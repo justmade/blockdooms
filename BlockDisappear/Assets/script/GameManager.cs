@@ -22,15 +22,14 @@ public class GameManager : MonoBehaviour {
 		allBlocks = new List<GameObject> ();
 		Vector3 v = new Vector3 (0,1,0);
 		Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
-		for (int i = 0; i < 9; i++)
+		for (int i = 0; i < 25; i++)
 		{
-			v.x = Mathf.Ceil (i / 3) * 1.1f;
-			v.z = i%3 * 1.1f ;
+			v.x = Mathf.Ceil (i / 5) * 1.1f;
+			v.z = i%5 * 1.1f ;
 			// ... create them, set their player number and references needed for control.
 			GameObject block = 
 				Instantiate(m_BlockPrefabs, v, turnRotation) as GameObject;
 			allBlocks.Add (block);
-			block.transform.localScale = new Vector3 (0.3f, 0.3f, 0.3f);
 
 		}	
 	}
