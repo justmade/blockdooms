@@ -322,6 +322,7 @@ MonoBehaviour:
     type: 2}
   allBlocks: []
   allDisappearIndex: 
+  B_Width: 8
 --- !u!4 &1479138419
 Transform:
   m_ObjectHideFlags: 0

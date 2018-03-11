@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour {
 
 	public List<int> allDisappearIndex;
 
+	public int B_Width = 5;
+
 	// Use this for initialization
 	void Start () {
 		initAllBlock ();
@@ -25,9 +27,10 @@ public class GameManager : MonoBehaviour {
 		Vector3 v = new Vector3 (0,1,0);
 		Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
 		GameObject container = GameObject.Find("BlockContainer");
-		for (int i = 0; i < 25; i++){			
-			v.x = Mathf.Ceil (i / 5) * 1.0f + 0.5f;
-			v.z = i%5 * 1.0f+0.5f ;
+		int counts = B_Width * B_Width;
+		for (int i = 0; i < counts; i++){			
+			v.x = Mathf.Ceil (i / B_Width) * 1.0f + 0.5f;
+			v.z = i % B_Width * 1.0f+0.5f ;
 			// ... create them, set their player number and references needed for control.
 			GameObject block = 
 				Instantiate(m_BlockPrefabs, v, turnRotation) as GameObject;
@@ -37,11 +40,11 @@ public class GameManager : MonoBehaviour {
 			block.transform.parent = container.transform;
 		}
 
-		container.transform.position = new Vector3(-(5 * 1.0f) / 2,0,-(5 * 1.0f) / 2);
+		container.transform.position = new Vector3(-(B_Width * 1.0f) / 2,0,-(B_Width * 1.0f) / 2);
 	}
 
 	void touchBlock(){
-		if (Input.GetMouseButton(0)) {
+		if (Input.GetMouseButtonUp(0)) {
 
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);  
 			RaycastHit hit;
@@ -54,8 +57,8 @@ public class GameManager : MonoBehaviour {
 					float px = t.localPosition.x - 0.5f;
 					float pz = t.localPosition.z - 0.5f;
 					int ix = Mathf.CeilToInt (px / 1);
-					int iy = Mathf.CeilToInt(pz % 5);
-					int index = ix * 5 + iy;
+					int iy = Mathf.CeilToInt(pz % B_Width);
+					int index = ix * B_Width + iy;
 
 					BlockBase bb = hit.collider.GetComponent<BlockBase> ();
 
@@ -81,17 +84,17 @@ public class GameManager : MonoBehaviour {
 
 	void findNeighbour(int index , int color , int currentDir)
 	{
-		int rightIndex = index + 5;
+		int rightIndex = index + B_Width;
 
-		int leftIndex = index - 5;
+		int leftIndex = index - B_Width;
 
 		int downIndex = -1;
-		if (index % 5 != 0) {
+		if (index % B_Width != 0) {
 			downIndex = index - 1;
 		}
 
 		int upIndex = -1;
-		if ((index + 1) % 5 != 0) {
+		if ((index + 1) % B_Width != 0) {
 			upIndex = index + 1;
 		}
 
