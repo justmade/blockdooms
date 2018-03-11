@@ -321,6 +321,7 @@ MonoBehaviour:
   m_BlockPrefabs: {fileID: 1767371218646420, guid: 085cb9064f01b45559ee524074e913c5,
     type: 2}
   allBlocks: []
+  allDisappearIndex: 
 --- !u!4 &1479138419
 Transform:
   m_ObjectHideFlags: 0
@@ -407,10 +408,10 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2109663766}
-  m_LocalRotation: {x: -0.24027723, y: 0.7260868, z: -0.56562126, w: -0.30844367}
-  m_LocalPosition: {x: 3.0922709, y: 11.185465, z: 1.9816923}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 13.02, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 35.4, y: 21.83, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
