@@ -6,9 +6,9 @@ public class GameManager : MonoBehaviour {
 
 	public GameObject m_BlockPrefabs;
 
-	public List<GameObject> allBlocks;
+	public GameObject[,] allBlocks;
 
-	public List<int> blockStates;
+	public int[,] blockStates;
 
 	public List<int> allDisappearIndex;
 
@@ -27,7 +27,8 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void initAllBlock(){
-		allBlocks = new List<GameObject> ();
+		blockStates = new int[B_Width, B_Width * B_Width];
+		allBlocks = new GameObject[B_Width, B_Width * B_Width];
 		Vector3 v = new Vector3 (0,1,0);
 		Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
 		GameObject container = GameObject.Find("BlockContainer");
@@ -38,13 +39,13 @@ public class GameManager : MonoBehaviour {
 			// ... create them, set their player number and references needed for control.
 			GameObject block = 
 				Instantiate(m_BlockPrefabs, v, turnRotation) as GameObject;
-			allBlocks.Add (block);
+			allBlocks[0,i] = block;
 			block.transform.localScale = new Vector3 (0.9f, 0.9f, 0.9f);
 			block.tag = "Block";
 			block.transform.parent = container.transform;
 			BlockBase bBase = block.GetComponent<BlockBase> ();
 			int color = bBase.getColorIndex ();
-			blockStates.Add (color);
+			blockStates [0,i] = color;
 		}
 
 		container.transform.position = new Vector3(-(B_Width * 1.0f) / 2,0,-(B_Width * 1.0f) / 2);
@@ -107,7 +108,7 @@ public class GameManager : MonoBehaviour {
 			upIndex = index + 1;
 		}
 
-		if (rightIndex < allBlocks.Count && currentDir != 8) {
+		if (rightIndex < allBlocks.GetLength(1) && currentDir != 8) {
 			if (getBlockColor (rightIndex) == color) {
 				if (addDisappearIndex (rightIndex)) {
 					findNeighbour (rightIndex, color , 4);
@@ -147,7 +148,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	int getBlockColor(int index){
-		return blockStates[index];
+		return blockStates[0,index];
 	}
 
 	void removeBlocks(){
@@ -156,39 +157,41 @@ public class GameManager : MonoBehaviour {
 			foreach (int element in allDisappearIndex) 
 			{
 				int index = element;
-				GameObject block = allBlocks [index];
+				GameObject block = allBlocks [0,index];
 				Destroy (block);
-				blockStates [index] = -1;
+				blockStates [0,index] = -1;
 			}
 		}
 	}
 
 	void dropBlock(){
-		int lastColor = -1;
 		for (int i = 0; i < B_Width; i++) {
 			int colum = i * B_Width;
 			int empty = 0;
+			int lastColor = -1;
 			for (int j = 0; j < B_Width; j++) {
 				int bIndex = colum + j;
-				if (blockStates[bIndex] == -1) {
+				if (blockStates[0,bIndex] == -1) {
 					empty++;
 				} else {
-					int temp = blockStates [bIndex];
+					int temp = blockStates [0,bIndex];
 					if (lastColor == temp) {
+						Debug.LogFormat ("drop{0},{1}",bIndex,lastColor);
 						checkSameColor = true;
 					} else if(checkSameColor == false){
 						lastColor = temp;
+						Debug.LogFormat ("last{0},{1}",bIndex,lastColor);
 					}
 					if (empty > 0) {
 //						Debug.LogFormat ("empty {0}", empty);
 						//int temp = blockStates [bIndex];
-						blockStates [bIndex] = -1;
-						blockStates [bIndex - empty] = temp;
-						BlockBase bBase = allBlocks[bIndex].GetComponent<BlockBase>();
+						blockStates [0,bIndex] = -1;
+						blockStates [0,bIndex - empty] = temp;
+						BlockBase bBase = allBlocks[0,bIndex].GetComponent<BlockBase>();
 						bBase.dropBlock (empty);
-						GameObject block = allBlocks [bIndex];
-						allBlocks [bIndex] = null;
-						allBlocks [bIndex - empty] = block; 
+						GameObject block = allBlocks [0,bIndex];
+						allBlocks [0,bIndex] = null;
+						allBlocks [0,bIndex - empty] = block; 
 					}
 				}
 			}
@@ -203,22 +206,22 @@ public class GameManager : MonoBehaviour {
 		int empty = 0;
 		for (int j = 0; j < B_Width; j++) {
 			int bIndex = line + j * B_Width;
-			if (blockStates[bIndex] == -1) {
+			if (blockStates[0,bIndex] == -1) {
 				empty++;
 			} else {
 				if (empty > 0) {
 					//Debug.LogFormat ("empty {0}", empty);
 					for (int i = 0; i < B_Width; i++) {
 						int lIndex = bIndex + i;
-						int temp = blockStates [lIndex];
+						int temp = blockStates[0,lIndex];
 						if (temp != -1) {
-							blockStates [lIndex] = -1;
-							blockStates [lIndex - empty * B_Width] = temp;
-							BlockBase bBase = allBlocks[lIndex].GetComponent<BlockBase>();
+							blockStates[0,lIndex] = -1;
+							blockStates[0,lIndex - empty * B_Width] = temp;
+							BlockBase bBase = allBlocks[0,lIndex].GetComponent<BlockBase>();
 							bBase.leftMoveBlock (empty);
-							GameObject block = allBlocks [lIndex];
-							allBlocks [lIndex] = null;
-							allBlocks [lIndex - empty * B_Width] = block; 
+							GameObject block = allBlocks [0,lIndex];
+							allBlocks [0,lIndex] = null;
+							allBlocks [0,lIndex - empty * B_Width] = block; 
 						}
 					}
 				}
@@ -227,18 +230,17 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void findHorizontalConnect(){
-		int lastColor = -1;
 		for (int i = 0; i < B_Width; i++) {
+			int lastColor = -1;
 			for (int j = 0; j < B_Width; j++) {
 				int bIndex = i + j * B_Width;
-				int temp = blockStates [bIndex];
-				if (temp != -1) {
-					if (lastColor == temp) {
-						checkSameColor = true;
-						return;
-					} else {
-						lastColor = temp;
-					}
+				int temp = blockStates[0,bIndex];
+				if (lastColor == temp && temp != -1) {
+					Debug.LogFormat ("hor{0},{1}",bIndex,lastColor);
+					checkSameColor = true;
+					return;
+				} else {
+					lastColor = temp;
 				}
 			}
 		}
