@@ -6,14 +6,16 @@ public class GameManager : MonoBehaviour {
 
 	public GameObject m_BlockPrefabs;
 
+	//所有的block对象
 	public GameObject[,] allBlocks;
-
+	//记录格子的状态
 	public int[,] blockStates;
 
 	public List<int> allDisappearIndex;
 
+	//宽度
 	public int B_Width = 5;
-
+	//判断是否还有格子可以消除
 	private bool checkSameColor;
 
 	// Use this for initialization
@@ -91,7 +93,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 
-
+	//递归查找格子四周的同色目标 currentDir上次的位置，放置来回寻找堆栈溢出 1：上 2：下 4：右 8：左
 	void findNeighbour(int index , int color , int currentDir)
 	{
 		int rightIndex = index + B_Width;
@@ -139,6 +141,7 @@ public class GameManager : MonoBehaviour {
 		return;
 	}
 
+	//添加要消除的目标下标
 	bool addDisappearIndex(int index){
 		if (allDisappearIndex.IndexOf (index) == -1) {
 			allDisappearIndex.Add (index);
@@ -164,6 +167,7 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+	//下落格子
 	void dropBlock(){
 		for (int i = 0; i < B_Width; i++) {
 			int colum = i * B_Width;
@@ -201,6 +205,7 @@ public class GameManager : MonoBehaviour {
 
 	}
 
+	//向左靠拢格子
 	void leftMoveBlock(){
 		int line = 0;
 		int empty = 0;
@@ -228,7 +233,7 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 	}
-
+	//横向搜索是否存在可以消除的格子
 	void findHorizontalConnect(){
 		for (int i = 0; i < B_Width; i++) {
 			int lastColor = -1;
