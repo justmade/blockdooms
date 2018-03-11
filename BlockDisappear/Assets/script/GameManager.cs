@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour {
 
 	public List<GameObject> allBlocks;
 
+	public List<int> blockStates;
+
 	public List<int> allDisappearIndex;
 
 	public int B_Width = 5;
@@ -38,6 +40,9 @@ public class GameManager : MonoBehaviour {
 			block.transform.localScale = new Vector3 (0.9f, 0.9f, 0.9f);
 			block.tag = "Block";
 			block.transform.parent = container.transform;
+			BlockBase bBase = block.GetComponent<BlockBase> ();
+			int color = bBase.getColorIndex ();
+			blockStates.Add (color);
 		}
 
 		container.transform.position = new Vector3(-(B_Width * 1.0f) / 2,0,-(B_Width * 1.0f) / 2);
@@ -68,11 +73,11 @@ public class GameManager : MonoBehaviour {
 
 				foreach (int element in allDisappearIndex) 
 				{
-					Debug.Log ("element:");
-					Debug.Log (element);
-
+					Debug.LogFormat ("ele , {0}",element);
 				}
-
+				removeBlocks ();
+				dropBlock ();
+				leftMoveBlock ();
 
 			}
 		}
@@ -138,12 +143,76 @@ public class GameManager : MonoBehaviour {
 	}
 
 	int getBlockColor(int index){
-		BlockBase block = allBlocks[index].GetComponent<BlockBase> ();
-		return block.getColorIndex ();
+		return blockStates[index];
 	}
 
+	void removeBlocks(){
+		if (allDisappearIndex.Count > 1) {
+			Debug.LogFormat ("remove {0}", allDisappearIndex.Count);
+			foreach (int element in allDisappearIndex) 
+			{
+				int index = element;
+				GameObject block = allBlocks [index];
+				Destroy (block);
+				blockStates [index] = -1;
+			}
+		}
+	}
+
+	void dropBlock(){
+		for (int i = 0; i < B_Width; i++) {
+			int colum = i * B_Width;
+			int empty = 0;
+			for (int j = 0; j < B_Width; j++) {
+				int bIndex = colum + j;
+				if (blockStates[bIndex] == -1) {
+					empty++;
+				} else {
+					if (empty > 0) {
+						Debug.LogFormat ("empty {0}", empty);
+						int temp = blockStates [bIndex];
+						blockStates [bIndex] = -1;
+						blockStates [bIndex - empty] = temp;
+						BlockBase bBase = allBlocks[bIndex].GetComponent<BlockBase>();
+						bBase.dropBlock (empty);
+						GameObject block = allBlocks [bIndex];
+						allBlocks [bIndex] = null;
+						allBlocks [bIndex - empty] = block; 
+					}
+				}
+			}
+		}
 
 
 
+	}
+
+	void leftMoveBlock(){
+		int line = 0;
+		int empty = 0;
+		for (int j = 0; j < B_Width; j++) {
+			int bIndex = line + j * B_Width;
+			if (blockStates[bIndex] == -1) {
+				empty++;
+			} else {
+				if (empty > 0) {
+					//Debug.LogFormat ("empty {0}", empty);
+					for (int i = 0; i < B_Width; i++) {
+						int lIndex = bIndex + i;
+						int temp = blockStates [lIndex];
+						if (temp != -1) {
+							blockStates [lIndex] = -1;
+							blockStates [lIndex - empty * B_Width] = temp;
+							BlockBase bBase = allBlocks[lIndex].GetComponent<BlockBase>();
+							bBase.leftMoveBlock (empty);
+							GameObject block = allBlocks [lIndex];
+							allBlocks [lIndex] = null;
+							allBlocks [lIndex - empty * B_Width] = block; 
+						}
+					}
+				}
+			}
+		}
+	}
 
 }
