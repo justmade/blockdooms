@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour {
 
 	public int B_Width = 5;
 
+	private bool checkSameColor;
+
 	// Use this for initialization
 	void Start () {
 		initAllBlock ();
@@ -57,6 +59,7 @@ public class GameManager : MonoBehaviour {
 			if(Physics.Raycast (ray,out hit))    //如果真的发生了碰撞，ray这条射线在hit点与别的物体碰撞了
 			{
 				allDisappearIndex.Clear ();
+				checkSameColor = false;
 				if (hit.collider.gameObject.tag == "Block") {
 					Transform t = hit.collider.gameObject.transform;
 					float px = t.localPosition.x - 0.5f;
@@ -73,12 +76,13 @@ public class GameManager : MonoBehaviour {
 
 				foreach (int element in allDisappearIndex) 
 				{
-					Debug.LogFormat ("ele , {0}",element);
+//					Debug.LogFormat ("ele , {0}",element);
 				}
 				removeBlocks ();
 				dropBlock ();
 				leftMoveBlock ();
-
+				findHorizontalConnect ();
+				Debug.LogFormat ("same color {0}", checkSameColor);
 			}
 		}
 
@@ -148,7 +152,7 @@ public class GameManager : MonoBehaviour {
 
 	void removeBlocks(){
 		if (allDisappearIndex.Count > 1) {
-			Debug.LogFormat ("remove {0}", allDisappearIndex.Count);
+//			Debug.LogFormat ("remove {0}", allDisappearIndex.Count);
 			foreach (int element in allDisappearIndex) 
 			{
 				int index = element;
@@ -160,6 +164,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void dropBlock(){
+		int lastColor = -1;
 		for (int i = 0; i < B_Width; i++) {
 			int colum = i * B_Width;
 			int empty = 0;
@@ -168,9 +173,15 @@ public class GameManager : MonoBehaviour {
 				if (blockStates[bIndex] == -1) {
 					empty++;
 				} else {
+					int temp = blockStates [bIndex];
+					if (lastColor == temp) {
+						checkSameColor = true;
+					} else if(checkSameColor == false){
+						lastColor = temp;
+					}
 					if (empty > 0) {
-						Debug.LogFormat ("empty {0}", empty);
-						int temp = blockStates [bIndex];
+//						Debug.LogFormat ("empty {0}", empty);
+						//int temp = blockStates [bIndex];
 						blockStates [bIndex] = -1;
 						blockStates [bIndex - empty] = temp;
 						BlockBase bBase = allBlocks[bIndex].GetComponent<BlockBase>();
@@ -209,6 +220,24 @@ public class GameManager : MonoBehaviour {
 							allBlocks [lIndex] = null;
 							allBlocks [lIndex - empty * B_Width] = block; 
 						}
+					}
+				}
+			}
+		}
+	}
+
+	void findHorizontalConnect(){
+		int lastColor = -1;
+		for (int i = 0; i < B_Width; i++) {
+			for (int j = 0; j < B_Width; j++) {
+				int bIndex = i + j * B_Width;
+				int temp = blockStates [bIndex];
+				if (temp != -1) {
+					if (lastColor == temp) {
+						checkSameColor = true;
+						return;
+					} else {
+						lastColor = temp;
 					}
 				}
 			}
