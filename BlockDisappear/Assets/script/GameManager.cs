@@ -11,6 +11,11 @@ public class GameManager : MonoBehaviour {
 	//记录格子的状态
 	public int[,] blockStates;
 
+
+	GameObject container;
+
+	int currentFloor;
+
 	public List<int> allDisappearIndex;
 
 	//宽度
@@ -30,10 +35,11 @@ public class GameManager : MonoBehaviour {
 
 	void initAllBlock(){
 		blockStates = new int[B_Width, B_Width * B_Width];
+		currentFloor = 0;
 		allBlocks = new GameObject[B_Width, B_Width * B_Width];
 		Vector3 v = new Vector3 (0,1,0);
 		Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
-		GameObject container = GameObject.Find("BlockContainer");
+		container = GameObject.Find("BlockContainer");
 		int counts = B_Width * B_Width;
 		for (int i = 0; i < counts; i++){			
 			v.x = Mathf.Ceil (i / B_Width) * 1.0f + 0.5f;
@@ -51,6 +57,41 @@ public class GameManager : MonoBehaviour {
 		}
 
 		container.transform.position = new Vector3(-(B_Width * 1.0f) / 2,0,-(B_Width * 1.0f) / 2);
+		//generateBlock (1);
+//		container.transform.position = new Vector3(-(B_Width * 1.0f) / 2,0,-(B_Width * 1.0f) / 2);
+	}
+
+	void generateBlock(int floor){
+		int counts = B_Width * B_Width;
+		currentFloor = floor;
+		for (int i = 0; i < (currentFloor); i++) {
+			for (int j = 0; j < counts; j++) {
+				if(allBlocks[i,j]){
+					allBlocks[i,j].transform.localPosition += new Vector3 (0,1,0);
+				}
+			}
+		}
+		Debug.LogFormat ("currentFloor {0}", currentFloor);
+
+		Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
+		Vector3 v = new Vector3 (0,1,0);
+		for (int i = 0; i < counts; i++){			
+			v.x = Mathf.Ceil (i / B_Width) * 1.0f + 0.5f;
+			v.z = i % B_Width * 1.0f+0.5f ;
+			// ... create them, set their player number and references needed for control.
+			GameObject block = 
+				Instantiate(m_BlockPrefabs, Vector3.zero, turnRotation) as GameObject;
+			block.transform.parent = container.transform;
+			block.transform.localPosition = v;
+			block.transform.localScale = new Vector3 (0.9f, 0.9f, 0.9f);
+			block.tag = "Block";
+			allBlocks[currentFloor,i] = block;
+			BlockBase bBase = block.GetComponent<BlockBase> ();
+			int color = bBase.getColorIndex ();
+			if(blockStates [0,i] == -1){
+				blockStates [0, i] = color;
+			}
+		}
 	}
 
 	void touchBlock(){
@@ -86,6 +127,10 @@ public class GameManager : MonoBehaviour {
 				leftMoveBlock ();
 				findHorizontalConnect ();
 				Debug.LogFormat ("same color {0}", checkSameColor);
+
+				if (checkSameColor == false) {
+					generateBlock (currentFloor+1);
+				}
 			}
 		}
 
@@ -110,7 +155,7 @@ public class GameManager : MonoBehaviour {
 			upIndex = index + 1;
 		}
 
-		if (rightIndex < allBlocks.GetLength(1) && currentDir != 8) {
+		if (rightIndex < B_Width * B_Width && currentDir != 8) {
 			if (getBlockColor (rightIndex) == color) {
 				if (addDisappearIndex (rightIndex)) {
 					findNeighbour (rightIndex, color , 4);
@@ -160,9 +205,14 @@ public class GameManager : MonoBehaviour {
 			foreach (int element in allDisappearIndex) 
 			{
 				int index = element;
-				GameObject block = allBlocks [0,index];
-				Destroy (block);
-				blockStates [0,index] = -1;
+				for (int i = 0; i < currentFloor + 1; i++) {
+					GameObject block = allBlocks [i,index];
+					if (block) {
+						Destroy (block);
+						blockStates [0,index] = -1;
+						break;
+					}
+				}
 			}
 		}
 	}
@@ -191,11 +241,21 @@ public class GameManager : MonoBehaviour {
 						//int temp = blockStates [bIndex];
 						blockStates [0,bIndex] = -1;
 						blockStates [0,bIndex - empty] = temp;
-						BlockBase bBase = allBlocks[0,bIndex].GetComponent<BlockBase>();
-						bBase.dropBlock (empty);
-						GameObject block = allBlocks [0,bIndex];
-						allBlocks [0,bIndex] = null;
-						allBlocks [0,bIndex - empty] = block; 
+
+
+						for (int k = 0; k < currentFloor + 1; k++) {
+							if (allBlocks[k,bIndex]) {
+								BlockBase bBase = allBlocks[k,bIndex].GetComponent<BlockBase>();
+								bBase.dropBlock (empty);
+								GameObject block = allBlocks [k,bIndex];
+								allBlocks [k,bIndex] = null;
+								allBlocks [k,bIndex - empty] = block; 
+								break;
+							}
+
+						}
+
+
 					}
 				}
 			}
@@ -222,11 +282,20 @@ public class GameManager : MonoBehaviour {
 						if (temp != -1) {
 							blockStates[0,lIndex] = -1;
 							blockStates[0,lIndex - empty * B_Width] = temp;
-							BlockBase bBase = allBlocks[0,lIndex].GetComponent<BlockBase>();
-							bBase.leftMoveBlock (empty);
-							GameObject block = allBlocks [0,lIndex];
-							allBlocks [0,lIndex] = null;
-							allBlocks [0,lIndex - empty * B_Width] = block; 
+
+
+
+							for (int k = 0; k < currentFloor + 1; k++) {
+								if (allBlocks[k,lIndex]) {
+									BlockBase bBase = allBlocks[k,lIndex].GetComponent<BlockBase>();
+									bBase.leftMoveBlock (empty);
+									GameObject block = allBlocks [k,lIndex];
+									allBlocks [k,lIndex] = null;
+									allBlocks [k,lIndex - empty * B_Width] = block;
+									break;
+								}
+							}
+
 						}
 					}
 				}
