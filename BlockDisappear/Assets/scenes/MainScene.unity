@@ -320,9 +320,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BlockPrefabs: {fileID: 1767371218646420, guid: 085cb9064f01b45559ee524074e913c5,
     type: 2}
-  allBlocks: []
   allDisappearIndex: 
-  B_Width: 8
+  B_Width: 5
 --- !u!4 &1479138419
 Transform:
   m_ObjectHideFlags: 0

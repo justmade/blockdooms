@@ -102,12 +102,24 @@ public class GameManager : MonoBehaviour {
 
 			if(Physics.Raycast (ray,out hit))    //如果真的发生了碰撞，ray这条射线在hit点与别的物体碰撞了
 			{
+				string d = "";
+				for (int i = 4; i >=0; i--) {
+					for (int j = 0; j < 5; j++) {
+						int aIndex = i + 5 * j;
+						d += blockStates [0, aIndex];
+
+					}
+					d += "\n";
+				}
+				Debug.LogFormat ("allBlocks pre {0}", d);
+
 				allDisappearIndex.Clear ();
 				checkSameColor = false;
 				if (hit.collider.gameObject.tag == "Block") {
 					Transform t = hit.collider.gameObject.transform;
 					float px = t.localPosition.x - 0.5f;
 					float pz = t.localPosition.z - 0.5f;
+
 					int ix = Mathf.CeilToInt (px / 1);
 					int iy = Mathf.CeilToInt(pz % B_Width);
 					int index = ix * B_Width + iy;
@@ -115,6 +127,7 @@ public class GameManager : MonoBehaviour {
 					BlockBase bb = hit.collider.GetComponent<BlockBase> ();
 
 					addDisappearIndex (index);
+					Debug.LogFormat ("index  {0}", index);
 					findNeighbour (index, bb.getColorIndex (),0);
 				}
 
@@ -230,11 +243,11 @@ public class GameManager : MonoBehaviour {
 				} else {
 					int temp = blockStates [0,bIndex];
 					if (lastColor == temp) {
-						Debug.LogFormat ("drop{0},{1}",bIndex,lastColor);
+//						Debug.LogFormat ("drop{0},{1}",bIndex,lastColor);
 						checkSameColor = true;
 					} else if(checkSameColor == false){
 						lastColor = temp;
-						Debug.LogFormat ("last{0},{1}",bIndex,lastColor);
+//						Debug.LogFormat ("last{0},{1}",bIndex,lastColor);
 					}
 					if (empty > 0) {
 //						Debug.LogFormat ("empty {0}", empty);
@@ -262,7 +275,16 @@ public class GameManager : MonoBehaviour {
 		}
 
 
+		string d = "";
+		for (int i = 4; i >=0; i--) {
+			for (int j = 0; j < 5; j++) {
+				int aIndex = i + 5 * j;
+				d += blockStates [0, aIndex];
 
+			}
+			d += "\n";
+		}
+		Debug.LogFormat ("allBlocks {0}", d);
 	}
 
 	//向左靠拢格子
