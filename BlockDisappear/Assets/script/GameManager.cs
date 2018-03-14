@@ -102,16 +102,7 @@ public class GameManager : MonoBehaviour {
 
 			if(Physics.Raycast (ray,out hit))    //如果真的发生了碰撞，ray这条射线在hit点与别的物体碰撞了
 			{
-				string d = "";
-				for (int i = 4; i >=0; i--) {
-					for (int j = 0; j < 5; j++) {
-						int aIndex = i + 5 * j;
-						d += blockStates [0, aIndex];
-
-					}
-					d += "\n";
-				}
-				Debug.LogFormat ("allBlocks pre {0}", d);
+				
 
 				allDisappearIndex.Clear ();
 				checkSameColor = false;
@@ -135,21 +126,35 @@ public class GameManager : MonoBehaviour {
 				{
 //					Debug.LogFormat ("ele , {0}",element);
 				}
+				printBlock ();
 				removeBlocks ();
 				dropBlock ();
 				leftMoveBlock ();
+				updateBlockState ();
 				findHorizontalConnect ();
-				Debug.LogFormat ("same color {0}", checkSameColor);
+				printBlock ();
+
+//				Debug.LogFormat ("same color {0}", checkSameColor);
 
 				if (checkSameColor == false) {
 					generateBlock (currentFloor+1);
 				}
 			}
 		}
-
-
 	}
 
+	void printBlock(){
+//		string d = "";
+//		for (int i = 4; i >=0; i--) {
+//			for (int j = 0; j < 5; j++) {
+//				int aIndex = i + 5 * j;
+//				d += blockStates [0, aIndex];
+//
+//			}
+//			d += "\n";
+//		}
+//		Debug.LogFormat ("{0}", d);
+	}
 
 	//递归查找格子四周的同色目标 currentDir上次的位置，放置来回寻找堆栈溢出 1：上 2：下 4：右 8：左
 	void findNeighbour(int index , int color , int currentDir)
@@ -222,12 +227,15 @@ public class GameManager : MonoBehaviour {
 					GameObject block = allBlocks [i,index];
 					if (block) {
 						Destroy (block);
+						Debug.LogFormat ("removeIndex {0} , {1}", i, index);
+						allBlocks [i, index] = null;
 						blockStates [0,index] = -1;
 						break;
 					}
 				}
 			}
 		}
+//		updateBlockState ();
 	}
 
 	//下落格子
@@ -249,6 +257,7 @@ public class GameManager : MonoBehaviour {
 						lastColor = temp;
 //						Debug.LogFormat ("last{0},{1}",bIndex,lastColor);
 					}
+					//这里需要判断消失的方块上面是是否可以下落，才可以减。如果是同一层的下落，不是的就用下一层
 					if (empty > 0) {
 //						Debug.LogFormat ("empty {0}", empty);
 						//int temp = blockStates [bIndex];
@@ -267,24 +276,33 @@ public class GameManager : MonoBehaviour {
 							}
 
 						}
-
-
 					}
 				}
 			}
 		}
 
 
-		string d = "";
-		for (int i = 4; i >=0; i--) {
-			for (int j = 0; j < 5; j++) {
-				int aIndex = i + 5 * j;
-				d += blockStates [0, aIndex];
+	
+	}
 
+	void updateBlockState(){
+		int counts = B_Width * B_Width;
+		for (int i = 0; i < counts; i++) {
+			if (blockStates [0,i] == -1) {
+				for (int k = 0; k < currentFloor + 1; k++) {
+					if (allBlocks [k, i]) {
+						BlockBase bBase = allBlocks[k,i].GetComponent<BlockBase>();
+						int color = bBase.getColorIndex ();
+						Debug.LogFormat ("update {0} , {1}" , i , color);
+						blockStates [0, i] = color;
+						break;
+
+					}
+				
+				}
 			}
-			d += "\n";
+
 		}
-		Debug.LogFormat ("allBlocks {0}", d);
 	}
 
 	//向左靠拢格子
