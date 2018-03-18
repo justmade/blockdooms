@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
@@ -11,8 +12,11 @@ public class GameManager : MonoBehaviour {
 	//记录格子的状态
 	public BlockState[,] blockStates;
 
+	public Text m_MessageText; 
 
 	GameObject container;
+
+	public Button addFloorBtn;
 
 	int currentFloor;
 
@@ -26,8 +30,16 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		initAllBlock ();
+
+		Button btn = addFloorBtn.GetComponent<Button>();
+		btn.onClick.AddListener(onAddFloor);
 	}
-	
+
+	void onAddFloor(){
+		generateBlock (currentFloor+1);
+	}
+
+
 	// Update is called once per frame
 	void Update () {
 		touchBlock ();
@@ -48,7 +60,7 @@ public class GameManager : MonoBehaviour {
 			GameObject block = 
 				Instantiate(m_BlockPrefabs, v, turnRotation) as GameObject;
 			allBlocks[0,i] = block;
-			block.transform.localScale = new Vector3 (0.9f, 0.9f, 0.9f);
+			block.transform.localScale = new Vector3 (1f, 1f, 1f);
 			block.tag = "Block";
 			block.transform.parent = container.transform;
 			BlockBase bBase = block.GetComponent<BlockBase> ();
@@ -85,7 +97,7 @@ public class GameManager : MonoBehaviour {
 				Instantiate(m_BlockPrefabs, Vector3.zero, turnRotation) as GameObject;
 			block.transform.parent = container.transform;
 			block.transform.localPosition = v;
-			block.transform.localScale = new Vector3 (0.9f, 0.9f, 0.9f);
+			block.transform.localScale = new Vector3 (1f, 1f, 1f);
 			block.tag = "Block";
 			allBlocks[currentFloor,i] = block;
 			BlockBase bBase = block.GetComponent<BlockBase> ();
@@ -140,7 +152,10 @@ public class GameManager : MonoBehaviour {
 //				Debug.LogFormat ("same color {0}", checkSameColor);
 
 				if (checkSameColor == false) {
-					generateBlock (currentFloor+1);
+//					generateBlock (currentFloor+1);
+					m_MessageText.text = "不可消除";
+				} else {
+					m_MessageText.text = "消除";
 				}
 			}
 		}
@@ -260,14 +275,6 @@ public class GameManager : MonoBehaviour {
 					floor = blockStates [0, bIndex].floor;
 
 				} else if(floor == blockStates [0, bIndex].floor){
-					int temp = blockStates [0,bIndex].color;
-					if (lastColor == temp) {
-//						Debug.LogFormat ("drop{0},{1}",bIndex,lastColor);
-						checkSameColor = true;
-					} else if(checkSameColor == false){
-						lastColor = temp;
-//						Debug.LogFormat ("last{0},{1}",bIndex,lastColor);
-					}
 					//这里需要判断消失的方块上面是是否可以下落，才可以减。如果是同一层的下落，不是的就用下一层
 					if (empty > 0) {
 //						Debug.LogFormat ("empty {0}", empty);
@@ -377,6 +384,17 @@ public class GameManager : MonoBehaviour {
 				}
 			}
 		}
+
+
+
+//		int temp = blockStates [0,bIndex].color;
+//		if (lastColor == temp) {
+//			//						Debug.LogFormat ("drop{0},{1}",bIndex,lastColor);
+//			checkSameColor = true;
+//		} else if(checkSameColor == false){
+//			lastColor = temp;
+//			//						Debug.LogFormat ("last{0},{1}",bIndex,lastColor);
+//		}
 	}
 
 }

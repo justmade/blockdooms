@@ -484,6 +484,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BlockPrefabs: {fileID: 1767371218646420, guid: 085cb9064f01b45559ee524074e913c5,
     type: 2}
+  m_MessageText: {fileID: 765687221}
+  addFloorBtn: {fileID: 2115339483}
   allDisappearIndex: 
   B_Width: 5
 --- !u!4 &1479138419
