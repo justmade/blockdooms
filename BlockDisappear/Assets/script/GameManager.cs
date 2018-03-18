@@ -14,6 +14,10 @@ public class GameManager : MonoBehaviour {
 
 	public Text m_MessageText; 
 
+	public Text debug_msg_1; 
+
+	public Text debug_msg_2; 
+
 	GameObject container;
 
 	public Button addFloorBtn;
@@ -122,6 +126,7 @@ public class GameManager : MonoBehaviour {
 				allDisappearIndex.Clear ();
 				checkSameColor = false;
 				if (hit.collider.gameObject.tag == "Block") {
+					debug_msg_1.text = printBlock ();
 					Transform t = hit.collider.gameObject.transform;
 					float px = t.localPosition.x - 0.5f;
 					float pz = t.localPosition.z - 0.5f;
@@ -147,7 +152,9 @@ public class GameManager : MonoBehaviour {
 				leftMoveBlock ();
 				updateBlockState ();
 				findHorizontalConnect ();
-				printBlock ();
+				findVerticalConnect ();
+//				printBlock ();
+				debug_msg_2.text = printBlock ();
 
 //				Debug.LogFormat ("same color {0}", checkSameColor);
 
@@ -161,16 +168,18 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	void printBlock(){
-//		string d = "";
-//		for (int i = 4; i >=0; i--) {
-//			for (int j = 0; j < 5; j++) {
-//				int aIndex = i + 5 * j;
-//				d += blockStates [0, aIndex];
-//
-//			}
-//			d += "\n";
-//		}
+	string printBlock(){
+		string d = "";
+		for (int i = B_Width-1; i >=0; i--) {
+			for (int j = 0; j < B_Width; j++) {
+				int aIndex = i + B_Width * j;
+				d += blockStates [0, aIndex].color;
+
+			}
+			d += "\n";
+		}
+
+		return d;
 //		Debug.LogFormat ("{0}", d);
 	}
 
@@ -264,7 +273,6 @@ public class GameManager : MonoBehaviour {
 			int colum = i * B_Width;
 			int empty = 0;
 			int floor = -1;
-			int lastColor = -1;
 			for (int j = 0; j < B_Width; j++) {
 				int bIndex = colum + j;
 				if (blockStates[0,bIndex].color == -1) {
@@ -275,25 +283,26 @@ public class GameManager : MonoBehaviour {
 					floor = blockStates [0, bIndex].floor;
 
 				} else if(floor == blockStates [0, bIndex].floor){
+					int temp = blockStates [0,bIndex].color;
 					//这里需要判断消失的方块上面是是否可以下落，才可以减。如果是同一层的下落，不是的就用下一层
 					if (empty > 0) {
 //						Debug.LogFormat ("empty {0}", empty);
 						//int temp = blockStates [bIndex];
 						blockStates [0,bIndex].color = -1;
 						blockStates [0,bIndex - empty].color = temp;
+						blockStates [0,bIndex - empty].floor = floor;
 
-
-						for (int k = 0; k < currentFloor + 1; k++) {
-							if (allBlocks[k,bIndex]) {
-								BlockBase bBase = allBlocks[k,bIndex].GetComponent<BlockBase>();
+//						for (int k = 0; k < 1; k++) {
+							if (allBlocks[floor,bIndex]) {
+								BlockBase bBase = allBlocks[floor,bIndex].GetComponent<BlockBase>();
 								bBase.dropBlock (empty);
-								GameObject block = allBlocks [k,bIndex];
-								allBlocks [k,bIndex] = null;
-								allBlocks [k,bIndex - empty] = block; 
-								break;
+								GameObject block = allBlocks [floor,bIndex];
+								allBlocks [floor,bIndex] = null;
+								allBlocks [floor,bIndex - empty] = block; 
+//								break;
 							}
 
-						}
+//						}
 					}
 				}
 			}
@@ -333,24 +342,19 @@ public class GameManager : MonoBehaviour {
 		for (int j = 0; j < B_Width; j++) {
 			int bIndex = line + j * B_Width;
 			if (blockStates[0,bIndex].color == -1) {
-				
-//				if (floor != -1 && blockStates [0, bIndex].floor != floor) {
-//					empty = 0;
-//				}
 				empty++;
-				floor = blockStates [0, bIndex].floor;
+
 			} else {
 				if (empty > 0) {
 					//Debug.LogFormat ("empty {0}", empty);
 					for (int i = 0; i < B_Width; i++) {
 						int lIndex = bIndex + i;
 						int temp = blockStates[0,lIndex].color;
+						floor = blockStates [0, lIndex].floor;
 						if (temp != -1) {
 							blockStates[0,lIndex].color = -1;
 							blockStates[0,lIndex - empty * B_Width].color = temp;
-
-
-
+							blockStates [0, lIndex - empty * B_Width].floor = floor;
 							for (int k = 0; k < currentFloor + 1; k++) {
 								if (allBlocks[k,lIndex]) {
 									BlockBase bBase = allBlocks[k,lIndex].GetComponent<BlockBase>();
@@ -358,7 +362,7 @@ public class GameManager : MonoBehaviour {
 									GameObject block = allBlocks [k,lIndex];
 									allBlocks [k,lIndex] = null;
 									allBlocks [k,lIndex - empty * B_Width] = block;
-									break;
+//									break;
 								}
 							}
 
@@ -395,6 +399,27 @@ public class GameManager : MonoBehaviour {
 //			lastColor = temp;
 //			//						Debug.LogFormat ("last{0},{1}",bIndex,lastColor);
 //		}
+	}
+
+	void findVerticalConnect(){
+		if (checkSameColor) {
+			return;
+		}
+		for (int i = 0; i < B_Width; i++) {
+			int lastColor = -1;
+			int colum = i * B_Width;
+			for (int j = 0; j < B_Width; j++) {
+				int bIndex = colum + j;
+				int temp = blockStates[0,bIndex].color;
+				if (lastColor == temp && temp != -1) {
+					Debug.LogFormat ("vertical{0},{1}",bIndex,lastColor);
+					checkSameColor = true;
+					return;
+				} else {
+					lastColor = temp;
+				}
+			}
+		}
 	}
 
 }
