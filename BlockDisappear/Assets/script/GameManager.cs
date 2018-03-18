@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour {
 	//所有的block对象
 	public GameObject[,] allBlocks;
 	//记录格子的状态
-	public int[,] blockStates;
+	public BlockState[,] blockStates;
 
 
 	GameObject container;
@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void initAllBlock(){
-		blockStates = new int[B_Width, B_Width * B_Width];
+		blockStates = new BlockState[B_Width, B_Width * B_Width];
 		currentFloor = 0;
 		allBlocks = new GameObject[B_Width, B_Width * B_Width];
 		Vector3 v = new Vector3 (0,1,0);
@@ -53,7 +53,9 @@ public class GameManager : MonoBehaviour {
 			block.transform.parent = container.transform;
 			BlockBase bBase = block.GetComponent<BlockBase> ();
 			int color = bBase.getColorIndex ();
-			blockStates [0,i] = color;
+			blockStates [0, i] = new BlockState ();
+			blockStates [0,i].color = color;
+			blockStates [0,i].floor = currentFloor;
 		}
 
 		container.transform.position = new Vector3(-(B_Width * 1.0f) / 2,0,-(B_Width * 1.0f) / 2);
@@ -88,8 +90,9 @@ public class GameManager : MonoBehaviour {
 			allBlocks[currentFloor,i] = block;
 			BlockBase bBase = block.GetComponent<BlockBase> ();
 			int color = bBase.getColorIndex ();
-			if(blockStates [0,i] == -1){
-				blockStates [0, i] = color;
+			if(blockStates [0,i].color == -1){
+				blockStates [0, i].color = color;
+				blockStates [0,i].floor = currentFloor;
 			}
 		}
 	}
@@ -214,7 +217,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	int getBlockColor(int index){
-		return blockStates[0,index];
+		return blockStates[0,index].color;
 	}
 
 	void removeBlocks(){
@@ -222,6 +225,7 @@ public class GameManager : MonoBehaviour {
 //			Debug.LogFormat ("remove {0}", allDisappearIndex.Count);
 			foreach (int element in allDisappearIndex) 
 			{
+				
 				int index = element;
 				for (int i = 0; i < currentFloor + 1; i++) {
 					GameObject block = allBlocks [i,index];
@@ -229,13 +233,14 @@ public class GameManager : MonoBehaviour {
 						Destroy (block);
 						Debug.LogFormat ("removeIndex {0} , {1}", i, index);
 						allBlocks [i, index] = null;
-						blockStates [0,index] = -1;
+						blockStates [0,index].color = -1;
 						break;
 					}
 				}
+
 			}
 		}
-//		updateBlockState ();
+
 	}
 
 	//下落格子
@@ -243,13 +248,19 @@ public class GameManager : MonoBehaviour {
 		for (int i = 0; i < B_Width; i++) {
 			int colum = i * B_Width;
 			int empty = 0;
+			int floor = -1;
 			int lastColor = -1;
 			for (int j = 0; j < B_Width; j++) {
 				int bIndex = colum + j;
-				if (blockStates[0,bIndex] == -1) {
+				if (blockStates[0,bIndex].color == -1) {
+					if (floor != -1 && blockStates [0, bIndex].floor != floor) {
+						empty = 0;
+					}
 					empty++;
-				} else {
-					int temp = blockStates [0,bIndex];
+					floor = blockStates [0, bIndex].floor;
+
+				} else if(floor == blockStates [0, bIndex].floor){
+					int temp = blockStates [0,bIndex].color;
 					if (lastColor == temp) {
 //						Debug.LogFormat ("drop{0},{1}",bIndex,lastColor);
 						checkSameColor = true;
@@ -261,8 +272,8 @@ public class GameManager : MonoBehaviour {
 					if (empty > 0) {
 //						Debug.LogFormat ("empty {0}", empty);
 						//int temp = blockStates [bIndex];
-						blockStates [0,bIndex] = -1;
-						blockStates [0,bIndex - empty] = temp;
+						blockStates [0,bIndex].color = -1;
+						blockStates [0,bIndex - empty].color = temp;
 
 
 						for (int k = 0; k < currentFloor + 1; k++) {
@@ -281,20 +292,22 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 
-
+		updateBlockState ();
 	
 	}
 
 	void updateBlockState(){
 		int counts = B_Width * B_Width;
 		for (int i = 0; i < counts; i++) {
-			if (blockStates [0,i] == -1) {
+			if (blockStates [0,i].color == -1) {
 				for (int k = 0; k < currentFloor + 1; k++) {
+					
 					if (allBlocks [k, i]) {
 						BlockBase bBase = allBlocks[k,i].GetComponent<BlockBase>();
 						int color = bBase.getColorIndex ();
 						Debug.LogFormat ("update {0} , {1}" , i , color);
-						blockStates [0, i] = color;
+						blockStates [0, i].color = color;
+						blockStates [0, i].floor = k;
 						break;
 
 					}
@@ -309,19 +322,25 @@ public class GameManager : MonoBehaviour {
 	void leftMoveBlock(){
 		int line = 0;
 		int empty = 0;
+		int floor = -1;
 		for (int j = 0; j < B_Width; j++) {
 			int bIndex = line + j * B_Width;
-			if (blockStates[0,bIndex] == -1) {
+			if (blockStates[0,bIndex].color == -1) {
+				
+//				if (floor != -1 && blockStates [0, bIndex].floor != floor) {
+//					empty = 0;
+//				}
 				empty++;
+				floor = blockStates [0, bIndex].floor;
 			} else {
 				if (empty > 0) {
 					//Debug.LogFormat ("empty {0}", empty);
 					for (int i = 0; i < B_Width; i++) {
 						int lIndex = bIndex + i;
-						int temp = blockStates[0,lIndex];
+						int temp = blockStates[0,lIndex].color;
 						if (temp != -1) {
-							blockStates[0,lIndex] = -1;
-							blockStates[0,lIndex - empty * B_Width] = temp;
+							blockStates[0,lIndex].color = -1;
+							blockStates[0,lIndex - empty * B_Width].color = temp;
 
 
 
@@ -348,7 +367,7 @@ public class GameManager : MonoBehaviour {
 			int lastColor = -1;
 			for (int j = 0; j < B_Width; j++) {
 				int bIndex = i + j * B_Width;
-				int temp = blockStates[0,bIndex];
+				int temp = blockStates[0,bIndex].color;
 				if (lastColor == temp && temp != -1) {
 					Debug.LogFormat ("hor{0},{1}",bIndex,lastColor);
 					checkSameColor = true;

@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\script\BlockBase.cs" />
+     <Compile Include="Assets\script\BlockState.cs" />
      <Compile Include="Assets\script\GameManager.cs" />
      <Compile Include="Assets\script\PlayerMove.cs" />
  <Reference Include="UnityEngine.UI">
