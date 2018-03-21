@@ -31,6 +31,8 @@ public class GameManager : MonoBehaviour {
 	//判断是否还有格子可以消除
 	private bool checkSameColor;
 
+	public GameObject boomParticle;
+
 	// Use this for initialization
 	void Start () {
 		initAllBlock ();
@@ -77,6 +79,15 @@ public class GameManager : MonoBehaviour {
 		container.transform.position = new Vector3(-(B_Width * 1.0f) / 2,0,-(B_Width * 1.0f) / 2);
 		//generateBlock (1);
 //		container.transform.position = new Vector3(-(B_Width * 1.0f) / 2,0,-(B_Width * 1.0f) / 2);
+	}
+
+	void addBoomParticle(Vector3 v){
+		v.y++;
+		GameObject boom = 
+			Instantiate(boomParticle, v, Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+		boom.transform.parent = container.transform;
+		ParticleSystem p = boom.GetComponent<ParticleSystem> ();
+		p.Play ();
 	}
 
 	void generateBlock(int floor){
@@ -258,6 +269,7 @@ public class GameManager : MonoBehaviour {
 						Debug.LogFormat ("removeIndex {0} , {1}", i, index);
 						allBlocks [i, index] = null;
 						blockStates [0,index].color = -1;
+						addBoomParticle (block.transform.position);
 						break;
 					}
 				}
