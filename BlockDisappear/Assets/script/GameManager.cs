@@ -9,6 +9,10 @@ public class GameManager : MonoBehaviour {
 
 	//所有的block对象
 	public GameObject[,] allBlocks;
+
+	public List<GameObject> dropBlocks;
+	public List<GameObject> moveBlocks;
+
 	//记录格子的状态
 	public BlockState[,] blockStates;
 
@@ -33,6 +37,14 @@ public class GameManager : MonoBehaviour {
 
 	public GameObject boomParticle;
 
+	private bool isPlaying;
+
+	private bool needDestory;
+
+	private float totalMove = 10f;
+
+	private float deltaTime = 0f;
+
 	// Use this for initialization
 	void Start () {
 		initAllBlock ();
@@ -48,7 +60,30 @@ public class GameManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		touchBlock ();
+		if (isPlaying == false) {
+			touchBlock ();
+		} 
+
+		if (needDestory == true) {
+			if (deltaTime > 2 * totalMove) {
+				Debug.Log ("KUHWFEuhfs jakdf");
+				needDestory = false;
+				deltaTime = 0f;
+				isPlaying = false;
+			} else {
+				isPlaying = true;
+				deltaTime++;
+//				Debug.LogFormat ("deltaTime {0}", deltaTime);
+				if (deltaTime <= totalMove) {
+					if (dropBlocks.Count == 0) {
+						deltaTime = totalMove;
+					}
+					droping (deltaTime);
+				} else if (deltaTime > totalMove) {
+					moving (deltaTime - totalMove);
+				}
+			}
+		}
 	}
 
 	void initAllBlock(){
@@ -257,6 +292,7 @@ public class GameManager : MonoBehaviour {
 
 	void removeBlocks(){
 		if (allDisappearIndex.Count > 1) {
+			needDestory = true;
 //			Debug.LogFormat ("remove {0}", allDisappearIndex.Count);
 			foreach (int element in allDisappearIndex) 
 			{
@@ -281,6 +317,7 @@ public class GameManager : MonoBehaviour {
 
 	//下落格子
 	void dropBlock(){
+		dropBlocks.Clear ();
 		for (int i = 0; i < B_Width; i++) {
 			int colum = i * B_Width;
 			int empty = 0;
@@ -311,6 +348,7 @@ public class GameManager : MonoBehaviour {
 								GameObject block = allBlocks [floor,bIndex];
 								allBlocks [floor,bIndex] = null;
 								allBlocks [floor,bIndex - empty] = block; 
+								dropBlocks.Add (block);
 //								break;
 							}
 
@@ -346,8 +384,25 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+	void droping(float delatTime){
+		foreach (GameObject element in dropBlocks) {
+			BlockBase bBase = element.GetComponent<BlockBase>();
+			bBase.drop (delatTime);
+		}
+	}
+
+	void moving(float delatTime){
+		foreach (GameObject element in moveBlocks) {
+			BlockBase bBase = element.GetComponent<BlockBase>();
+			bBase.move (delatTime);
+		}
+	}
+
+
+
 	//向左靠拢格子
 	void leftMoveBlock(){
+		moveBlocks.Clear ();
 		int line = 0;
 		int empty = 0;
 		int floor = -1;
@@ -374,6 +429,7 @@ public class GameManager : MonoBehaviour {
 									GameObject block = allBlocks [k,lIndex];
 									allBlocks [k,lIndex] = null;
 									allBlocks [k,lIndex - empty * B_Width] = block;
+									moveBlocks.Add (block);
 //									break;
 								}
 							}

@@ -18,13 +18,13 @@ public class BlockBase : MonoBehaviour {
 
 	private Vector3 lastP;
 
-	private float timeDelta = 0f;
 
 	private float totalMove = 10f;
 
 	public AnimationCurve AniX;
 
 	public Vector3 targetPosition;
+
 	// Use this for initialization
 	void Awake(){
 		int index = Mathf.FloorToInt(Random.Range(0f,_materials.Length));
@@ -43,23 +43,31 @@ public class BlockBase : MonoBehaviour {
 //			Vector3 v = new Vector3 (0, 0, 0.2f);
 //			transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref v, 0.1f);
 //		}
+
+
+
+	}
+
+	public void drop(float timeDelta){
 		if (isDrop) {
 			if (timeDelta <= totalMove) {
 				this.transform.position = lastP - new Vector3 (0, 0, AniX.Evaluate (timeDelta / totalMove) * dropDistance);
-				timeDelta += 1f;
-			} else {
-				isDrop = false;
-				timeDelta = 0f;
-				lastP = this.transform.position;
-			}
-		} else if(isMove){
+				if (timeDelta == totalMove) {
+					isDrop = false;
+					lastP = this.transform.position;
+				}
+			} 
+		} 
+	}
+
+	public void move(float timeDelta){
+		if(isMove){
 			if (timeDelta <= totalMove) {
 				this.transform.position = lastP - new Vector3 (AniX.Evaluate (timeDelta / totalMove) * moveDistance, 0,0);
-				timeDelta += 1f;
-			} else {
-				isMove = false;
-				timeDelta = 0f;
-			}
+				if (timeDelta == totalMove) {
+					isMove = false;
+				}
+			} 
 		}
 	}
 
@@ -82,4 +90,6 @@ public class BlockBase : MonoBehaviour {
 		}
 //		this.transform.position = this.transform.position - new Vector3 (distance, 0, 0	);
 	}
+
+
 }
