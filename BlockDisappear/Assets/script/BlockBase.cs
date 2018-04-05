@@ -23,7 +23,10 @@ public class BlockBase : MonoBehaviour {
 
 	public AnimationCurve AniX;
 
-	public Vector3 targetPosition;
+
+    private Vector3 lpos = Vector3.zero;
+
+    public Vector3 targetPosition;
 
 	// Use this for initialization
 	void Awake(){
@@ -47,6 +50,19 @@ public class BlockBase : MonoBehaviour {
 
 
 	}
+
+    public void elevate(float timeDelta) {
+        //lpos = this.transform.localPosition;
+        if (timeDelta == 1f) {
+           lpos = this.transform.localPosition;
+            Debug.Log(lpos);
+        }
+        if (timeDelta <= totalMove)
+        {
+            this.transform.localPosition = lpos + new Vector3(0, AniX.Evaluate(timeDelta / totalMove) * 1,0);
+           // Debug.Log(this.transform.localPosition);
+        }
+    }
 
 	public void drop(float timeDelta){
 		if (isDrop) {

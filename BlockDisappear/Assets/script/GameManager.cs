@@ -45,8 +45,20 @@ public class GameManager : MonoBehaviour {
 
 	private float deltaTime = 0f;
 
-	// Use this for initialization
-	void Start () {
+    public Camera mainCamera;
+
+    private float rotateAngle = 80f;
+
+    private float rotateFrame = 30;
+
+    private int currentRotateFrame = -1;
+
+    private bool isElevate = false;
+
+    private int cameraMove = 0;
+
+    // Use this for initialization
+    void Start () {
 		initAllBlock ();
 
 		Button btn = addFloorBtn.GetComponent<Button>();
@@ -54,8 +66,10 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void onAddFloor(){
-		generateBlock (currentFloor+1);
-	}
+        //currentRotateFrame = 0;
+        elevateBlocks(10);
+        //generateBlock (currentFloor+1);
+    }
 
 
 	// Update is called once per frame
@@ -66,7 +80,6 @@ public class GameManager : MonoBehaviour {
 
 		if (needDestory == true) {
 			if (deltaTime > 2 * totalMove) {
-				Debug.Log ("KUHWFEuhfs jakdf");
 				needDestory = false;
 				deltaTime = 0f;
 				isPlaying = false;
@@ -83,8 +96,46 @@ public class GameManager : MonoBehaviour {
 					moving (deltaTime - totalMove);
 				}
 			}
-		}
-	}
+		}else if (cameraMove == 1 && currentRotateFrame >= 0 && currentRotateFrame <= rotateFrame) {
+            currentRotateFrame++;
+            mainCamera.transform.RotateAround(Vector3.zero, Vector3.left, rotateAngle / rotateFrame);
+            if (currentRotateFrame == rotateFrame) {
+                currentRotateFrame = -1;
+                isElevate = true;
+                deltaTime = 0f;
+                cameraMove = 0;
+                generateBlock(currentFloor + 1);
+            }
+        }
+
+        if (isElevate) {
+
+            if (deltaTime > totalMove)
+            {
+                isElevate = false;
+                deltaTime = 0f;
+                currentRotateFrame = 0;
+                cameraMove = -1;
+            }
+            else {
+                deltaTime++;
+                elevateBlocks(deltaTime);
+            }
+        }else if (cameraMove == -1 && currentRotateFrame >= 0 && currentRotateFrame <= rotateFrame)
+        {
+            currentRotateFrame++;
+            mainCamera.transform.RotateAround(Vector3.zero, Vector3.left, -rotateAngle / rotateFrame);
+            if (currentRotateFrame == rotateFrame)
+            {
+                currentRotateFrame = -1;
+                deltaTime = 0f;
+                cameraMove = 0;
+            }
+        }
+
+
+
+    }
 
 	void initAllBlock(){
 		blockStates = new BlockState[B_Width, B_Width * B_Width];
@@ -125,20 +176,36 @@ public class GameManager : MonoBehaviour {
 		p.Play ();
 	}
 
+
+    void elevateBlocks(float deltaTime) {
+        int counts = B_Width * B_Width;
+        for (int i = 0; i < (currentFloor+1); i++)
+        {
+            for (int j = 0; j < counts; j++)
+            {
+                if (allBlocks[i, j])
+                {
+                    BlockBase blockBase = allBlocks[i, j].GetComponent<BlockBase>();
+                    blockBase.elevate(deltaTime);
+                }
+            }
+        }
+    }
+
 	void generateBlock(int floor){
 		int counts = B_Width * B_Width;
 		currentFloor = floor;
-		for (int i = 0; i < (currentFloor); i++) {
-			for (int j = 0; j < counts; j++) {
-				if(allBlocks[i,j]){
-					allBlocks[i,j].transform.localPosition += new Vector3 (0,1,0);
-				}
-			}
-		}
+		//for (int i = 0; i < (currentFloor); i++) {
+		//	for (int j = 0; j < counts; j++) {
+		//		if(allBlocks[i,j]){
+		//			allBlocks[i,j].transform.localPosition += new Vector3 (0,1,0);
+		//		}
+		//	}
+		//}
 		Debug.LogFormat ("currentFloor {0}", currentFloor);
 
 		Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
-		Vector3 v = new Vector3 (0,1,0);
+		Vector3 v = new Vector3 (0,0,0);
 		for (int i = 0; i < counts; i++){			
 			v.x = Mathf.Ceil (i / B_Width) * 1.0f + 0.5f;
 			v.z = i % B_Width * 1.0f+0.5f ;
@@ -205,8 +272,9 @@ public class GameManager : MonoBehaviour {
 //				Debug.LogFormat ("same color {0}", checkSameColor);
 
 				if (checkSameColor == false) {
-//					generateBlock (currentFloor+1);
-					m_MessageText.text = "不可消除";
+                    currentRotateFrame = 0;
+                    cameraMove = 1;
+                    m_MessageText.text = "不可消除";
 				} else {
 					m_MessageText.text = "消除";
 				}
