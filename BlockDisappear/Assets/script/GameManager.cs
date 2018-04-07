@@ -238,8 +238,13 @@ public class GameManager : MonoBehaviour {
 
 	void touchBlock(){
 		if (Input.GetMouseButtonUp(0)) {
+			Ray ray;
+			if (isMainC) {
+				ray = mainCamera.ScreenPointToRay (Input.mousePosition);  
+			} else {
+				ray = sideCamera.ScreenPointToRay (Input.mousePosition);  
+			}
 
-			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);  
 			RaycastHit hit;
 
 			if(Physics.Raycast (ray,out hit))    //如果真的发生了碰撞，ray这条射线在hit点与别的物体碰撞了
