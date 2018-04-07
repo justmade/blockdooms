@@ -174,6 +174,7 @@ public class GameManager : MonoBehaviour {
 		boom.transform.parent = container.transform;
 		ParticleSystem p = boom.GetComponent<ParticleSystem> ();
 		p.Play ();
+		Destroy(p,p.startLifetime); 
 	}
 
 
