@@ -241,24 +241,21 @@ public class GameManager : MonoBehaviour {
 				checkSameColor = false;
 				if (hit.collider.gameObject.tag == "Block") {
 					debug_msg_1.text = printBlock ();
-					Transform t = hit.collider.gameObject.transform;
-					float px = t.localPosition.x - 0.5f;
-					float pz = t.localPosition.z - 0.5f;
-
-					int ix = Mathf.CeilToInt (px / 1);
-					int iy = Mathf.CeilToInt(pz % B_Width);
-					int index = ix * B_Width + iy;
+//					Transform t = hit.collider.gameObject.transform;
+//					float px = t.localPosition.x - 0.5f;
+//					float pz = t.localPosition.z - 0.5f;
+//
+//					int ix = Mathf.CeilToInt (px / 1);
+//					int iy = Mathf.CeilToInt(pz % B_Width);
+//					int index = ix * B_Width + iy;
 
 					BlockBase bb = hit.collider.GetComponent<BlockBase> ();
+					int index = findBlockIndex (hit.collider.gameObject);
+
 
 					addDisappearIndex (index);
 					Debug.LogFormat ("index  {0}", index);
 					findNeighbour (index, bb.getColorIndex (),0);
-				}
-
-				foreach (int element in allDisappearIndex) 
-				{
-//					Debug.LogFormat ("ele , {0}",element);
 				}
 				printBlock ();
 				removeBlocks ();
@@ -269,9 +266,6 @@ public class GameManager : MonoBehaviour {
 				findVerticalConnect ();
 //				printBlock ();
 				debug_msg_2.text = printBlock ();
-
-//				Debug.LogFormat ("same color {0}", checkSameColor);
-
 				if (checkSameColor == false) {
                     currentRotateFrame = 0;
                     cameraMove = 1;
@@ -281,6 +275,18 @@ public class GameManager : MonoBehaviour {
 				}
 			}
 		}
+	}
+
+	//在数组中找到对应的下标
+	int findBlockIndex(GameObject bBase){
+		for (int i = 0; i < currentFloor + 1; i++) {
+			for( int j = 0 ; j < allBlocks.GetLength(1) ;j ++){
+				if (bBase == allBlocks [i, j]) {
+					return j;
+				}
+			}
+		}
+		return -1;
 	}
 
 	string printBlock(){
