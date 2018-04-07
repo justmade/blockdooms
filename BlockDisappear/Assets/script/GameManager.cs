@@ -45,7 +45,11 @@ public class GameManager : MonoBehaviour {
 
 	private float deltaTime = 0f;
 
+	private bool isMainC = true;
+
     public Camera mainCamera;
+
+	public Camera sideCamera;
 
     private float rotateAngle = 80f;
 
@@ -60,14 +64,19 @@ public class GameManager : MonoBehaviour {
     // Use this for initialization
     void Start () {
 		initAllBlock ();
-
 		Button btn = addFloorBtn.GetComponent<Button>();
 		btn.onClick.AddListener(onAddFloor);
+
+		mainCamera.enabled = isMainC;
+		sideCamera.enabled = !isMainC;
 	}
 
 	void onAddFloor(){
+		isMainC = !isMainC;
+		mainCamera.enabled = isMainC;
+		sideCamera.enabled = !isMainC;
         //currentRotateFrame = 0;
-        elevateBlocks(10);
+        //elevateBlocks(10);
         //generateBlock (currentFloor+1);
     }
 
