@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour {
 	//记录格子的状态
 	public BlockState[,] blockStates;
 
+	//每一层最上面格子的颜色
+	public BlockState[] topBlockSates;
+
 	public Text m_MessageText; 
 
 	public Text debug_msg_1; 
@@ -148,6 +151,7 @@ public class GameManager : MonoBehaviour {
 
 	void initAllBlock(){
 		blockStates = new BlockState[B_Width, B_Width * B_Width];
+		topBlockSates = new BlockState[B_Width * B_Width];
 		currentFloor = 0;
 		allBlocks = new GameObject[B_Width, B_Width * B_Width];
 		Vector3 v = new Vector3 (0,1,0);
@@ -169,6 +173,9 @@ public class GameManager : MonoBehaviour {
 			blockStates [0, i] = new BlockState ();
 			blockStates [0,i].color = color;
 			blockStates [0,i].floor = currentFloor;
+
+			topBlockSates[i] = new BlockState ();
+			topBlockSates[i].color = -1;
 		}
 
 		container.transform.position = new Vector3(-(B_Width * 1.0f) / 2,0,-(B_Width * 1.0f) / 2);
@@ -280,6 +287,7 @@ public class GameManager : MonoBehaviour {
 				findVerticalConnect ();
 //				printBlock ();
 				debug_msg_2.text = printBlock ();
+				findTopBlock ();
 				if (checkSameColor == false) {
                     currentRotateFrame = 0;
                     cameraMove = 1;
@@ -303,6 +311,32 @@ public class GameManager : MonoBehaviour {
 		return -1;
 	}
 
+	//获取每一次最上面的方块 从上到下，从左到右
+	void findTopBlock(){
+		int index = 0;
+		string top = "";
+		for (int i = 0; i < currentFloor + 1; i++) {
+			for(int j = B_Width -1  ; j >= 0 ;j --){
+				int colum = j * B_Width;
+				int topColor = -1;	
+				for (int k = B_Width-1; k >= 0; k--) {
+					int bIndex = colum + k;
+					GameObject block = allBlocks [i, bIndex];
+					if (block) {
+						BlockBase blockBase = block.GetComponent<BlockBase>();
+						topColor = blockBase.getColorIndex ();
+						break;
+					}
+				}
+				//Debug.Log (index);
+				topBlockSates[index++].color = topColor;
+				top = top + topColor;
+			}
+			top += "\n";
+		}
+	}
+		
+
 	string printBlock(){
 		string d = "";
 		for (int i = B_Width-1; i >=0; i--) {
@@ -313,7 +347,6 @@ public class GameManager : MonoBehaviour {
 			}
 			d += "\n";
 		}
-
 		return d;
 //		Debug.LogFormat ("{0}", d);
 	}
@@ -446,10 +479,10 @@ public class GameManager : MonoBehaviour {
 				}
 			}
 		}
-
 		updateBlockState ();
-	
 	}
+
+
 
 	void updateBlockState(){
 		int counts = B_Width * B_Width;
