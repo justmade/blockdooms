@@ -262,21 +262,16 @@ public class GameManager : MonoBehaviour {
 				checkSameColor = false;
 				if (hit.collider.gameObject.tag == "Block") {
 					debug_msg_1.text = printBlock ();
-//					Transform t = hit.collider.gameObject.transform;
-//					float px = t.localPosition.x - 0.5f;
-//					float pz = t.localPosition.z - 0.5f;
-//
-//					int ix = Mathf.CeilToInt (px / 1);
-//					int iy = Mathf.CeilToInt(pz % B_Width);
-//					int index = ix * B_Width + iy;
-
 					BlockBase bb = hit.collider.GetComponent<BlockBase> ();
 					int index = findBlockIndex (hit.collider.gameObject);
-
-
 					addDisappearIndex (index);
-					Debug.LogFormat ("index  {0}", index);
-					findNeighbour (index, bb.getColorIndex (),0);
+					//Debug.LogFormat ("index  {0}", index);
+					if (isMainC) {
+						findNeighbour (index, bb.getColorIndex (), 0);
+					} else {
+						int topIndex = originalIndex2TopInde (index);
+						findTopNeighbour(topIndex, bb.getColorIndex (), 0);
+					}
 				}
 				printBlock ();
 				removeBlocks ();
@@ -319,21 +314,26 @@ public class GameManager : MonoBehaviour {
 			for(int j = B_Width -1  ; j >= 0 ;j --){
 				int colum = j * B_Width;
 				int topColor = -1;	
+				int oriIndex = -1;
 				for (int k = B_Width-1; k >= 0; k--) {
 					int bIndex = colum + k;
 					GameObject block = allBlocks [i, bIndex];
 					if (block) {
 						BlockBase blockBase = block.GetComponent<BlockBase>();
 						topColor = blockBase.getColorIndex ();
+						oriIndex = bIndex;
 						break;
 					}
 				}
 				//Debug.Log (index);
-				topBlockSates[index++].color = topColor;
+				topBlockSates[index].color = topColor;
+				topBlockSates[index].originalIndex = oriIndex;
+				index++;
 				top = top + topColor;
 			}
 			top += "\n";
 		}
+		Debug.LogFormat ("top {0}", top);
 	}
 		
 
@@ -357,6 +357,7 @@ public class GameManager : MonoBehaviour {
 		int rightIndex = index + B_Width;
 
 		int leftIndex = index - B_Width;
+	
 
 		int downIndex = -1;
 		if (index % B_Width != 0) {
@@ -399,6 +400,73 @@ public class GameManager : MonoBehaviour {
 		return;
 	}
 
+	//递归查找顶部视角格子四周的同色目标 currentDir上次的位置，放置来回寻找堆栈溢出 1：上 2：下 4：右 8：左
+	void findTopNeighbour(int index , int color , int currentDir)
+	{
+		Debug.LogFormat ("findTopNeighbour {0}" , index);
+		int rightIndex = -1;
+		if ((index + 1) % B_Width != 0) {
+			rightIndex = index + 1;
+		}
+			
+		int leftIndex = index - 1;
+		if (index % B_Width != 0) {
+			leftIndex = index - 1;
+		}
+			
+		int downIndex = index + B_Width;
+
+		int upIndex = index - B_Width;
+	
+
+		if (rightIndex >= 0  && currentDir != 8) {
+			if (getTopBlockColor (rightIndex) == color) {
+				if (addDisappearIndex (topIndex2originalIndex(rightIndex))) {
+					findTopNeighbour (rightIndex, color , 4);
+				}
+			}
+		}
+
+		if (leftIndex >= 0 && currentDir != 4) {
+			if (getTopBlockColor (leftIndex) == color) {
+				if(addDisappearIndex(topIndex2originalIndex(leftIndex))){
+					findTopNeighbour (leftIndex, color,8);
+				}
+			}
+		}
+
+		if (downIndex <  B_Width * B_Width && getTopBlockColor (downIndex) == color && currentDir != 1) {
+			if (addDisappearIndex (topIndex2originalIndex(downIndex))) {
+				findTopNeighbour (downIndex, color,2);
+			}
+		}
+
+		if (upIndex >= 0 && getTopBlockColor (upIndex) == color && currentDir != 2) {
+			if (addDisappearIndex (topIndex2originalIndex(upIndex))) {
+				findTopNeighbour (upIndex, color,1);
+			}
+		}
+
+		return;
+	}
+
+	//将top的下标转换成原始的下标
+	int topIndex2originalIndex(int index)
+	{
+		return topBlockSates [index].originalIndex;
+	}
+
+	//将原始下标转换成top下标
+	int originalIndex2TopInde(int index){
+		for (int i = 0; i < topBlockSates.Length; i++) {
+			if (topBlockSates [i].originalIndex == index) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+
 	//添加要消除的目标下标
 	bool addDisappearIndex(int index){
 		if (allDisappearIndex.IndexOf (index) == -1) {
@@ -408,8 +476,14 @@ public class GameManager : MonoBehaviour {
 		return false;
 	}
 
+	//获取blockStates中的block颜色
 	int getBlockColor(int index){
 		return blockStates[0,index].color;
+	}
+
+	//获取topBlocks中的block颜色
+	int getTopBlockColor(int index){
+		return topBlockSates [index].color;
 	}
 
 	void removeBlocks(){
@@ -570,7 +644,7 @@ public class GameManager : MonoBehaviour {
 				int bIndex = i + j * B_Width;
 				int temp = blockStates[0,bIndex].color;
 				if (lastColor == temp && temp != -1) {
-					Debug.LogFormat ("hor{0},{1}",bIndex,lastColor);
+					//Debug.LogFormat ("hor{0},{1}",bIndex,lastColor);
 					checkSameColor = true;
 					return;
 				} else {
