@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour {
 
 	public Button addFloorBtn;
 
+	public Button addUpBtn;
+
 	int currentFloor;
 
 	public List<int> allDisappearIndex;
@@ -69,6 +71,9 @@ public class GameManager : MonoBehaviour {
 		initAllBlock ();
 		Button btn = addFloorBtn.GetComponent<Button>();
 		btn.onClick.AddListener(onAddFloor);
+		Button upBtn = addUpBtn.GetComponent<Button>();
+		upBtn.onClick.AddListener(onUp);
+
 
 		mainCamera.enabled = isMainC;
 		sideCamera.enabled = !isMainC;
@@ -83,6 +88,11 @@ public class GameManager : MonoBehaviour {
         //generateBlock (currentFloor+1);
     }
 
+
+	void onUp(){
+		currentRotateFrame = 0;
+		cameraMove = 1;
+	}
 
 	// Update is called once per frame
 	void Update () {
@@ -263,13 +273,13 @@ public class GameManager : MonoBehaviour {
 				if (hit.collider.gameObject.tag == "Block") {
 					debug_msg_1.text = printBlock ();
 					BlockBase bb = hit.collider.GetComponent<BlockBase> ();
-					int index = findBlockIndex (hit.collider.gameObject);
-					addDisappearIndex (index);
+					BlockState bs = findBlockIndex (hit.collider.gameObject);
+					addDisappearIndex (bs.originalIndex);
 					//Debug.LogFormat ("index  {0}", index);
 					if (isMainC) {
-						findNeighbour (index, bb.getColorIndex (), 0);
+						findNeighbour (bs.originalIndex, bb.getColorIndex (), 0);
 					} else {
-						int topIndex = originalIndex2TopInde (index);
+						int topIndex = originalIndex2TopInde (bs.originalIndex , bs.floor);
 						findTopNeighbour(topIndex, bb.getColorIndex (), 0);
 					}
 				}
@@ -282,7 +292,7 @@ public class GameManager : MonoBehaviour {
 				findVerticalConnect ();
 //				printBlock ();
 				debug_msg_2.text = printBlock ();
-				findTopBlock ();
+//				findTopBlock ();
 				if (checkSameColor == false) {
                     currentRotateFrame = 0;
                     cameraMove = 1;
@@ -295,15 +305,18 @@ public class GameManager : MonoBehaviour {
 	}
 
 	//在数组中找到对应的下标
-	int findBlockIndex(GameObject bBase){
+	BlockState findBlockIndex(GameObject bBase){
 		for (int i = 0; i < currentFloor + 1; i++) {
 			for( int j = 0 ; j < allBlocks.GetLength(1) ;j ++){
 				if (bBase == allBlocks [i, j]) {
-					return j;
+					BlockState bs = new BlockState ();
+					bs.originalIndex = j;
+					bs.floor = i;
+					return bs;
 				}
 			}
 		}
-		return -1;
+		return new BlockState();
 	}
 
 	//获取每一次最上面的方块 从上到下，从左到右
@@ -315,6 +328,7 @@ public class GameManager : MonoBehaviour {
 				int colum = j * B_Width;
 				int topColor = -1;	
 				int oriIndex = -1;
+				int floor = -1;
 				for (int k = B_Width-1; k >= 0; k--) {
 					int bIndex = colum + k;
 					GameObject block = allBlocks [i, bIndex];
@@ -322,10 +336,12 @@ public class GameManager : MonoBehaviour {
 						BlockBase blockBase = block.GetComponent<BlockBase>();
 						topColor = blockBase.getColorIndex ();
 						oriIndex = bIndex;
+						floor = i;
 						break;
 					}
 				}
 				//Debug.Log (index);
+				topBlockSates[index].floor = floor;
 				topBlockSates[index].color = topColor;
 				topBlockSates[index].originalIndex = oriIndex;
 				index++;
@@ -409,7 +425,7 @@ public class GameManager : MonoBehaviour {
 			rightIndex = index + 1;
 		}
 			
-		int leftIndex = index - 1;
+		int leftIndex = -1;
 		if (index % B_Width != 0) {
 			leftIndex = index - 1;
 		}
@@ -457,9 +473,10 @@ public class GameManager : MonoBehaviour {
 	}
 
 	//将原始下标转换成top下标
-	int originalIndex2TopInde(int index){
+	int originalIndex2TopInde(int index , int floor){
 		for (int i = 0; i < topBlockSates.Length; i++) {
-			if (topBlockSates [i].originalIndex == index) {
+			if (topBlockSates [i].originalIndex == index 
+				&& topBlockSates [i].floor == floor) {
 				return i;
 			}
 		}
@@ -483,6 +500,9 @@ public class GameManager : MonoBehaviour {
 
 	//获取topBlocks中的block颜色
 	int getTopBlockColor(int index){
+
+		Debug.LogFormat ("topBlockSates [index].color {0} , {1}", index, topBlockSates [index].color);
+
 		return topBlockSates [index].color;
 	}
 
@@ -498,7 +518,7 @@ public class GameManager : MonoBehaviour {
 					GameObject block = allBlocks [i,index];
 					if (block) {
 						Destroy (block);
-						Debug.LogFormat ("removeIndex {0} , {1}", i, index);
+						//Debug.LogFormat ("removeIndex {0} , {1}", i, index);
 						allBlocks [i, index] = null;
 						blockStates [0,index].color = -1;
 						addBoomParticle (block.transform.position);
@@ -567,7 +587,7 @@ public class GameManager : MonoBehaviour {
 					if (allBlocks [k, i]) {
 						BlockBase bBase = allBlocks[k,i].GetComponent<BlockBase>();
 						int color = bBase.getColorIndex ();
-						Debug.LogFormat ("update {0} , {1}" , i , color);
+						//Debug.LogFormat ("update {0} , {1}" , i , color);
 						blockStates [0, i].color = color;
 						blockStates [0, i].floor = k;
 						break;
