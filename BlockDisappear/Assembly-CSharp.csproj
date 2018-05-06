@@ -51,6 +51,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\CameraFollow.cs" />
      <Compile Include="Assets\script\BlockBase.cs" />
      <Compile Include="Assets\script\BlockState.cs" />
      <Compile Include="Assets\script\GameManager.cs" />

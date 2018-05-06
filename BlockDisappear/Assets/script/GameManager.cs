@@ -254,6 +254,10 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void touchBlock(){
+		if (mainCamera.GetComponent<CameraFollow> ().startMove == true) {
+			return;
+		}
+
 		if (Input.GetMouseButtonUp(0)) {
 			Ray ray;
 			if (isMainC) {
