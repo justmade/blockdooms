@@ -55,7 +55,6 @@ public class BlockBase : MonoBehaviour {
         //lpos = this.transform.localPosition;
         if (timeDelta == 1f) {
            lpos = this.transform.localPosition;
-            Debug.Log(lpos);
         }
         if (timeDelta <= totalMove)
         {

@@ -66,6 +66,10 @@ public class GameManager : MonoBehaviour {
 
     private int cameraMove = 0;
 
+	private int generateFloors = 3;
+
+	private int blocksLeftCounts;
+
     // Use this for initialization
     void Start () {
 		initAllBlock ();
@@ -119,25 +123,35 @@ public class GameManager : MonoBehaviour {
 				}
 			}
 		}else if (cameraMove == 1 && currentRotateFrame >= 0 && currentRotateFrame <= rotateFrame) {
+			
             currentRotateFrame++;
             mainCamera.transform.RotateAround(Vector3.zero, Vector3.left, rotateAngle / rotateFrame);
-            if (currentRotateFrame == rotateFrame) {
-                currentRotateFrame = -1;
-                isElevate = true;
-                deltaTime = 0f;
-                cameraMove = 0;
-                generateBlock(currentFloor + 1);
-            }
+
         }
+
+		if (currentRotateFrame == rotateFrame) {
+			Debug.Log("fffff");
+			currentRotateFrame = -1;
+			isElevate = true;
+			deltaTime = 0f;
+			cameraMove = 0;
+			generateBlock(currentFloor + 1);
+			generateFloors--;
+		}
 
         if (isElevate) {
 
             if (deltaTime > totalMove)
             {
-                isElevate = false;
-                deltaTime = 0f;
-                currentRotateFrame = 0;
-                cameraMove = -1;
+				if (generateFloors > 0) {
+					deltaTime = 0f;
+					currentRotateFrame = Mathf.FloorToInt(rotateFrame);
+				} else {
+					isElevate = false;
+					deltaTime = 0f;
+					currentRotateFrame = 0;
+					cameraMove = -1;
+				}
             }
             else {
                 deltaTime++;
@@ -168,6 +182,8 @@ public class GameManager : MonoBehaviour {
 		Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
 		container = GameObject.Find("BlockContainer");
 		int counts = B_Width * B_Width;
+		blocksLeftCounts = counts;
+		updateLeftText ();
 		for (int i = 0; i < counts; i++){			
 			v.x = Mathf.Ceil (i / B_Width) * 1.0f + 0.5f;
 			v.z = i % B_Width * 1.0f+0.5f ;
@@ -221,6 +237,8 @@ public class GameManager : MonoBehaviour {
 
 	void generateBlock(int floor){
 		int counts = B_Width * B_Width;
+		blocksLeftCounts = blocksLeftCounts + counts;
+		updateLeftText ();
 		currentFloor = floor;
 		//for (int i = 0; i < (currentFloor); i++) {
 		//	for (int j = 0; j < counts; j++) {
@@ -298,14 +316,19 @@ public class GameManager : MonoBehaviour {
 				debug_msg_2.text = printBlock ();
 //				findTopBlock ();
 				if (checkSameColor == false) {
-                    currentRotateFrame = 0;
-                    cameraMove = 1;
-                    m_MessageText.text = "不可消除";
+//                    currentRotateFrame = 0;
+//                    cameraMove = 1;
+                    //m_MessageText.text = "不可消除";
+					m_MessageText.text = "Gameover！ 剩余方块：" + blocksLeftCounts;
 				} else {
-					m_MessageText.text = "消除";
+					//m_MessageText.text = "消除";
 				}
 			}
 		}
+	}
+
+	void updateLeftText(){
+		m_MessageText.text = "剩余方块：" + blocksLeftCounts;
 	}
 
 	//在数组中找到对应的下标
@@ -512,6 +535,8 @@ public class GameManager : MonoBehaviour {
 
 	void removeBlocks(){
 		if (allDisappearIndex.Count > 1) {
+			blocksLeftCounts -= allDisappearIndex.Count;
+			updateLeftText ();
 			needDestory = true;
 //			Debug.LogFormat ("remove {0}", allDisappearIndex.Count);
 			foreach (int element in allDisappearIndex) 
@@ -521,6 +546,7 @@ public class GameManager : MonoBehaviour {
 				for (int i = 0; i < currentFloor + 1; i++) {
 					GameObject block = allBlocks [i,index];
 					if (block) {
+						
 						Destroy (block);
 						//Debug.LogFormat ("removeIndex {0} , {1}", i, index);
 						allBlocks [i, index] = null;
