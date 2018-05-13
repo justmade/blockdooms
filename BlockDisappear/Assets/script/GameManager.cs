@@ -259,7 +259,7 @@ public class GameManager : MonoBehaviour {
 				Instantiate(m_BlockPrefabs, Vector3.zero, turnRotation) as GameObject;
 			block.transform.parent = container.transform;
 			block.transform.localPosition = v;
-			block.transform.localScale = new Vector3 (1f, 1f, 1f);
+			block.transform.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
 			block.tag = "Block";
 			allBlocks[currentFloor,i] = block;
 			BlockBase bBase = block.GetComponent<BlockBase> ();
@@ -267,6 +267,7 @@ public class GameManager : MonoBehaviour {
 			if(blockStates [0,i].color == -1){
 				blockStates [0, i].color = color;
 				blockStates [0,i].floor = currentFloor;
+				block.transform.localScale = new Vector3 (1f, 1f, 1f);
 			}
 		}
 	}
@@ -620,6 +621,7 @@ public class GameManager : MonoBehaviour {
 						//Debug.LogFormat ("update {0} , {1}" , i , color);
 						blockStates [0, i].color = color;
 						blockStates [0, i].floor = k;
+						allBlocks[k,i].transform.localScale = new Vector3 (1f, 1f, 1f);
 						break;
 
 					}
