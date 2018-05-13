@@ -23,10 +23,17 @@ public class BlockBase : MonoBehaviour {
 
 	public AnimationCurve AniX;
 
+	public AnimationCurve AniScale;
 
     private Vector3 lpos = Vector3.zero;
 
     public Vector3 targetPosition;
+
+	public bool playAmplify = false;
+
+	private float amplifyFrames = 0;
+
+	private float amplifyTime = 20f;
 
 	// Use this for initialization
 	void Awake(){
@@ -42,13 +49,7 @@ public class BlockBase : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-//		if (targetPosition != Vector3.zero) {
-//			Vector3 v = new Vector3 (0, 0, 0.2f);
-//			transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref v, 0.1f);
-//		}
-
-
-
+		amplify ();
 	}
 
     public void elevate(float timeDelta) {
@@ -62,6 +63,20 @@ public class BlockBase : MonoBehaviour {
            // Debug.Log(this.transform.localPosition);
         }
     }
+
+	public void amplify(){
+		if (playAmplify) {
+			amplifyFrames++;
+			if (amplifyFrames <= amplifyTime) {
+				float value = 0.5f + AniScale.Evaluate (amplifyFrames / amplifyTime) * 0.5f;
+				this.transform.localScale =  new Vector3 (value, value, value);
+			}
+			if (amplifyFrames == amplifyTime) {
+				amplifyFrames = 0;
+				playAmplify = false;
+			}
+		}
+	}
 
 	public void drop(float timeDelta){
 		if (isDrop) {

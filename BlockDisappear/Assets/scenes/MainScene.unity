@@ -909,6 +909,98 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1531674132
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 114099737464132810, guid: 085cb9064f01b45559ee524074e913c5,
+        type: 2}
+      propertyPath: AniScale.m_Curve.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4725689160060972, guid: 085cb9064f01b45559ee524074e913c5, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0.7405136
+      objectReference: {fileID: 0}
+    - target: {fileID: 4725689160060972, guid: 085cb9064f01b45559ee524074e913c5, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4725689160060972, guid: 085cb9064f01b45559ee524074e913c5, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -1.0174628
+      objectReference: {fileID: 0}
+    - target: {fileID: 4725689160060972, guid: 085cb9064f01b45559ee524074e913c5, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4725689160060972, guid: 085cb9064f01b45559ee524074e913c5, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4725689160060972, guid: 085cb9064f01b45559ee524074e913c5, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4725689160060972, guid: 085cb9064f01b45559ee524074e913c5, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4725689160060972, guid: 085cb9064f01b45559ee524074e913c5, type: 2}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 114099737464132810, guid: 085cb9064f01b45559ee524074e913c5,
+        type: 2}
+      propertyPath: AniScale.m_Curve.Array.data[0].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114099737464132810, guid: 085cb9064f01b45559ee524074e913c5,
+        type: 2}
+      propertyPath: AniScale.m_Curve.Array.data[0].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114099737464132810, guid: 085cb9064f01b45559ee524074e913c5,
+        type: 2}
+      propertyPath: AniScale.m_Curve.Array.data[1].inSlope
+      value: 0.5888939
+      objectReference: {fileID: 0}
+    - target: {fileID: 114099737464132810, guid: 085cb9064f01b45559ee524074e913c5,
+        type: 2}
+      propertyPath: AniScale.m_Curve.Array.data[1].outSlope
+      value: 0.5888939
+      objectReference: {fileID: 0}
+    - target: {fileID: 114099737464132810, guid: 085cb9064f01b45559ee524074e913c5,
+        type: 2}
+      propertyPath: AniScale.m_Curve.Array.data[0].time
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114099737464132810, guid: 085cb9064f01b45559ee524074e913c5,
+        type: 2}
+      propertyPath: AniScale.m_Curve.Array.data[1].time
+      value: 0.6813453
+      objectReference: {fileID: 0}
+    - target: {fileID: 114099737464132810, guid: 085cb9064f01b45559ee524074e913c5,
+        type: 2}
+      propertyPath: AniScale.m_Curve.Array.data[1].value
+      value: 0.9483277
+      objectReference: {fileID: 0}
+    - target: {fileID: 114099737464132810, guid: 085cb9064f01b45559ee524074e913c5,
+        type: 2}
+      propertyPath: AniScale.m_Curve.Array.data[2].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114099737464132810, guid: 085cb9064f01b45559ee524074e913c5,
+        type: 2}
+      propertyPath: AniScale.m_Curve.Array.data[2].value
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 085cb9064f01b45559ee524074e913c5, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1902312620
 GameObject:
   m_ObjectHideFlags: 0

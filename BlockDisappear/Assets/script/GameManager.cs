@@ -267,7 +267,7 @@ public class GameManager : MonoBehaviour {
 			if(blockStates [0,i].color == -1){
 				blockStates [0, i].color = color;
 				blockStates [0,i].floor = currentFloor;
-				block.transform.localScale = new Vector3 (1f, 1f, 1f);
+				bBase.playAmplify = true;
 			}
 		}
 	}
@@ -552,7 +552,7 @@ public class GameManager : MonoBehaviour {
 						//Debug.LogFormat ("removeIndex {0} , {1}", i, index);
 						allBlocks [i, index] = null;
 						blockStates [0,index].color = -1;
-						addBoomParticle (block.transform.position);
+						//addBoomParticle (block.transform.position);
 						break;
 					}
 				}
@@ -621,7 +621,7 @@ public class GameManager : MonoBehaviour {
 						//Debug.LogFormat ("update {0} , {1}" , i , color);
 						blockStates [0, i].color = color;
 						blockStates [0, i].floor = k;
-						allBlocks[k,i].transform.localScale = new Vector3 (1f, 1f, 1f);
+						bBase.playAmplify = true;
 						break;
 
 					}
