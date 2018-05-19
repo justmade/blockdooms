@@ -943,7 +943,7 @@ MonoBehaviour:
   addFloorBtn: {fileID: 2115339483}
   addUpBtn: {fileID: 1299464289}
   allDisappearIndex: 
-  B_Width: 7
+  B_Width: 5
   boomParticle: {fileID: 1144990956482732, guid: ea0631e6027a542668c7eabf1b387ad1,
     type: 2}
   mainCamera: {fileID: 2109663769}
