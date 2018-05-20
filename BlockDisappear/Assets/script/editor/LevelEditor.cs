@@ -32,7 +32,7 @@ public class LevelEditor : EditorWindow {
 
 	public string[] selStrings = new string[] {"radio1", "radio2","radio3","radio4", "radio5", "radio6"};
 
-	private bool isUpdate = true;
+	private bool isUpdate = false;
 
 	private string[,] blockGrids;
 
@@ -64,6 +64,8 @@ public class LevelEditor : EditorWindow {
 			blockGrids[currentFloor,k] = "1";
 			lastGrids [currentFloor,k] = "1";
 		}
+
+		//mapSize = EditorGUILayout.Vector2IntField("Map Size:", mapSize);
 	}
 
 
@@ -72,15 +74,8 @@ public class LevelEditor : EditorWindow {
 	void OnGUI () 
 	{
 		mapSize = EditorGUILayout.Vector2IntField("Map Size:", mapSize);
-		totalGrids = mapSize.x * mapSize.y;
-
-
+	
 		floor = EditorGUILayout.IntField ("层数", floor);
-
-//		if(isUpdate){
-//			
-//		}
-
 
 		if (floor > 0) {
 			string[] floorNames = new string[floor];
@@ -94,48 +89,51 @@ public class LevelEditor : EditorWindow {
 			GUILayout.EndVertical ();
 		}
 
-		if (lastMapSize != mapSize) {
+		//更新网格数据
+		if (isUpdate && lastMapSize != mapSize) {
+			totalGrids = mapSize.x * mapSize.y;
+			isUpdate = false;
 			blockGrids = new string[floor,totalGrids];
-
-			int diff = mapSize.x - lastMapSize.x;
-
 
 			int lastIndex = 0;
 
-			for (int k = 0; k < totalGrids; k++) {
-				if (lastIndex >= lastMapSize.x * lastMapSize.y) {
-					blockGrids [currentFloor, k] = "-1";
+			if (mapSize.x >= lastMapSize.x) {
+				for (int k = 0; k < totalGrids; k++) {
+					if (lastIndex >= lastMapSize.x * lastMapSize.y) {
+						blockGrids [currentFloor, k] = "-1";
+					}
+
+					else if (k % (mapSize.x) >= (lastMapSize.x)) {
+						blockGrids [currentFloor, k] = "-1";
+					} 
+					else {
+						blockGrids [currentFloor, k] = lastGrids[currentFloor, lastIndex];
+						lastIndex++;
+					}
 				}
-				else if (k % (mapSize.x) >= (lastMapSize.x)) {
-					Debug.Log (k);
-					Debug.LogFormat ("lastMapSize.x {0}", lastMapSize.x);
-					blockGrids [currentFloor, k] = "-1";
-				} 
-				else {
+			}else if(mapSize.x < lastMapSize.x){
+				for (int k = 0; k < totalGrids; k++) {
+					if (lastIndex >= lastMapSize.x * lastMapSize.y) {
+						blockGrids [currentFloor, k] = "-1";
+					}
 					blockGrids [currentFloor, k] = lastGrids[currentFloor, lastIndex];
 					lastIndex++;
-
-//					blockGrids [currentFloor, k] = "2";
+					if ((k+1) % (mapSize.x) == 0) {
+						lastIndex += (lastMapSize.x - mapSize.x);
+					} 
 				}
-
 			}
-
-
-
 
 			lastGrids = blockGrids;
 			lastMapSize = mapSize;
-
 		}
-
-		//输入框控件
-
+			
 		for(int i=0;i<totalGrids;i++){
-			if (i %  mapSize.x == 0) {
+			if (i %  lastMapSize.x == 0) {
 				EditorGUILayout.BeginHorizontal (GUILayout.Height (30));
 			}
-			blockGrids[currentFloor,i] = EditorGUILayout.TextField("",blockGrids[currentFloor,i], GUILayout.Width (40),  GUILayout.Height (30));
-			if ((i+1) %  mapSize.x == 0) {
+			lastGrids[currentFloor,i] = EditorGUILayout.TextField("",lastGrids[currentFloor,i], GUILayout.Width (40),  GUILayout.Height (30));
+			if ((i+1) %  lastMapSize.x == 0) {
 				EditorGUILayout.EndHorizontal ();
 			}
 		}
@@ -172,7 +170,7 @@ public class LevelEditor : EditorWindow {
 	}
 
 	void updateSetting(){
-		
+		isUpdate = true;
 	}
 
 	//更新
