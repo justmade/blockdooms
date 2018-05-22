@@ -39,6 +39,11 @@ public class BlockBase : MonoBehaviour {
 	void Awake(){
 		int index = Mathf.FloorToInt(Random.Range(0f,_materials.Length));
 		colorIndex = index;
+		Debug.Log (colorIndex);
+	}
+
+	public void setColor(int i){
+		this.GetComponent<Renderer> ().material = _materials [i];
 	}
 
 	void Start () {

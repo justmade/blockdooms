@@ -42,6 +42,10 @@ public class LevelEditor : EditorWindow {
 
 	private int currentFloor;
 
+	private int totalFloors;
+
+	private GameObject blockContainer;
+
 	public void Awake () 
 	{
 		//在资源中读取一张贴图
@@ -53,17 +57,21 @@ public class LevelEditor : EditorWindow {
 
 		totalGrids = mapSize.x * mapSize.y;
 
-		floor = 1;
+		floor = 10;
 		currentFloor = 0;
+		totalFloors = 10;
 
-		blockGrids = new string[1, totalGrids];
+		blockGrids = new string[totalFloors, totalGrids];
 
-		lastGrids = new string[1, totalGrids];
+		lastGrids = new string[totalFloors, totalGrids];
 
-		for (int k = 0; k < totalGrids; k++) {
-			blockGrids[currentFloor,k] = "1";
-			lastGrids [currentFloor,k] = "1";
+		for (int f = 0; f < totalFloors; f++) {
+			for (int k = 0; k < totalGrids; k++) {
+				blockGrids[f,k] = "1";
+				lastGrids [f,k] = "1";
+			}
 		}
+		blockContainer = new GameObject ("block container");
 
 		//mapSize = EditorGUILayout.Vector2IntField("Map Size:", mapSize);
 	}
@@ -85,7 +93,7 @@ public class LevelEditor : EditorWindow {
 
 			GUILayout.BeginVertical("Box");
 
-			selGridInt = GUILayout.SelectionGrid(selGridInt, floorNames, 10);
+			currentFloor = GUILayout.SelectionGrid(currentFloor, floorNames, 10);
 			GUILayout.EndVertical ();
 		}
 
@@ -98,32 +106,37 @@ public class LevelEditor : EditorWindow {
 			int lastIndex = 0;
 
 			if (mapSize.x >= lastMapSize.x) {
-				for (int k = 0; k < totalGrids; k++) {
-					if (lastIndex >= lastMapSize.x * lastMapSize.y) {
-						blockGrids [currentFloor, k] = "-1";
-					}
+				for (int f = 0; f < totalFloors; f++) {
+					lastIndex = 0;
+					for (int k = 0; k < totalGrids; k++) {
+						if (lastIndex >= lastMapSize.x * lastMapSize.y) {
+							blockGrids [f, k] = "-1";
+						}
 
-					else if (k % (mapSize.x) >= (lastMapSize.x)) {
-						blockGrids [currentFloor, k] = "-1";
-					} 
-					else {
-						blockGrids [currentFloor, k] = lastGrids[currentFloor, lastIndex];
-						lastIndex++;
+						else if (k % (mapSize.x) >= (lastMapSize.x)) {
+							blockGrids [f, k] = "-1";
+						} 
+						else {
+							blockGrids [f, k] = lastGrids[f, lastIndex];
+							lastIndex++;
+						}
 					}
 				}
 			}else if(mapSize.x < lastMapSize.x){
-				for (int k = 0; k < totalGrids; k++) {
-					if (lastIndex >= lastMapSize.x * lastMapSize.y) {
-						blockGrids [currentFloor, k] = "-1";
+				for(int f = 0 ; f < totalFloors ; f++){
+					lastIndex = 0;
+					for(int k = 0; k < totalGrids; k++) {
+						if (lastIndex >= lastMapSize.x * lastMapSize.y) {
+							blockGrids [f, k] = "-1";
+						}
+						blockGrids [f, k] = lastGrids[f, lastIndex];
+						lastIndex++;
+						if ((k+1) % (mapSize.x) == 0) {
+							lastIndex += (lastMapSize.x - mapSize.x);
+						} 
 					}
-					blockGrids [currentFloor, k] = lastGrids[currentFloor, lastIndex];
-					lastIndex++;
-					if ((k+1) % (mapSize.x) == 0) {
-						lastIndex += (lastMapSize.x - mapSize.x);
-					} 
 				}
 			}
-
 			lastGrids = blockGrids;
 			lastMapSize = mapSize;
 		}
@@ -171,6 +184,39 @@ public class LevelEditor : EditorWindow {
 
 	void updateSetting(){
 		isUpdate = true;
+
+		addBlocks ();
+	}
+
+	void addBlocks(){
+		foreach (Transform child in blockContainer.transform)
+		{
+			DestroyImmediate (child.gameObject);
+		}
+		for (int i = 0; i < floor; i++) {
+			Vector3 v = new Vector3 (0,i+1,0);
+			Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
+			for (int j = 0; j < totalGrids; j++) {
+				v.x = Mathf.Ceil (j / lastMapSize.x) * 1.0f + 0.5f;
+				v.z = j % lastMapSize.x * 1.0f+0.5f ;
+				Object blockPreb = Resources.Load( "BlockBase", typeof( GameObject ) );
+				GameObject block = Instantiate( blockPreb,v ,turnRotation) as GameObject;	
+				block.transform.parent = blockContainer.transform;
+
+				BlockBase bBase = block.GetComponent<BlockBase> ();
+				int color = bBase.getColorIndex ();
+				int value = int.Parse (lastGrids [i, j]);
+				if (value < 0) {
+					value = 0;
+				}
+				bBase.setColor (value);
+				Debug.Log (color);
+			}
+		
+		}
+
+	
+
 	}
 
 	//更新
@@ -219,5 +265,11 @@ public class LevelEditor : EditorWindow {
 	void OnDestroy()
 	{
 		Debug.Log("当窗口关闭时调用");
+		foreach (Transform child in blockContainer.transform)
+		{
+			
+			DestroyImmediate (child.gameObject);
+		}
+		DestroyImmediate (blockContainer);
 	}
 }
