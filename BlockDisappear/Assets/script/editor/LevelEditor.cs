@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 
 using LitJson;
-
+using System.IO;
 
 public class LevelEditor : EditorWindow {
 
@@ -209,7 +209,28 @@ public class LevelEditor : EditorWindow {
 	}
 
 	void exportToJson(){
-		Debug.Log(JsonMapper.ToJson(lastGrids));
+		JsonData jd = new JsonData ();
+		jd ["grid"] =  JsonMapper.ToJson(lastGrids);
+		jd ["floor"] = floor;
+		jd ["sizeX"] = (mapSize.x);
+		jd ["sizeY"] = (mapSize.y);
+
+		Debug.Log(jd.ToJson());
+
+		CreateFile (Application.dataPath+"/level.txt", jd.ToJson ());
+	}
+
+	public void CreateFile (string _filePath ,string _data)
+	{
+		StreamWriter sw;
+		FileInfo fi = new FileInfo (_filePath);
+			//创建文件
+		sw = fi.CreateText ();
+		sw.WriteLine (_data);//以行的形式写入
+		sw.Close ();//关闭流
+		sw.Dispose ();//销毁流
+
+		this.ShowNotification(new GUIContent("File Saved Completed"));
 	}
 
 	void updateSetting(){
