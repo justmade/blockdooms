@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+using LitJson;
+
+
 public class LevelEditor : EditorWindow {
 
 	[MenuItem ("Window/LevelEditor")]
@@ -40,6 +43,8 @@ public class LevelEditor : EditorWindow {
 
 	private int totalGrids;
 
+	private int selectedFloor;
+
 	private int currentFloor;
 
 	private int totalFloors;
@@ -58,6 +63,7 @@ public class LevelEditor : EditorWindow {
 		totalGrids = mapSize.x * mapSize.y;
 
 		floor = 10;
+		selectedFloor = 0;
 		currentFloor = 0;
 		totalFloors = 10;
 
@@ -83,6 +89,7 @@ public class LevelEditor : EditorWindow {
 	{
 		mapSize = EditorGUILayout.Vector2IntField("Map Size:", mapSize);
 	
+		GUI.SetNextControlName("FloorText");
 		floor = EditorGUILayout.IntField ("层数", floor);
 
 		if (floor > 0) {
@@ -93,7 +100,13 @@ public class LevelEditor : EditorWindow {
 
 			GUILayout.BeginVertical("Box");
 
-			currentFloor = GUILayout.SelectionGrid(currentFloor, floorNames, 10);
+			selectedFloor = GUILayout.SelectionGrid (currentFloor, floorNames, 10);
+
+			if (currentFloor != selectedFloor) {
+				currentFloor = selectedFloor;
+				GUI.FocusControl ("FloorText");
+			}
+		
 			GUILayout.EndVertical ();
 		}
 
@@ -145,9 +158,6 @@ public class LevelEditor : EditorWindow {
 			if (i %  lastMapSize.x == 0) {
 				EditorGUILayout.BeginHorizontal (GUILayout.Height (30));
 			}
-//			Debug.Log (currentFloor);
-//			Debug.Log (lastGrids);
-//			Debug.Log (i);
 			if (lastGrids != null) {
 				lastGrids[currentFloor,i] = EditorGUILayout.TextField("",lastGrids[currentFloor,i], GUILayout.Width (40),  GUILayout.Height (30));
 				if ((i+1) %  lastMapSize.x == 0) {
@@ -165,6 +175,11 @@ public class LevelEditor : EditorWindow {
 		if(GUILayout.Button ("Clear", GUILayout.Width (200))) {
 
 			OnDestroy ();
+		}
+
+		if(GUILayout.Button ("Export-json", GUILayout.Width (200))) {
+
+			exportToJson();
 		}
 
 //		if(GUILayout.Button("打开通知",GUILayout.Width(200)))
@@ -193,14 +208,17 @@ public class LevelEditor : EditorWindow {
 
 	}
 
+	void exportToJson(){
+		Debug.Log(JsonMapper.ToJson(lastGrids));
+	}
+
 	void updateSetting(){
 		isUpdate = true;
-
+		GUI.FocusControl ("FloorText");
 		addBlocks ();
 	}
 
 	void addBlocks(){
-		currentFloor = 0;
 		OnDestroy ();
 		blockContainer = new GameObject ("block container");
 		for (int i = 0; i < floor; i++) {

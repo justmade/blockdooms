@@ -52,10 +52,24 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\CameraFollow.cs" />
+     <Compile Include="Assets\Extensions.cs" />
+     <Compile Include="Assets\IJsonWrapper.cs" />
+     <Compile Include="Assets\JsonAttribute.cs" />
+     <Compile Include="Assets\JsonData.cs" />
+     <Compile Include="Assets\JsonException.cs" />
+     <Compile Include="Assets\JsonMapper.cs" />
+     <Compile Include="Assets\JsonMockWrapper.cs" />
+     <Compile Include="Assets\JsonReader.cs" />
+     <Compile Include="Assets\JsonWriter.cs" />
+     <Compile Include="Assets\Lexer.cs" />
+     <Compile Include="Assets\ParserToken.cs" />
+     <Compile Include="Assets\Platform.cs" />
      <Compile Include="Assets\script\BlockBase.cs" />
      <Compile Include="Assets\script\BlockState.cs" />
      <Compile Include="Assets\script\GameManager.cs" />
      <Compile Include="Assets\script\PlayerMove.cs" />
+     <Compile Include="Assets\script\UnityLitJson-Example\JsonExample.cs" />
+     <Compile Include="Assets\Unity\UnityTypeBindings.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
