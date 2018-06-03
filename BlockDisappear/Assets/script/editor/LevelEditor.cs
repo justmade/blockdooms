@@ -145,15 +145,26 @@ public class LevelEditor : EditorWindow {
 			if (i %  lastMapSize.x == 0) {
 				EditorGUILayout.BeginHorizontal (GUILayout.Height (30));
 			}
-			lastGrids[currentFloor,i] = EditorGUILayout.TextField("",lastGrids[currentFloor,i], GUILayout.Width (40),  GUILayout.Height (30));
-			if ((i+1) %  lastMapSize.x == 0) {
-				EditorGUILayout.EndHorizontal ();
+//			Debug.Log (currentFloor);
+//			Debug.Log (lastGrids);
+//			Debug.Log (i);
+			if (lastGrids != null) {
+				lastGrids[currentFloor,i] = EditorGUILayout.TextField("",lastGrids[currentFloor,i], GUILayout.Width (40),  GUILayout.Height (30));
+				if ((i+1) %  lastMapSize.x == 0) {
+					EditorGUILayout.EndHorizontal ();
+				}
 			}
+
 		}
 			
 		if (GUILayout.Button ("Apply", GUILayout.Width (200))) {
 		
 			updateSetting ();
+		}
+
+		if(GUILayout.Button ("Clear", GUILayout.Width (200))) {
+
+			OnDestroy ();
 		}
 
 //		if(GUILayout.Button("打开通知",GUILayout.Width(200)))
@@ -189,16 +200,15 @@ public class LevelEditor : EditorWindow {
 	}
 
 	void addBlocks(){
-		foreach (Transform child in blockContainer.transform)
-		{
-			DestroyImmediate (child.gameObject);
-		}
+		currentFloor = 0;
+		OnDestroy ();
+		blockContainer = new GameObject ("block container");
 		for (int i = 0; i < floor; i++) {
 			Vector3 v = new Vector3 (0,i+1,0);
 			Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
 			for (int j = 0; j < totalGrids; j++) {
-				v.x = Mathf.Ceil (j / lastMapSize.x) * 1.0f + 0.5f;
-				v.z = j % lastMapSize.x * 1.0f+0.5f ;
+				v.x =  (j % lastMapSize.x) * 1.0f + 0.5f;
+				v.z = -Mathf.Ceil(j / lastMapSize.x) * 1.0f+0.5f ;
 				Object blockPreb = Resources.Load( "BlockBase", typeof( GameObject ) );
 				GameObject block = Instantiate( blockPreb,v ,turnRotation) as GameObject;	
 				block.transform.parent = blockContainer.transform;
@@ -265,11 +275,15 @@ public class LevelEditor : EditorWindow {
 	void OnDestroy()
 	{
 		Debug.Log("当窗口关闭时调用");
-		foreach (Transform child in blockContainer.transform)
-		{
-			
-			DestroyImmediate (child.gameObject);
+
+		if (blockContainer) {
+			foreach (Transform child in blockContainer.transform)
+			{
+
+				DestroyImmediate (child.gameObject);
+			}
+			DestroyImmediate (blockContainer);
 		}
-		DestroyImmediate (blockContainer);
+
 	}
 }
