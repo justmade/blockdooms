@@ -8,6 +8,14 @@ using System.IO;
 
 public class LevelEditor : EditorWindow {
 
+	public class LevelFormat {
+		public string grid;
+		public int floor;
+		public int sizeX;
+		public int sizeY;
+	}
+
+
 	[MenuItem ("Window/LevelEditor")]
 	static void AddWindow ()
 	{       
@@ -111,10 +119,10 @@ public class LevelEditor : EditorWindow {
 		}
 
 		//更新网格数据
-		if (isUpdate && lastMapSize != mapSize) {
+		if (isUpdate) {
 			totalGrids = mapSize.x * mapSize.y;
 			isUpdate = false;
-			blockGrids = new string[floor,totalGrids];
+			blockGrids = new string[totalFloors,totalGrids];
 
 			int lastIndex = 0;
 
@@ -130,7 +138,9 @@ public class LevelEditor : EditorWindow {
 							blockGrids [f, k] = "-1";
 						} 
 						else {
+							Debug.LogFormat ("lastIndex ,k,f  {0} {1} {2}", f,k,JsonMapper.ToJson(blockGrids));
 							blockGrids [f, k] = lastGrids[f, lastIndex];
+
 							lastIndex++;
 						}
 					}
@@ -142,6 +152,7 @@ public class LevelEditor : EditorWindow {
 						if (lastIndex >= lastMapSize.x * lastMapSize.y) {
 							blockGrids [f, k] = "-1";
 						}
+						Debug.LogFormat ("lastIndex ,k,f  {0} {1} {2}", f,k,JsonMapper.ToJson(blockGrids));
 						blockGrids [f, k] = lastGrids[f, lastIndex];
 						lastIndex++;
 						if ((k+1) % (mapSize.x) == 0) {
@@ -149,9 +160,12 @@ public class LevelEditor : EditorWindow {
 						} 
 					}
 				}
+
 			}
 			lastGrids = blockGrids;
 			lastMapSize = mapSize;
+			Debug.Log (blockGrids);
+			addBlocks ();
 		}
 			
 		for(int i=0;i<totalGrids;i++){
@@ -159,6 +173,7 @@ public class LevelEditor : EditorWindow {
 				EditorGUILayout.BeginHorizontal (GUILayout.Height (30));
 			}
 			if (lastGrids != null) {
+//				Debug.LogFormat ("{0},{1}", currentFloor, i);
 				lastGrids[currentFloor,i] = EditorGUILayout.TextField("",lastGrids[currentFloor,i], GUILayout.Width (40),  GUILayout.Height (30));
 				if ((i+1) %  lastMapSize.x == 0) {
 					EditorGUILayout.EndHorizontal ();
@@ -180,6 +195,11 @@ public class LevelEditor : EditorWindow {
 		if(GUILayout.Button ("Export-json", GUILayout.Width (200))) {
 
 			exportToJson();
+		}
+
+		if(GUILayout.Button ("Import-json", GUILayout.Width (200))) {
+
+			importJson();
 		}
 
 //		if(GUILayout.Button("打开通知",GUILayout.Width(200)))
@@ -209,15 +229,15 @@ public class LevelEditor : EditorWindow {
 	}
 
 	void exportToJson(){
-		JsonData jd = new JsonData ();
-		jd ["grid"] =  JsonMapper.ToJson(lastGrids);
-		jd ["floor"] = floor;
-		jd ["sizeX"] = (mapSize.x);
-		jd ["sizeY"] = (mapSize.y);
+		LevelFormat lf = new LevelFormat ();
+		lf.grid =  JsonMapper.ToJson(lastGrids);
+		lf.floor = floor;
+		lf.sizeX = (mapSize.x);
+		lf.sizeY = (mapSize.y);
 
-		Debug.Log(jd.ToJson());
+		Debug.Log(JsonMapper.ToJson(lf));
 
-		CreateFile (Application.dataPath+"/level.txt", jd.ToJson ());
+		CreateFile (Application.dataPath+"/levels/level.txt", JsonMapper.ToJson(lf));
 	}
 
 	public void CreateFile (string _filePath ,string _data)
@@ -233,10 +253,57 @@ public class LevelEditor : EditorWindow {
 		this.ShowNotification(new GUIContent("File Saved Completed"));
 	}
 
+	void importJson(){
+		ReadFile (Application.dataPath + "/levels/level.txt");
+	}
+
+	private void ReadFile(string _filePath){
+	
+		StreamReader sr = File.OpenText(_filePath);  
+		string s = sr.ReadToEnd ();
+		Debug.LogFormat ("reading {0}", s);
+		solveLevelData(s);
+		isUpdate = true;
+//		LevelFormat loadLevel = JsonMapper.ToObject<LevelFormat>(s);
+//		Debug.Log(loadLevel.grid);
+//
+//		Debug.Log(JsonMapper.ToObject<string[]> (loadLevel.grid)[0]);
+//		JsonMapper.ToObject
+	}
+
+	void solveLevelData(string _levelData){
+		LevelFormat loadLevel = JsonMapper.ToObject<LevelFormat>(_levelData);
+		string[] g = JsonMapper.ToObject<string[]> (loadLevel.grid);
+
+		mapSize = new Vector2Int (loadLevel.sizeX, loadLevel.sizeY);
+		lastMapSize = new Vector2Int (loadLevel.sizeX, loadLevel.sizeY);
+		floor = loadLevel.floor;
+		totalGrids = mapSize.x * mapSize.y;
+
+		lastGrids = new string[totalFloors,totalGrids];
+
+		for (int f = 0; f < totalFloors; f++) {
+			for (int k = 0; k < totalGrids; k++) {
+				blockGrids[f,k] = "1";
+				lastGrids [f,k] = "1";
+			}
+		}
+
+		Debug.Log (totalGrids);
+		for (int i = 0; i < floor; i++) {
+			for (int j = 0; j < totalGrids; j++) {
+				lastGrids [i, j] = g [i * totalGrids + j];
+				blockGrids [i, j] = g [i * totalGrids + j]; 
+			}
+		}
+
+	}
+
+
 	void updateSetting(){
 		isUpdate = true;
 		GUI.FocusControl ("FloorText");
-		addBlocks ();
+
 	}
 
 	void addBlocks(){
