@@ -61,6 +61,7 @@
      <Compile Include="Assets\JsonMockWrapper.cs" />
      <Compile Include="Assets\JsonReader.cs" />
      <Compile Include="Assets\JsonWriter.cs" />
+     <Compile Include="Assets\LevelFormat.cs" />
      <Compile Include="Assets\Lexer.cs" />
      <Compile Include="Assets\ParserToken.cs" />
      <Compile Include="Assets\Platform.cs" />

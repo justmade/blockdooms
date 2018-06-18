@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+using LitJson;
+using System.IO;
+using LFormat;
+
+
 public class GameManager : MonoBehaviour {
 
 	public GameObject m_BlockPrefabs;
@@ -36,7 +41,7 @@ public class GameManager : MonoBehaviour {
 	public List<int> allDisappearIndex;
 
 	//宽度
-	public int B_Width = 5;
+	public int B_Width = 2;
 	//判断是否还有格子可以消除
 	private bool checkSameColor;
 
@@ -70,8 +75,12 @@ public class GameManager : MonoBehaviour {
 
 	private int blocksLeftCounts;
 
+	private int B_Height = 10;
+
     // Use this for initialization
     void Start () {
+		loadLevelData (Application.dataPath + "/levels/level.txt");
+
 		initAllBlock ();
 		Button btn = addFloorBtn.GetComponent<Button>();
 		btn.onClick.AddListener(onAddFloor);
@@ -81,6 +90,22 @@ public class GameManager : MonoBehaviour {
 
 		mainCamera.enabled = isMainC;
 		sideCamera.enabled = !isMainC;
+	}
+
+	void loadLevelData(string _filePath){
+		
+		StreamReader sr = File.OpenText(_filePath);  
+		string _levelData = sr.ReadToEnd ();
+
+		LevelFormat loadLevel = JsonMapper.ToObject<LevelFormat>(_levelData);
+
+		string[] g = JsonMapper.ToObject<string[]> (loadLevel.grid);
+
+		B_Width = 2;
+//		mapSize = new Vector2Int (loadLevel.sizeX, loadLevel.sizeY);
+//		lastMapSize = new Vector2Int (loadLevel.sizeX, loadLevel.sizeY);
+//		floor = loadLevel.floor;
+//		totalGrids = mapSize.x * mapSize.y;
 	}
 
 	void onAddFloor(){
@@ -130,13 +155,13 @@ public class GameManager : MonoBehaviour {
         }
 
 		if (currentRotateFrame == rotateFrame) {
-			Debug.Log("fffff");
 			currentRotateFrame = -1;
 			isElevate = true;
 			deltaTime = 0f;
 			cameraMove = 0;
 			generateBlock(currentFloor + 1);
 			generateFloors--;
+			Debug.LogFormat ("generateFloors {0}", generateFloors);
 		}
 
         if (isElevate) {
@@ -174,10 +199,10 @@ public class GameManager : MonoBehaviour {
     }
 
 	void initAllBlock(){
-		blockStates = new BlockState[B_Width, B_Width * B_Width];
+		blockStates = new BlockState[B_Height, B_Width * B_Width];
 		topBlockSates = new BlockState[B_Width * B_Width];
 		currentFloor = 0;
-		allBlocks = new GameObject[B_Width, B_Width * B_Width];
+		allBlocks = new GameObject[B_Height, B_Width * B_Width];
 		Vector3 v = new Vector3 (0,1,0);
 		Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
 		container = GameObject.Find("BlockContainer");

@@ -5,15 +5,10 @@ using UnityEditor;
 
 using LitJson;
 using System.IO;
-
+using LFormat;
 public class LevelEditor : EditorWindow {
 
-	public class LevelFormat {
-		public string grid;
-		public int floor;
-		public int sizeX;
-		public int sizeY;
-	}
+
 
 
 	[MenuItem ("Window/LevelEditor")]
@@ -264,11 +259,6 @@ public class LevelEditor : EditorWindow {
 		Debug.LogFormat ("reading {0}", s);
 		solveLevelData(s);
 		isUpdate = true;
-//		LevelFormat loadLevel = JsonMapper.ToObject<LevelFormat>(s);
-//		Debug.Log(loadLevel.grid);
-//
-//		Debug.Log(JsonMapper.ToObject<string[]> (loadLevel.grid)[0]);
-//		JsonMapper.ToObject
 	}
 
 	void solveLevelData(string _levelData){
