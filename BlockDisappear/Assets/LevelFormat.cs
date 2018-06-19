@@ -9,6 +9,7 @@ namespace LFormat
 		public int floor;
 		public int sizeX;
 		public int sizeY;
+		public int[] gridInGame;
 
 		public LevelFormat ()
 		{

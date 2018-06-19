@@ -42,7 +42,9 @@ public class BlockBase : MonoBehaviour {
 	}
 
 	public void setColor(int i){
+		Debug.LogFormat ("setColor {0}",i);
 		this.GetComponent<Renderer> ().material = _materials [i];
+		colorIndex = i;
 	}
 
 	void Start () {

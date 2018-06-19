@@ -77,6 +77,10 @@ public class GameManager : MonoBehaviour {
 
 	private int B_Height = 10;
 
+	private int levelFloor = 1;
+
+	private List<int> loadGridData;
+
     // Use this for initialization
     void Start () {
 		loadLevelData (Application.dataPath + "/levels/level.txt");
@@ -90,6 +94,7 @@ public class GameManager : MonoBehaviour {
 
 		mainCamera.enabled = isMainC;
 		sideCamera.enabled = !isMainC;
+		onUp ();
 	}
 
 	void loadLevelData(string _filePath){
@@ -99,9 +104,16 @@ public class GameManager : MonoBehaviour {
 
 		LevelFormat loadLevel = JsonMapper.ToObject<LevelFormat>(_levelData);
 
-		string[] g = JsonMapper.ToObject<string[]> (loadLevel.grid);
+		int[] g =  (loadLevel.gridInGame);
 
-		B_Width = 2;
+
+		B_Width = loadLevel.sizeX;
+		levelFloor = loadLevel.floor;
+		generateFloors = levelFloor - 1;
+
+		loadGridData = new List<int> (g);
+
+		Debug.LogFormat ("debug in gridingame {0}" , loadGridData.Count);
 //		mapSize = new Vector2Int (loadLevel.sizeX, loadLevel.sizeY);
 //		lastMapSize = new Vector2Int (loadLevel.sizeX, loadLevel.sizeY);
 //		floor = loadLevel.floor;
@@ -220,11 +232,12 @@ public class GameManager : MonoBehaviour {
 			block.tag = "Block";
 			block.transform.parent = container.transform;
 			BlockBase bBase = block.GetComponent<BlockBase> ();
+			bBase.setColor (loadGridData[0]);
+			loadGridData.RemoveAt (0);
 			int color = bBase.getColorIndex ();
 			blockStates [0, i] = new BlockState ();
 			blockStates [0,i].color = color;
 			blockStates [0,i].floor = currentFloor;
-
 			topBlockSates[i] = new BlockState ();
 			topBlockSates[i].color = -1;
 		}
@@ -288,6 +301,8 @@ public class GameManager : MonoBehaviour {
 			block.tag = "Block";
 			allBlocks[currentFloor,i] = block;
 			BlockBase bBase = block.GetComponent<BlockBase> ();
+			bBase.setColor (loadGridData[0]);
+			loadGridData.RemoveAt (0);
 			int color = bBase.getColorIndex ();
 			if(blockStates [0,i].color == -1){
 				blockStates [0, i].color = color;

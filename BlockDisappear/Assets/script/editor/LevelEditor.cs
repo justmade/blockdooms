@@ -230,7 +230,19 @@ public class LevelEditor : EditorWindow {
 		lf.sizeX = (mapSize.x);
 		lf.sizeY = (mapSize.y);
 
-		Debug.Log(JsonMapper.ToJson(lf));
+		List<int> termsList = new List<int>();
+
+		for (int k = floor - 1; k >= 0; k--) {
+			for (int j = 0; j < mapSize.x; j++) {
+				for (int i = mapSize.y-1; i >= 0; i--) {
+					termsList.Add (int.Parse(lastGrids [k, i * mapSize.x + j  ]));
+				}
+			}
+		}
+
+		lf.gridInGame = termsList.ToArray ();
+
+		//Debug.Log(JsonMapper.ToJson(lf));
 
 		CreateFile (Application.dataPath+"/levels/level.txt", JsonMapper.ToJson(lf));
 	}
@@ -271,6 +283,7 @@ public class LevelEditor : EditorWindow {
 		totalGrids = mapSize.x * mapSize.y;
 
 		lastGrids = new string[totalFloors,totalGrids];
+		blockGrids = new string[totalFloors,totalGrids];
 
 		for (int f = 0; f < totalFloors; f++) {
 			for (int k = 0; k < totalGrids; k++) {
