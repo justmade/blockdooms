@@ -54,6 +54,10 @@ public class LevelEditor : EditorWindow {
 
 	private GameObject blockContainer;
 
+	private string fileName = "";
+
+	private List<string> files;
+
 	public void Awake () 
 	{
 		//在资源中读取一张贴图
@@ -81,6 +85,15 @@ public class LevelEditor : EditorWindow {
 			}
 		}
 		blockContainer = new GameObject ("block container");
+
+		files = new List<string> ();
+		foreach (var path in Directory.GetFiles(Application.dataPath+"/levels/")) {
+			if (System.IO.Path.GetExtension (path) == ".txt") {
+				string name =  (System.IO.Path.GetFileName(path));
+				Debug.LogFormat ("file {0}", name);
+				files.Add (name);
+			}
+		}
 
 		//mapSize = EditorGUILayout.Vector2IntField("Map Size:", mapSize);
 	}
@@ -187,6 +200,15 @@ public class LevelEditor : EditorWindow {
 			OnDestroy ();
 		}
 
+
+		EditorGUILayout.BeginHorizontal (GUILayout.Height (30));
+		if(GUILayout.Button ("Export-anther-json", GUILayout.Width (200), GUILayout.Height (20))) {
+
+			exportToJson ();
+		}
+		fileName = EditorGUILayout.TextField("",fileName, GUILayout.Width (200),  GUILayout.Height (20));
+		EditorGUILayout.EndHorizontal ();
+
 		if(GUILayout.Button ("Export-json", GUILayout.Width (200))) {
 
 			exportToJson();
@@ -244,7 +266,7 @@ public class LevelEditor : EditorWindow {
 
 		//Debug.Log(JsonMapper.ToJson(lf));
 
-		CreateFile (Application.dataPath+"/levels/level.txt", JsonMapper.ToJson(lf));
+		CreateFile (Application.dataPath+"/levels/"+fileName+".txt", JsonMapper.ToJson(lf));
 	}
 
 	public void CreateFile (string _filePath ,string _data)

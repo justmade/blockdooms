@@ -73,6 +73,7 @@
      <Compile Include="Assets\Unity\UnityTypeBindings.cs" />
      <None Include="Assets\level.txt" />
      <None Include="Assets\levels\level.txt" />
+     <None Include="Assets\levels\avs.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

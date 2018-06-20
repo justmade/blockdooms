@@ -349,7 +349,7 @@ public class GameManager : MonoBehaviour {
 				printBlock ();
 				removeBlocks ();
 				dropBlock ();
-				leftMoveBlock ();
+				//leftMoveBlock ();
 				updateBlockState ();
 				findHorizontalConnect ();
 				findVerticalConnect ();
