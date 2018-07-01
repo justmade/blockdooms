@@ -58,6 +58,8 @@ public class LevelEditor : EditorWindow {
 
 	private List<string> files;
 
+	private TextAsset txtAsset;
+
 	public void Awake () 
 	{
 		//在资源中读取一张贴图
@@ -68,6 +70,8 @@ public class LevelEditor : EditorWindow {
 		lastMapSize = new Vector2Int (2, 2);
 
 		totalGrids = mapSize.x * mapSize.y;
+
+		txtAsset = new TextAsset ();
 
 		floor = 10;
 		selectedFloor = 0;
@@ -214,11 +218,16 @@ public class LevelEditor : EditorWindow {
 			exportToJson();
 		}
 
-		if(GUILayout.Button ("Import-json", GUILayout.Width (200))) {
+//		if(GUILayout.Button ("Import-json", GUILayout.Width (200))) {
+//
+//			importJson();
+//		}
 
-			importJson();
+	
+		TextAsset newTxtAsset = EditorGUILayout.ObjectField ("选择关卡", txtAsset, typeof(TextAsset), true) as TextAsset;
+		if (newTxtAsset != txtAsset) {
+			ReadTextAsset (newTxtAsset);
 		}
-
 //		if(GUILayout.Button("打开通知",GUILayout.Width(200)))
 //		{
 //			//打开一个通知栏
@@ -242,6 +251,14 @@ public class LevelEditor : EditorWindow {
 //			//关闭窗口
 //			this.Close();
 //		}
+
+	}
+
+	void ReadTextAsset(TextAsset txt){
+		string s = txt.text;
+		txtAsset = txt;
+		solveLevelData(s);
+		isUpdate = true;
 
 	}
 
@@ -297,6 +314,9 @@ public class LevelEditor : EditorWindow {
 
 	void solveLevelData(string _levelData){
 		LevelFormat loadLevel = JsonMapper.ToObject<LevelFormat>(_levelData);
+		if(loadLevel == null) {
+			return;
+		}
 		string[] g = JsonMapper.ToObject<string[]> (loadLevel.grid);
 
 		mapSize = new Vector2Int (loadLevel.sizeX, loadLevel.sizeY);
