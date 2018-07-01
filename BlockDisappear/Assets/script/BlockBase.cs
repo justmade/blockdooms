@@ -70,6 +70,15 @@ public class BlockBase : MonoBehaviour {
         }
     }
 
+	public void hideObject(){
+//		Color c = this.GetComponent<Renderer> ().sharedMaterial.color;
+//		this.GetComponent<Renderer> ().sharedMaterial.color = new Color (c.r, c.g, c.b, 50);
+	}
+
+	public void displayObject(){
+//		this.GetComponent<Renderer> ().material.color.a = 255;
+	}
+
 	public void amplify(){
 		if (playAmplify) {
 			amplifyFrames++;

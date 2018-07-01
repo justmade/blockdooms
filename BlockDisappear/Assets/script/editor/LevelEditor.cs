@@ -371,6 +371,7 @@ public class LevelEditor : EditorWindow {
 					value = 0;
 				}
 				bBase.setColor (value);
+				bBase.hideObject ();
 				Debug.Log (color);
 			}
 		

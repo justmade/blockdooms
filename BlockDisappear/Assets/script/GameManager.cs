@@ -81,9 +81,17 @@ public class GameManager : MonoBehaviour {
 
 	private List<int> loadGridData;
 
+	private List<string> files;
+
+	public TextAsset txtAsset;
+
     // Use this for initialization
     void Start () {
-		loadLevelData (Application.dataPath + "/levels/level.txt");
+		//loadLevelData (Application.dataPath + "/levels/level.txt");
+
+		if (txtAsset) {
+			solveLevelData (txtAsset.text);
+		}
 
 		initAllBlock ();
 		Button btn = addFloorBtn.GetComponent<Button>();
@@ -96,16 +104,21 @@ public class GameManager : MonoBehaviour {
 		sideCamera.enabled = !isMainC;
 		onUp ();
 	}
+		
 
 	void loadLevelData(string _filePath){
 		
 		StreamReader sr = File.OpenText(_filePath);  
+
 		string _levelData = sr.ReadToEnd ();
 
-		LevelFormat loadLevel = JsonMapper.ToObject<LevelFormat>(_levelData);
+		solveLevelData (_levelData);
+	}
+
+	void solveLevelData(string data){
+		LevelFormat loadLevel = JsonMapper.ToObject<LevelFormat>(data);
 
 		int[] g =  (loadLevel.gridInGame);
-
 
 		B_Width = loadLevel.sizeX;
 		levelFloor = loadLevel.floor;
@@ -114,10 +127,6 @@ public class GameManager : MonoBehaviour {
 		loadGridData = new List<int> (g);
 
 		Debug.LogFormat ("debug in gridingame {0}" , loadGridData.Count);
-//		mapSize = new Vector2Int (loadLevel.sizeX, loadLevel.sizeY);
-//		lastMapSize = new Vector2Int (loadLevel.sizeX, loadLevel.sizeY);
-//		floor = loadLevel.floor;
-//		totalGrids = mapSize.x * mapSize.y;
 	}
 
 	void onAddFloor(){
