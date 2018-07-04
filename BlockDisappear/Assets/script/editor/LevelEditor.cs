@@ -40,6 +40,8 @@ public class LevelEditor : EditorWindow {
 
 	private bool isUpdate = false;
 
+	private GameObject[,] allBlock;
+
 	private string[,] blockGrids;
 
 	private string[,] lastGrids;
@@ -79,6 +81,7 @@ public class LevelEditor : EditorWindow {
 		totalFloors = 10;
 
 		blockGrids = new string[totalFloors, totalGrids];
+		allBlock = new GameObject[totalFloors, totalGrids];
 
 		lastGrids = new string[totalFloors, totalGrids];
 
@@ -125,6 +128,24 @@ public class LevelEditor : EditorWindow {
 			if (currentFloor != selectedFloor) {
 				currentFloor = selectedFloor;
 				GUI.FocusControl ("FloorText");
+
+				for (int k = 0; k < floor; k++) {
+					if ((k) != currentFloor) {
+						for (int j = 0; j < totalGrids; j++) {
+							Debug.LogFormat ("{0},{1}", k, currentFloor);
+							BlockBase bb = allBlock [k, j].GetComponent<BlockBase> ();
+							bb.hideObject();
+						}
+					
+					} else {
+						for (int j = 0; j < totalGrids; j++) {
+							Debug.LogFormat ("display{0},{1}", k, currentFloor);
+							BlockBase bb = allBlock [k, j].GetComponent<BlockBase> ();
+							bb.displayObject();
+						}
+					}
+				}
+
 			}
 		
 			GUILayout.EndVertical ();
@@ -135,6 +156,7 @@ public class LevelEditor : EditorWindow {
 			totalGrids = mapSize.x * mapSize.y;
 			isUpdate = false;
 			blockGrids = new string[totalFloors,totalGrids];
+			allBlock = new GameObject[totalFloors,totalGrids];
 
 			int lastIndex = 0;
 
@@ -363,15 +385,15 @@ public class LevelEditor : EditorWindow {
 				Object blockPreb = Resources.Load( "BlockBase", typeof( GameObject ) );
 				GameObject block = Instantiate( blockPreb,v ,turnRotation) as GameObject;	
 				block.transform.parent = blockContainer.transform;
-
+				block.transform.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
 				BlockBase bBase = block.GetComponent<BlockBase> ();
 				int color = bBase.getColorIndex ();
 				int value = int.Parse (lastGrids [i, j]);
 				if (value < 0) {
 					value = 0;
 				}
+				allBlock [i, j] = block;
 				bBase.setColor (value);
-				bBase.hideObject ();
 				Debug.Log (color);
 			}
 		
