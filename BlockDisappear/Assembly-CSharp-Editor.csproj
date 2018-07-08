@@ -51,6 +51,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Editor\MaterialArrayDrawers.cs" />
+     <Compile Include="Assets\Editor\MaterialTextureSettingsEditor.cs" />
+     <Compile Include="Assets\Editor\MultiMaterialDataEditor.cs" />
+     <Compile Include="Assets\Editor\MultiMaterialEditor.cs" />
+     <Compile Include="Assets\Editor\MultiMaterialEditorUtilities.cs" />
      <Compile Include="Assets\Editor\SenceUI.cs" />
      <Compile Include="Assets\script\editor\LevelEditor.cs" />
      <None Include="Assets\levels\level3.txt" />

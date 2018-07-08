@@ -68,6 +68,9 @@
      <Compile Include="Assets\script\BlockBase.cs" />
      <Compile Include="Assets\script\BlockState.cs" />
      <Compile Include="Assets\script\GameManager.cs" />
+     <Compile Include="Assets\script\MaterialTextureSettings.cs" />
+     <Compile Include="Assets\script\MultiMaterial.cs" />
+     <Compile Include="Assets\script\MultiMaterialData.cs" />
      <Compile Include="Assets\script\PlaneUI.cs" />
      <Compile Include="Assets\script\PlayerMove.cs" />
      <Compile Include="Assets\script\UnityLitJson-Example\JsonExample.cs" />
