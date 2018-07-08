@@ -43,13 +43,17 @@ public class BlockBase : MonoBehaviour {
 
 	public void setColor(int i){
 		Debug.LogFormat ("setColor {0}",i);
-		this.GetComponent<Renderer> ().material = _materials [i];
+		Material material = new Material(Shader.Find("Transparent/Diffuse"));
+		material.CopyPropertiesFromMaterial (_materials [i]);
+		GetComponent<Renderer>().material = material;
 		colorIndex = i;
 	}
 
 	void Start () {
-		
-		this.GetComponent<Renderer> ().material = _materials [colorIndex];
+//		Material material = new Material(Shader.Find("Transparent/Diffuse"));
+//		material.color = Color.green;
+//		//material.SetVector("_Color",new Vector4(1,1,1,1));
+//		GetComponent<Renderer>().material = material;
 
 	}
 	

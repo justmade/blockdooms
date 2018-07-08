@@ -290,6 +290,7 @@ public class LevelEditor : EditorWindow {
 		lf.floor = floor;
 		lf.sizeX = (mapSize.x);
 		lf.sizeY = (mapSize.y);
+		lf.fileName = fileName;
 
 		List<int> termsList = new List<int>();
 
@@ -306,6 +307,7 @@ public class LevelEditor : EditorWindow {
 		//Debug.Log(JsonMapper.ToJson(lf));
 
 		CreateFile (Application.dataPath+"/levels/"+fileName+".txt", JsonMapper.ToJson(lf));
+		AssetDatabase.Refresh ();
 	}
 
 	public void CreateFile (string _filePath ,string _data)
@@ -339,6 +341,11 @@ public class LevelEditor : EditorWindow {
 		if(loadLevel == null) {
 			return;
 		}
+		if (loadLevel.fileName != null && loadLevel.fileName != "") {
+			fileName = loadLevel.fileName;
+		}
+
+
 		string[] g = JsonMapper.ToObject<string[]> (loadLevel.grid);
 
 		mapSize = new Vector2Int (loadLevel.sizeX, loadLevel.sizeY);

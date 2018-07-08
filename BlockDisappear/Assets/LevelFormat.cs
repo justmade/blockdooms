@@ -10,6 +10,7 @@ namespace LFormat
 		public int sizeX;
 		public int sizeY;
 		public int[] gridInGame;
+		public string fileName = "";
 
 		public LevelFormat ()
 		{

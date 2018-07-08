@@ -357,7 +357,7 @@ public class GameManager : MonoBehaviour {
 				}
 				printBlock ();
 				removeBlocks ();
-				dropBlock ();
+//				dropBlock ();
 				//leftMoveBlock ();
 				updateBlockState ();
 				findHorizontalConnect ();
