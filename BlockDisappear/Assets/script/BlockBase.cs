@@ -42,10 +42,27 @@ public class BlockBase : MonoBehaviour {
 	}
 
 	public void setColor(int i){
-		Debug.LogFormat ("setColor {0}",i);
 		Material material = new Material(Shader.Find("Transparent/Diffuse"));
 		material.CopyPropertiesFromMaterial (_materials [i]);
-		GetComponent<Renderer>().material = material;
+		Transform center = this.gameObject.transform.Find ("Cube");
+		center.gameObject.GetComponent<Renderer> ().material = material;
+
+		Transform up = this.gameObject.transform.Find ("Cube_Up");
+		up.gameObject.GetComponent<Renderer> ().material = material;
+
+		Transform down = this.gameObject.transform.Find ("Cube_Down");
+		down.gameObject.GetComponent<Renderer> ().material = material;
+
+		Transform right = this.gameObject.transform.Find ("Cube_Right");
+		right.gameObject.GetComponent<Renderer> ().material = material;
+
+		Transform left = this.gameObject.transform.Find ("Cube_Left");
+		left.gameObject.GetComponent<Renderer> ().material = material;
+
+//		Debug.LogFormat ("setColor {0}",i);
+//		Material material = new Material(Shader.Find("Transparent/Diffuse"));
+//		material.CopyPropertiesFromMaterial (_materials [i]);
+//		GetComponent<Renderer>().material = material;
 		colorIndex = i;
 	}
 
