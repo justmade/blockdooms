@@ -1,17 +1,17 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/script/editor/LevelEditor.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/script/BlockBase.cs">
     <Files>
-      <File FileName="Assets/script/GameManager.cs" Line="352" Column="64" />
-      <File FileName="Assets/script/editor/LevelEditor.cs" Line="344" Column="33" />
+      <File FileName="Assets/script/BlockBase.cs" Line="57" Column="45" />
+      <File FileName="Assets/script/GameManager.cs" Line="244" Column="15" />
+      <File FileName="Assets/script/editor/LevelEditor.cs" Line="407" Column="4" />
       <File FileName="Assets/CameraFollow.cs" Line="1" Column="1" />
       <File FileName="Assets/script/PlayerMove.cs" Line="1" Column="1" />
-      <File FileName="Assets/script/BlockBase.cs" Line="45" Column="38" />
       <File FileName="Assets/script/BlockState.cs" Line="1" Column="1" />
       <File FileName="Assets/JsonMapper.cs" Line="1" Column="1" />
       <File FileName="Assets/JsonReader.cs" Line="1" Column="1" />
       <File FileName="Assets/levels/level.txt" Line="1" Column="1" />
-      <File FileName="Assets/Editor/SenceUI.cs" Line="29" Column="31" />
+      <File FileName="Assets/Editor/SenceUI.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

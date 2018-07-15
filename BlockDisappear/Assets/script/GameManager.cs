@@ -345,6 +345,10 @@ public class GameManager : MonoBehaviour {
 				if (hit.collider.gameObject.tag == "Block") {
 					debug_msg_1.text = printBlock ();
 					BlockBase bb = hit.collider.GetComponent<BlockBase> ();
+					if (bb.getColorIndex() == 0) {
+						return;					
+					}
+
 					BlockState bs = findBlockIndex (hit.collider.gameObject);
 					addDisappearIndex (bs.originalIndex);
 					//Debug.LogFormat ("index  {0}", index);
