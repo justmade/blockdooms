@@ -241,7 +241,7 @@ public class GameManager : MonoBehaviour {
 			block.tag = "Block";
 			block.transform.parent = container.transform;
 			BlockBase bBase = block.GetComponent<BlockBase> ();
-			bBase.setColor (loadGridData[0]);
+			bBase.setColor (loadGridData[0],loadGridData[counts]);
 			loadGridData.RemoveAt (0);
 			int color = bBase.getColorIndex ();
 			blockStates [0, i] = new BlockState ();

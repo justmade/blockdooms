@@ -41,29 +41,28 @@ public class BlockBase : MonoBehaviour {
 		colorIndex = index;
 	}
 
-	public void setColor(int i){
-		Material material = new Material(Shader.Find("Transparent/Diffuse"));
-		material.CopyPropertiesFromMaterial (_materials [i]);
-		Transform center = this.gameObject.transform.Find ("Cube");
-		center.gameObject.GetComponent<Renderer> ().material = material;
+	public void setColor(int i , int centreIndex=-1){
+		
+		if (centreIndex == -1) {
+			centreIndex = i;
+		}
 
-		Transform up = this.gameObject.transform.Find ("Cube_Up");
-		up.gameObject.GetComponent<Renderer> ().material = material;
+		Debug.LogFormat ("centre {0},{1}", centreIndex,i);
 
-		Transform down = this.gameObject.transform.Find ("Cube_Down");
-		down.gameObject.GetComponent<Renderer> ().material = material;
 
-		Transform right = this.gameObject.transform.Find ("Cube_Right");
-		right.gameObject.GetComponent<Renderer> ().material = material;
-
-		Transform left = this.gameObject.transform.Find ("Cube_Left");
-		left.gameObject.GetComponent<Renderer> ().material = material;
-
-//		Debug.LogFormat ("setColor {0}",i);
-//		Material material = new Material(Shader.Find("Transparent/Diffuse"));
-//		material.CopyPropertiesFromMaterial (_materials [i]);
-//		GetComponent<Renderer>().material = material;
+		setMaterial (_materials [centreIndex], "Cube");
+		setMaterial (_materials [i], "Cube_Up");
+		setMaterial (_materials [i], "Cube_Down");
+		setMaterial (_materials [i], "Cube_Right");
+		setMaterial (_materials [i], "Cube_Left");
 		colorIndex = i;
+	}
+
+	private void setMaterial(Material mat , string cubeName){
+		Material material = new Material(Shader.Find("Transparent/Diffuse"));
+		material.CopyPropertiesFromMaterial (mat);
+		Transform centre = this.gameObject.transform.Find (cubeName);
+		centre.gameObject.GetComponent<Renderer> ().material = material;
 	}
 
 
