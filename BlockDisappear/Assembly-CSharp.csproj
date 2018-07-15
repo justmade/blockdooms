@@ -75,6 +75,7 @@
      <Compile Include="Assets\script\PlayerMove.cs" />
      <Compile Include="Assets\script\UnityLitJson-Example\JsonExample.cs" />
      <Compile Include="Assets\Unity\UnityTypeBindings.cs" />
+     <None Include="Assets\levels\Level4.txt" />
      <None Include="Assets\levels\level3.txt" />
      <None Include="Assets\level.txt" />
      <None Include="Assets\levels\level.txt" />
