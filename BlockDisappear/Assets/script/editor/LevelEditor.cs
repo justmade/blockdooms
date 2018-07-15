@@ -400,14 +400,11 @@ public class LevelEditor : EditorWindow {
 					value = 0;
 				}
 				allBlock [i, j] = block;
-				bBase.setColor (value);
+				bBase.setEditorColor (value);
 				Debug.Log (color);
 			}
 		
 		}
-
-	
-
 	}
 
 	//更新

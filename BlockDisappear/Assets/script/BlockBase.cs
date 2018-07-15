@@ -66,6 +66,15 @@ public class BlockBase : MonoBehaviour {
 		colorIndex = i;
 	}
 
+
+	public void setEditorColor(int i){
+		Debug.LogFormat ("setColor {0}",i);
+		Material material = new Material(Shader.Find("Transparent/Diffuse"));
+		material.CopyPropertiesFromMaterial (_materials [i]);
+		GetComponent<Renderer>().material = material;
+		colorIndex = i;
+	}
+
 	void Start () {
 //		Material material = new Material(Shader.Find("Transparent/Diffuse"));
 //		material.color = Color.green;
