@@ -63,6 +63,7 @@
      <None Include="Assets\level.txt" />
      <None Include="Assets\levels\level.txt" />
      <None Include="Assets\levels\123123.txt" />
+     <None Include="Assets\levels\Level5.txt" />
      <None Include="Assets\levels\level2.txt" />
      <None Include="Assets\levels\avs.txt" />
      <None Include="Assets\levels\wwegds.txt" />

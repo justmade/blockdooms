@@ -45,6 +45,11 @@ public class BlockBase : MonoBehaviour {
 		
 		if (centreIndex == -1) {
 			centreIndex = i;
+			Transform centre = this.gameObject.transform.Find ("Cube");
+			centre.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
+		} else {
+			Transform centre = this.gameObject.transform.Find ("Cube");
+			centre.localScale = new Vector3 (0.3f, 0.3f, 0.3f);
 		}
 
 		Debug.LogFormat ("centre {0},{1}", centreIndex,i);

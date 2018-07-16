@@ -306,7 +306,7 @@ public class GameManager : MonoBehaviour {
 				Instantiate(m_BlockPrefabs, Vector3.zero, turnRotation) as GameObject;
 			block.transform.parent = container.transform;
 			block.transform.localPosition = v;
-			block.transform.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
+			block.transform.localScale = new Vector3 (0.0f, 0.0f, 0.0f);
 			block.tag = "Block";
 			allBlocks[currentFloor,i] = block;
 			BlockBase bBase = block.GetComponent<BlockBase> ();
