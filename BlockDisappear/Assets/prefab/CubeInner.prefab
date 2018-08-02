@@ -125,7 +125,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1463869403249634}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.4932021, y: 3.9246246e-17, z: -1.7674937}
+  m_LocalPosition: {x: 1.1566174, y: 5.2118933e-17, z: -2.347228}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4923280726676598}
@@ -494,6 +494,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 339cee2bd77294b10bead656f52bdef6, type: 2}
   - {fileID: 2100000, guid: 66d35c0e37af3419aa534e26764abbec, type: 2}
   - {fileID: 2100000, guid: 61365d7ea356541ec9ea374c52e22b27, type: 2}
+  - {fileID: 2100000, guid: 0403a9fc0bb3d40dc8b440354c8c3855, type: 2}
   AniX:
     serializedVersion: 2
     m_Curve:

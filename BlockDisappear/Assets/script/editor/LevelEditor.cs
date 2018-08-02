@@ -165,11 +165,11 @@ public class LevelEditor : EditorWindow {
 					lastIndex = 0;
 					for (int k = 0; k < totalGrids; k++) {
 						if (lastIndex >= lastMapSize.x * lastMapSize.y) {
-							blockGrids [f, k] = "-1";
+							blockGrids [f, k] = "0";
 						}
 
 						else if (k % (mapSize.x) >= (lastMapSize.x)) {
-							blockGrids [f, k] = "-1";
+							blockGrids [f, k] = "0";
 						} 
 						else {
 							Debug.LogFormat ("lastIndex ,k,f  {0} {1} {2}", f,k,JsonMapper.ToJson(blockGrids));
@@ -184,7 +184,7 @@ public class LevelEditor : EditorWindow {
 					lastIndex = 0;
 					for(int k = 0; k < totalGrids; k++) {
 						if (lastIndex >= lastMapSize.x * lastMapSize.y) {
-							blockGrids [f, k] = "-1";
+							blockGrids [f, k] = "0";
 						}
 						Debug.LogFormat ("lastIndex ,k,f  {0} {1} {2}", f,k,JsonMapper.ToJson(blockGrids));
 						blockGrids [f, k] = lastGrids[f, lastIndex];
