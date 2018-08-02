@@ -68,6 +68,7 @@
      <Compile Include="Assets\script\BlockBase.cs" />
      <Compile Include="Assets\script\BlockState.cs" />
      <Compile Include="Assets\script\GameManager.cs" />
+     <Compile Include="Assets\script\LevelSelector.cs" />
      <Compile Include="Assets\script\MaterialTextureSettings.cs" />
      <Compile Include="Assets\script\MultiMaterial.cs" />
      <Compile Include="Assets\script\MultiMaterialData.cs" />
