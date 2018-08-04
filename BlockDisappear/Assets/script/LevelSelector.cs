@@ -18,6 +18,9 @@ public class LevelSelector : MonoBehaviour {
 
 	private int lastSelectIndex;
 
+	public GameManager gm;
+
+
 	// Use this for initialization
 	void Start () {
 		selectIndex = 0;
@@ -26,6 +29,7 @@ public class LevelSelector : MonoBehaviour {
 		float rightBorder;
 		float topBorder;
 		float downBorder;
+
 		//the up right corner
 		Vector3 cornerPos=Camera.main.ViewportToWorldPoint(new Vector3(1f,1f,Mathf.Abs(Camera.main.transform.position.z)));
 
@@ -59,7 +63,7 @@ public class LevelSelector : MonoBehaviour {
 		GUI.BeginGroup(new Rect(Screen.width/2 - 300/2,150,300,300));
 		string[] floorNames = new string[files.Count];
 		for (int i = 0; i < files.Count; i++) {
-			floorNames [i] = (files[i]).ToString ();;
+			floorNames [i] = (files[i]).ToString ();
 		}
 		selectIndex = GUILayout.SelectionGrid (selectIndex, floorNames, 3,GUILayout.Width(300));
 		GUI.EndGroup();
@@ -70,6 +74,8 @@ public class LevelSelector : MonoBehaviour {
 	void Update () {
 		if (lastSelectIndex != selectIndex) {
 			lastSelectIndex = selectIndex;
+			Debug.Log ("select");
+			gm.SendMessageUpwards("GameStart", (files[lastSelectIndex]).ToString(), SendMessageOptions.DontRequireReceiver);
 		}
 	}
 }

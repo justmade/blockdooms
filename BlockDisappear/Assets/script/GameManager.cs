@@ -85,13 +85,33 @@ public class GameManager : MonoBehaviour {
 
 	public TextAsset txtAsset;
 
+	public GameObject LevelUI;
+
+	private GameObject LevelUIObj;
+
     // Use this for initialization
     void Start () {
 		//loadLevelData (Application.dataPath + "/levels/level.txt");
 
-		if (txtAsset) {
-			solveLevelData (txtAsset.text);
-		}
+//		new LevelSelector ();
+
+		LevelUIObj = Instantiate(LevelUI) as GameObject;
+		
+		LevelUIObj.GetComponent<LevelSelector> ().gm = this;
+
+
+	}
+
+	void GameStart(string _s){
+
+		Destroy (LevelUIObj);
+//		Debug.Log(this.gameObject.name + " Get: "+_s);
+
+//		if (txtAsset) {
+//			solveLevelData (txtAsset.text);
+//		}
+
+		loadLevelData (Application.dataPath + "/levels/" + _s);
 
 		initAllBlock ();
 		Button btn = addFloorBtn.GetComponent<Button>();
