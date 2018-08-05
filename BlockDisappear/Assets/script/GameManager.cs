@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour {
 
 	public Text debug_msg_2; 
 
-	GameObject container;
+	private GameObject container;
 
 	public Button addFloorBtn;
 
@@ -89,35 +89,34 @@ public class GameManager : MonoBehaviour {
 
 	private GameObject LevelUIObj;
 
+	private string currentLevelName;
+
     // Use this for initialization
     void Start () {
-		//loadLevelData (Application.dataPath + "/levels/level.txt");
-
-//		new LevelSelector ();
-
 		LevelUIObj = Instantiate(LevelUI) as GameObject;
-		
 		LevelUIObj.GetComponent<LevelSelector> ().gm = this;
-
-
 	}
 
 	void GameStart(string _s){
-
 		Destroy (LevelUIObj);
+		currentLevelName = _s;
 //		Debug.Log(this.gameObject.name + " Get: "+_s);
 
 //		if (txtAsset) {
 //			solveLevelData (txtAsset.text);
 //		}
+		InitGame(currentLevelName);
+	}
 
+	void InitGame(string _s){
+		currentLevelName = _s;
 		loadLevelData (Application.dataPath + "/levels/" + _s);
 
 		initAllBlock ();
 		Button btn = addFloorBtn.GetComponent<Button>();
-		btn.onClick.AddListener(onAddFloor);
+		btn.onClick.AddListener(onBack);
 		Button upBtn = addUpBtn.GetComponent<Button>();
-		upBtn.onClick.AddListener(onUp);
+		upBtn.onClick.AddListener(onRetry);
 
 
 		mainCamera.enabled = isMainC;
@@ -149,13 +148,28 @@ public class GameManager : MonoBehaviour {
 		Debug.LogFormat ("debug in gridingame {0}" , loadGridData.Count);
 	}
 
+	void onBack(){
+		Application.LoadLevel(Application.loadedLevel);
+	}
+
+	void onRetry(){
+		destoryAllBlocks ();
+		InitGame(currentLevelName);
+	}
+
+	void destoryAllBlocks(){
+		foreach (Transform child in container.transform)
+		{
+			Destroy (child.gameObject);
+		}
+		Destroy (container);
+	}
+
 	void onAddFloor(){
-		isMainC = !isMainC;
-		mainCamera.enabled = isMainC;
-		sideCamera.enabled = !isMainC;
-        //currentRotateFrame = 0;
-        //elevateBlocks(10);
-        //generateBlock (currentFloor+1);
+//		isMainC = !isMainC;
+//		mainCamera.enabled = isMainC;
+//		sideCamera.enabled = !isMainC;
+		Application.LoadLevel(Application.loadedLevel);
     }
 
 
@@ -246,7 +260,7 @@ public class GameManager : MonoBehaviour {
 		allBlocks = new GameObject[B_Height, B_Width * B_Width];
 		Vector3 v = new Vector3 (0,1,0);
 		Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
-		container = GameObject.Find("BlockContainer");
+		container =  new GameObject ("block container");
 		int counts = B_Width * B_Width;
 		blocksLeftCounts = counts;
 		updateLeftText ();
@@ -363,7 +377,7 @@ public class GameManager : MonoBehaviour {
 				allDisappearIndex.Clear ();
 				checkSameColor = false;
 				if (hit.collider.gameObject.tag == "Block") {
-					debug_msg_1.text = printBlock ();
+					//debug_msg_1.text = printBlock ();
 					BlockBase bb = hit.collider.GetComponent<BlockBase> ();
 					if (bb.getColorIndex() == 0) {
 						return;					
@@ -379,7 +393,7 @@ public class GameManager : MonoBehaviour {
 						findTopNeighbour(topIndex, bb.getColorIndex (), 0);
 					}
 				}
-				printBlock ();
+				//printBlock ();
 				removeBlocks ();
 //				dropBlock ();
 				//leftMoveBlock ();
@@ -387,7 +401,7 @@ public class GameManager : MonoBehaviour {
 				findHorizontalConnect ();
 				findVerticalConnect ();
 //				printBlock ();
-				debug_msg_2.text = printBlock ();
+				//debug_msg_2.text = printBlock ();
 //				findTopBlock ();
 				if (checkSameColor == false) {
 //                    currentRotateFrame = 0;
@@ -684,6 +698,7 @@ public class GameManager : MonoBehaviour {
 
 	void updateBlockState(){
 		int counts = B_Width * B_Width;
+		Debug.LogFormat ("{0},", counts);
 		for (int i = 0; i < counts; i++) {
 			if (blockStates [0,i].color == -1) {
 				for (int k = 0; k < currentFloor + 1; k++) {
