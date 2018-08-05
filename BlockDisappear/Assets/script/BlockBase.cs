@@ -52,8 +52,6 @@ public class BlockBase : MonoBehaviour {
 			centre.localScale = new Vector3 (0.3f, 0.3f, 0.3f);
 		}
 
-		Debug.LogFormat ("centre {0},{1}", centreIndex,i);
-
 
 		setMaterial (_materials [centreIndex], "Cube");
 		setMaterial (_materials [i], "Cube_Up");

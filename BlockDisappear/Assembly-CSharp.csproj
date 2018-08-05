@@ -77,18 +77,14 @@
      <Compile Include="Assets\script\UnityLitJson-Example\JsonExample.cs" />
      <Compile Include="Assets\Unity\UnityTypeBindings.cs" />
      <None Include="Assets\levels\Level4.txt" />
-     <None Include="Assets\levels\level3.txt" />
+     <None Include="Assets\levels\Level3.txt" />
      <None Include="Assets\levels\Level6.txt" />
      <None Include="Assets\level.txt" />
-     <None Include="Assets\levels\level.txt" />
      <None Include="Assets\levels\Level7.txt" />
-     <None Include="Assets\levels\123123.txt" />
      <None Include="Assets\levels\Level8.txt" />
      <None Include="Assets\levels\Level5.txt" />
-     <None Include="Assets\levels\level2.txt" />
+     <None Include="Assets\levels\Level2.txt" />
      <None Include="Assets\levels\Level9.txt" />
-     <None Include="Assets\levels\avs.txt" />
-     <None Include="Assets\levels\wwegds.txt" />
      <None Include="Assets\levels\Level1.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

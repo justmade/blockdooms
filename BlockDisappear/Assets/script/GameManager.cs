@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour {
 	public List<int> allDisappearIndex;
 
 	//宽度
-	public int B_Width = 2;
+	private int B_Width = 0;
 	//判断是否还有格子可以消除
 	private bool checkSameColor;
 
@@ -262,6 +262,7 @@ public class GameManager : MonoBehaviour {
     }
 
 	void initAllBlock(){
+		blocksLeftCounts = 0;
 		blockStates = new BlockState[B_Height, B_Width * B_Width];
 		topBlockSates = new BlockState[B_Width * B_Width];
 		currentFloor = 0;
@@ -270,8 +271,8 @@ public class GameManager : MonoBehaviour {
 		Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
 		container =  new GameObject ("block container");
 		int counts = B_Width * B_Width;
-		blocksLeftCounts = counts;
-		updateLeftText ();
+//		blocksLeftCounts = counts;
+	
 		for (int i = 0; i < counts; i++){			
 			v.x = Mathf.Ceil (i / B_Width) * 1.0f + 0.5f;
 			v.z = i % B_Width * 1.0f+0.5f ;
@@ -291,6 +292,12 @@ public class GameManager : MonoBehaviour {
 			blockStates [0,i].floor = currentFloor;
 			topBlockSates[i] = new BlockState ();
 			topBlockSates[i].color = -1;
+
+			if(color!=0){
+				Debug.LogFormat ("color,{0},{1}", color,blocksLeftCounts);
+				blocksLeftCounts++;
+			}
+			updateLeftText ();
 		}
 
 		container.transform.position = new Vector3(-(B_Width * 1.0f) / 2,0,-(B_Width * 1.0f) / 2);
@@ -326,8 +333,8 @@ public class GameManager : MonoBehaviour {
 
 	void generateBlock(int floor){
 		int counts = B_Width * B_Width;
-		blocksLeftCounts = blocksLeftCounts + counts;
-		updateLeftText ();
+		//blocksLeftCounts = blocksLeftCounts + counts;
+
 		currentFloor = floor;
 		//for (int i = 0; i < (currentFloor); i++) {
 		//	for (int j = 0; j < counts; j++) {
@@ -360,7 +367,12 @@ public class GameManager : MonoBehaviour {
 				blockStates [0,i].floor = currentFloor;
 				bBase.playAmplify = true;
 			}
+			if(color!=0){
+				Debug.LogFormat ("color,{0},{1}", color,blocksLeftCounts);
+				blocksLeftCounts++;
+			}
 		}
+		updateLeftText ();
 	}
 
 	void touchBlock(){
@@ -706,7 +718,7 @@ public class GameManager : MonoBehaviour {
 
 	void updateBlockState(){
 		int counts = B_Width * B_Width;
-		Debug.LogFormat ("{0},", counts);
+		Debug.LogFormat ("{0},{1}", counts,B_Width);
 		for (int i = 0; i < counts; i++) {
 			if (blockStates [0,i].color == -1) {
 				for (int k = 0; k < currentFloor + 1; k++) {
