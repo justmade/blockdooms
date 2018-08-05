@@ -62,7 +62,7 @@ public class BlockBase : MonoBehaviour {
 	}
 
 	private void setMaterial(Material mat , string cubeName){
-		Material material = new Material(Shader.Find("Transparent/Diffuse"));
+		Material material = new Material(mat);
 		material.CopyPropertiesFromMaterial (mat);
 		Transform centre = this.gameObject.transform.Find (cubeName);
 		centre.gameObject.GetComponent<Renderer> ().material = material;
