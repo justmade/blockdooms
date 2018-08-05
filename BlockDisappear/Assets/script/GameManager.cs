@@ -95,10 +95,18 @@ public class GameManager : MonoBehaviour {
     void Start () {
 		LevelUIObj = Instantiate(LevelUI) as GameObject;
 		LevelUIObj.GetComponent<LevelSelector> ().gm = this;
+		addFloorBtn.enabled = false;
+		addUpBtn.enabled = false;
+		addFloorBtn.gameObject.SetActive (false);
+		addUpBtn.gameObject.SetActive (false);
 	}
 
 	void GameStart(string _s){
 		Destroy (LevelUIObj);
+		addFloorBtn.gameObject.SetActive (true);
+		addUpBtn.gameObject.SetActive (true);
+		addFloorBtn.enabled = true;
+		addUpBtn.enabled = true;
 		currentLevelName = _s;
 //		Debug.Log(this.gameObject.name + " Get: "+_s);
 
