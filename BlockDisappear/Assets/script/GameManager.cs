@@ -166,6 +166,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void destoryAllBlocks(){
+		Resources.UnloadUnusedAssets ();
 		foreach (Transform child in container.transform)
 		{
 			Destroy (child.gameObject);

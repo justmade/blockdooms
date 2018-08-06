@@ -59,6 +59,7 @@
      <Compile Include="Assets\Editor\SenceUI.cs" />
      <Compile Include="Assets\script\editor\LevelEditor.cs" />
      <None Include="Assets\levels\Level4.txt" />
+     <None Include="Assets\levels\Level10-4color.txt" />
      <None Include="Assets\levels\Level3.txt" />
      <None Include="Assets\levels\Level6.txt" />
      <None Include="Assets\level.txt" />
