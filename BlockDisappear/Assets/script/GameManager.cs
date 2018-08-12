@@ -93,6 +93,9 @@ public class GameManager : MonoBehaviour {
 
 	private string currentLevelName;
 
+	//找到宝箱和钥匙
+	private bool findTreasureKey;
+
     // Use this for initialization
     void Start () {
 		LevelUIObj = Instantiate(LevelUI) as GameObject;
@@ -196,31 +199,56 @@ public class GameManager : MonoBehaviour {
 		} 
 
 		if (needDestory == true) {
-			if (deltaTime > 2 * totalMove) {
-				needDestory = false;
-				deltaTime = 0f;
-				isPlaying = false;
-			} else {
-				isPlaying = true;
-				deltaTime++;
-//				Debug.LogFormat ("deltaTime {0}", deltaTime);
-				if (deltaTime <= totalMove) {
-					if (dropBlocks.Count == 0) {
-						deltaTime = totalMove;
+			isPlaying = true;
+			//找到钥匙和宝箱之后 先播放block的消失动画，在去消除key和treasure的block
+			if (findTreasureKey) {
+				int counts = B_Width * B_Width;
+				for (int i = 0; i < counts; i++) {
+					for (int k = 0; k < currentFloor + 1; k++) {
+						if (allBlocks [k, i]) {
+							BlockBase bBase = allBlocks [k, i].GetComponent<BlockBase> ();
+							if (bBase.isPlayingAimation) {
+								return;
+							}
+						}
 					}
-					droping (deltaTime);
-				} else if (deltaTime > totalMove) {
-					moving (deltaTime - totalMove);
+
 				}
+				checkAllBlocks ();
+			} else {
+				isPlaying = false;
 			}
+
+
+
+
+//			if (deltaTime > 2 * totalMove) {
+//				needDestory = false;
+//				deltaTime = 0f;
+//				isPlaying = false;
+//			} else {
+//				isPlaying = true;
+//				deltaTime++;
+//				if (deltaTime <= totalMove) {
+//					if (dropBlocks.Count == 0) {
+//						deltaTime = totalMove;
+//					}
+//					//droping (deltaTime);
+//				} else if (deltaTime > totalMove) {
+//					//moving (deltaTime - totalMove);
+//				}
+//			}
+
 		}else if (cameraMove == 1 && currentRotateFrame >= 0 && currentRotateFrame <= rotateFrame) {
 			
             currentRotateFrame++;
+			Debug.LogFormat("currentRotateFrame {0}",currentRotateFrame);
             mainCamera.transform.RotateAround(Vector3.zero, Vector3.left, rotateAngle / rotateFrame);
 
         }
 
 		if (currentRotateFrame == rotateFrame) {
+			Debug.LogFormat("currentRotateFrame2 {0}",currentRotateFrame);
 			currentRotateFrame = -1;
 			isElevate = true;
 			deltaTime = 0f;
@@ -414,12 +442,9 @@ public class GameManager : MonoBehaviour {
 						findTopNeighbour(topIndex, bb.getColorIndex (), 0);
 					}
 				}
-				removeBlocks ();
-//				dropBlock ();
-				//leftMoveBlock ();
-				updateBlockState ();
-				findHorizontalConnect ();
-				findVerticalConnect ();
+
+				checkAllBlocks ();
+
 //				findTopBlock ();
 				if (checkSameColor == false) {
 //                    currentRotateFrame = 0;
@@ -431,6 +456,17 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 	}
+
+	//检测已经更新所有的block
+	private void checkAllBlocks(){
+		removeBlocks ();
+		//dropBlock ();
+		//leftMoveBlock ();
+		updateBlockState ();
+		findHorizontalConnect ();
+		findVerticalConnect ();
+	}
+
 
 	void updateLeftText(){
 		m_MessageText.text = "剩余方块：" + blocksLeftCounts;
@@ -715,7 +751,6 @@ public class GameManager : MonoBehaviour {
 
 	void updateBlockState(){
 		int counts = B_Width * B_Width;
-		Debug.LogFormat ("{0},{1}", counts,B_Width);
 		for (int i = 0; i < counts; i++) {
 			if (blockStates [0,i].color == -1) {
 				for (int k = 0; k < currentFloor + 1; k++) {
@@ -726,7 +761,7 @@ public class GameManager : MonoBehaviour {
 						//Debug.LogFormat ("update {0} , {1}" , i , color);
 						blockStates [0, i].color = color;
 						blockStates [0, i].floor = k;
-						bBase.playAmplify = true;
+						bBase.setPlayAmplify (true);
 						break;
 
 					}
@@ -795,6 +830,10 @@ public class GameManager : MonoBehaviour {
 	}
 	//横向搜索是否存在可以消除的格子
 	void findHorizontalConnect(){
+		findTreasureKey = false;
+		allDisappearIndex.Clear ();
+		int keyIndex = -1;
+		int treasureIndex = -1;
 		for (int i = 0; i < B_Width; i++) {
 			int lastColor = -1;
 			for (int j = 0; j < B_Width; j++) {
@@ -803,23 +842,26 @@ public class GameManager : MonoBehaviour {
 				if (lastColor == temp && temp != -1) {
 					//Debug.LogFormat ("hor{0},{1}",bIndex,lastColor);
 					checkSameColor = true;
-					return;
 				} else {
 					lastColor = temp;
 				}
+
+				if (temp == elementConfig.Key) {
+					keyIndex = bIndex;
+				}
+
+				if (temp == elementConfig.Treasure) {
+					treasureIndex = bIndex;
+				}
 			}
 		}
+		//是否有可消除的key和treasure
+		if (keyIndex != -1 && treasureIndex != -1) {
+			addDisappearIndex (keyIndex);
+			addDisappearIndex (treasureIndex);
+			findTreasureKey = true;
+		}
 
-
-
-//		int temp = blockStates [0,bIndex].color;
-//		if (lastColor == temp) {
-//			//						Debug.LogFormat ("drop{0},{1}",bIndex,lastColor);
-//			checkSameColor = true;
-//		} else if(checkSameColor == false){
-//			lastColor = temp;
-//			//						Debug.LogFormat ("last{0},{1}",bIndex,lastColor);
-//		}
 	}
 
 	void findVerticalConnect(){

@@ -37,6 +37,8 @@ public class BlockBase : MonoBehaviour {
 
 	private float amplifyTime = 20f;
 
+	public bool isPlayingAimation = false;
+
 	// Use this for initialization
 	void Awake(){
 		_materials = elements._materials;
@@ -94,6 +96,11 @@ public class BlockBase : MonoBehaviour {
 		amplify ();
 	}
 
+	public void setPlayAmplify(bool _state){
+		playAmplify = _state;
+		isPlayingAimation = true;
+	}
+
     public void elevate(float timeDelta) {
         //lpos = this.transform.localPosition;
         if (timeDelta == 1f) {
@@ -119,6 +126,7 @@ public class BlockBase : MonoBehaviour {
 
 	public void amplify(){
 		if (playAmplify) {
+			isPlayingAimation = true;
 			amplifyFrames++;
 			if (amplifyFrames <= amplifyTime) {
 				float value = 0.5f + AniScale.Evaluate (amplifyFrames / amplifyTime) * 0.5f;
@@ -127,6 +135,7 @@ public class BlockBase : MonoBehaviour {
 			if (amplifyFrames == amplifyTime) {
 				amplifyFrames = 0;
 				playAmplify = false;
+				isPlayingAimation = false;
 			}
 		}
 	}
