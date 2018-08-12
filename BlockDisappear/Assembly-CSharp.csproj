@@ -88,7 +88,9 @@
      <None Include="Assets\levels\Level5.txt" />
      <None Include="Assets\levels\Level2.txt" />
      <None Include="Assets\levels\Level9.txt" />
+     <None Include="Assets\levels\Level-t1.txt" />
      <None Include="Assets\levels\Level1.txt" />
+     <None Include="Assets\levels\Level-treasure.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

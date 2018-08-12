@@ -222,22 +222,22 @@ public class GameManager : MonoBehaviour {
 
 
 
-//			if (deltaTime > 2 * totalMove) {
-//				needDestory = false;
-//				deltaTime = 0f;
-//				isPlaying = false;
-//			} else {
-//				isPlaying = true;
-//				deltaTime++;
-//				if (deltaTime <= totalMove) {
-//					if (dropBlocks.Count == 0) {
-//						deltaTime = totalMove;
-//					}
-//					//droping (deltaTime);
-//				} else if (deltaTime > totalMove) {
-//					//moving (deltaTime - totalMove);
-//				}
-//			}
+			if (deltaTime > 2 * totalMove) {
+				needDestory = false;
+				deltaTime = 0f;
+				//isPlaying = false;
+			} else {
+				//isPlaying = true;
+				deltaTime++;
+				if (deltaTime <= totalMove) {
+					if (dropBlocks.Count == 0) {
+						deltaTime = totalMove;
+					}
+					//droping (deltaTime);
+				} else if (deltaTime > totalMove) {
+					//moving (deltaTime - totalMove);
+				}
+			}
 
 		}else if (cameraMove == 1 && currentRotateFrame >= 0 && currentRotateFrame <= rotateFrame) {
 			
