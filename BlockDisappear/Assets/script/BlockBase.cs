@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class BlockBase : MonoBehaviour {
 
-	public Material[] _materials;
+	public Elements elements;
+
+	private Material[] _materials;
 
 	private int colorIndex;
 
@@ -37,6 +39,7 @@ public class BlockBase : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake(){
+		_materials = elements._materials;
 		int index = Mathf.FloorToInt(Random.Range(0f,_materials.Length));
 		colorIndex = index;
 	}
@@ -70,6 +73,7 @@ public class BlockBase : MonoBehaviour {
 
 
 	public void setEditorColor(int i){
+		_materials = elements._materials;
 		Debug.LogFormat ("setColor {0}",i);
 		Material material = new Material(Shader.Find("Transparent/Diffuse"));
 		material.CopyPropertiesFromMaterial (_materials [i]);

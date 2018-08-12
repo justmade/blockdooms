@@ -107,12 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28479c60b3e814a1cb7cf36a337bec6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _materials:
-  - {fileID: 2100000, guid: 4628387fedd6b477484afb4ee5f52144, type: 2}
-  - {fileID: 2100000, guid: 339cee2bd77294b10bead656f52bdef6, type: 2}
-  - {fileID: 2100000, guid: 66d35c0e37af3419aa534e26764abbec, type: 2}
-  - {fileID: 2100000, guid: 61365d7ea356541ec9ea374c52e22b27, type: 2}
-  - {fileID: 2100000, guid: 0403a9fc0bb3d40dc8b440354c8c3855, type: 2}
+  elements: {fileID: 11400000, guid: 9b1f051c3ce2a4c7686a96c91ec4c39e, type: 2}
   AniX:
     serializedVersion: 2
     m_Curve:

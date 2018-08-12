@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour {
 
 	public GameObject m_BlockPrefabs;
 
+	public Elements elementConfig;
+
 	//所有的block对象
 	public GameObject[,] allBlocks;
 
@@ -294,7 +296,7 @@ public class GameManager : MonoBehaviour {
 			topBlockSates[i] = new BlockState ();
 			topBlockSates[i].color = -1;
 
-			if(color!=0){
+			if(color != elementConfig.Unlock){
 				Debug.LogFormat ("color,{0},{1}", color,blocksLeftCounts);
 				blocksLeftCounts++;
 			}
@@ -398,7 +400,6 @@ public class GameManager : MonoBehaviour {
 				allDisappearIndex.Clear ();
 				checkSameColor = false;
 				if (hit.collider.gameObject.tag == "Block") {
-					//debug_msg_1.text = printBlock ();
 					BlockBase bb = hit.collider.GetComponent<BlockBase> ();
 					if (bb.getColorIndex() == 0) {
 						return;					
@@ -406,7 +407,6 @@ public class GameManager : MonoBehaviour {
 
 					BlockState bs = findBlockIndex (hit.collider.gameObject);
 					addDisappearIndex (bs.originalIndex);
-					//Debug.LogFormat ("index  {0}", index);
 					if (isMainC) {
 						findNeighbour (bs.originalIndex, bb.getColorIndex (), 0);
 					} else {
@@ -414,20 +414,16 @@ public class GameManager : MonoBehaviour {
 						findTopNeighbour(topIndex, bb.getColorIndex (), 0);
 					}
 				}
-				//printBlock ();
 				removeBlocks ();
 //				dropBlock ();
 				//leftMoveBlock ();
 				updateBlockState ();
 				findHorizontalConnect ();
 				findVerticalConnect ();
-//				printBlock ();
-				//debug_msg_2.text = printBlock ();
 //				findTopBlock ();
 				if (checkSameColor == false) {
 //                    currentRotateFrame = 0;
 //                    cameraMove = 1;
-                    //m_MessageText.text = "不可消除";
 					m_MessageText.text = "Gameover！ 剩余方块：" + blocksLeftCounts;
 				} else {
 					//m_MessageText.text = "消除";

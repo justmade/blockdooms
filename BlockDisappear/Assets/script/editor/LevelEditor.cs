@@ -172,7 +172,7 @@ public class LevelEditor : EditorWindow {
 							blockGrids [f, k] = "0";
 						} 
 						else {
-							Debug.LogFormat ("lastIndex ,k,f  {0} {1} {2}", f,k,JsonMapper.ToJson(blockGrids));
+							//Debug.LogFormat ("lastIndex ,k,f  {0} {1} {2}", f,k,JsonMapper.ToJson(blockGrids));
 							blockGrids [f, k] = lastGrids[f, lastIndex];
 
 							lastIndex++;
