@@ -80,6 +80,7 @@
      <None Include="Assets\levels\Level4.txt" />
      <None Include="Assets\levels\Level10-4color.txt" />
      <None Include="Assets\levels\Level3.txt" />
+     <None Include="Assets\levels\Level-t2.txt" />
      <None Include="Assets\levels\Leveltest.txt" />
      <None Include="Assets\levels\Level6.txt" />
      <None Include="Assets\level.txt" />
