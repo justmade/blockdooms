@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour {
 
 	void InitGame(string _s){
 		currentLevelName = _s;
-		loadLevelData (Application.dataPath + "/levels/" + _s);
+		loadLevelData ("./levels/" + _s);
 
 		initAllBlock ();
 		Button btn = addFloorBtn.GetComponent<Button>();
@@ -148,6 +148,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void solveLevelData(string data){
+		Debug.Log(data);
 		LevelFormat loadLevel = JsonMapper.ToObject<LevelFormat>(data);
 
 		int[] g =  (loadLevel.gridInGame);
@@ -450,6 +451,9 @@ public class GameManager : MonoBehaviour {
 //                    currentRotateFrame = 0;
 //                    cameraMove = 1;
 					m_MessageText.text = "Gameover！ 剩余方块：" + blocksLeftCounts;
+					if(blocksLeftCounts == 0){
+						m_MessageText.text = "成功！！！";
+					}
 				} else {
 					//m_MessageText.text = "消除";
 				}

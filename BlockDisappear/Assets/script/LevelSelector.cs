@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 using LitJson;
 using System.IO;
@@ -23,8 +22,8 @@ public class LevelSelector : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		selectIndex = 0;
-		lastSelectIndex = 0;
+		selectIndex = -1;
+		lastSelectIndex = -1;
 		float leftBorder;
 		float rightBorder;
 		float topBorder;
@@ -49,7 +48,7 @@ public class LevelSelector : MonoBehaviour {
 
 	void GetAllLevel(){
 		files = new List<string> ();
-		foreach (var path in Directory.GetFiles(Application.dataPath+"/levels/")) {
+		foreach (var path in Directory.GetFiles("./levels/")) {
 			if (System.IO.Path.GetExtension (path) == ".txt") {
 				string name =  (System.IO.Path.GetFileName(path));
 				Debug.LogFormat ("file {0}", name);
@@ -60,12 +59,12 @@ public class LevelSelector : MonoBehaviour {
 
 	void OnGUI () 
 	{
-		GUI.BeginGroup(new Rect(Screen.width/2 - 300/2,150,300,300));
+		GUI.BeginGroup(new Rect(Screen.width/2 - 600/2,150,600,600));
 		string[] floorNames = new string[files.Count];
 		for (int i = 0; i < files.Count; i++) {
 			floorNames [i] = (files[i]).ToString ();
 		}
-		selectIndex = GUILayout.SelectionGrid (selectIndex, floorNames, 3,GUILayout.Width(300));
+		selectIndex = GUILayout.SelectionGrid (selectIndex, floorNames, 3,GUILayout.Width(600),GUILayout.Height(200));
 		GUI.EndGroup();
 	}
 
