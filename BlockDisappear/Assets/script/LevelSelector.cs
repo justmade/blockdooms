@@ -48,13 +48,22 @@ public class LevelSelector : MonoBehaviour {
 
 	void GetAllLevel(){
 		files = new List<string> ();
-		foreach (var path in Directory.GetFiles("./levels/")) {
-			if (System.IO.Path.GetExtension (path) == ".txt") {
-				string name =  (System.IO.Path.GetFileName(path));
-				Debug.LogFormat ("file {0}", name);
-				files.Add (name);
-			}
+	
+		Object[] textures = Resources.LoadAll("Levels", typeof(TextAsset));
+
+		foreach (var t in textures)
+		{
+			files.Add (t.name);
 		}
+
+
+//		foreach (var path in Resources.FindObjectsOfTypeAll(typeof()) as GameObject[]) {
+//			if (System.IO.Path.GetExtension (path) == ".txt") {
+//				string name =  (System.IO.Path.GetFileName(path));
+//				Debug.LogFormat ("file {0}", name);
+//				files.Add (name);
+//			}
+//		}
 	}
 
 	void OnGUI () 

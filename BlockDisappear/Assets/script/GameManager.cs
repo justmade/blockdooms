@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour {
 
 	void InitGame(string _s){
 		currentLevelName = _s;
-		loadLevelData ("./levels/" + _s);
+		loadLevelData (_s);
 
 		initAllBlock ();
 		Button btn = addFloorBtn.GetComponent<Button>();
@@ -140,10 +140,13 @@ public class GameManager : MonoBehaviour {
 
 	void loadLevelData(string _filePath){
 		
-		StreamReader sr = File.OpenText(_filePath);  
+//		StreamReader sr = File.OpenText(_filePath);  
+		var textFile = Resources.Load<TextAsset>("Levels/"+_filePath);
 
-		string _levelData = sr.ReadToEnd ();
 
+//		string _levelData = sr.ReadToEnd ();
+
+		string _levelData = textFile.text;
 		solveLevelData (_levelData);
 	}
 
