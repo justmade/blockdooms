@@ -93,14 +93,14 @@ public class LevelEditor : EditorWindow {
 		}
 		blockContainer = new GameObject ("block container");
 
-		files = new List<string> ();
-		foreach (var path in Directory.GetFiles(Application.dataPath+"/levels/")) {
-			if (System.IO.Path.GetExtension (path) == ".txt") {
-				string name =  (System.IO.Path.GetFileName(path));
-				Debug.LogFormat ("file {0}", name);
-				files.Add (name);
-			}
-		}
+		// files = new List<string> ();
+		// foreach (var path in Directory.GetFiles(Application.dataPath+"/levels/")) {
+		// 	if (System.IO.Path.GetExtension (path) == ".txt") {
+		// 		string name =  (System.IO.Path.GetFileName(path));
+		// 		Debug.LogFormat ("file {0}", name);
+		// 		files.Add (name);
+		// 	}
+		// }
 
 		//mapSize = EditorGUILayout.Vector2IntField("Map Size:", mapSize);
 	}
@@ -306,7 +306,7 @@ public class LevelEditor : EditorWindow {
 
 		//Debug.Log(JsonMapper.ToJson(lf));
 
-		CreateFile (Application.dataPath+"/levels/"+fileName+".txt", JsonMapper.ToJson(lf));
+		CreateFile (Application.dataPath+"/Resources/levels/"+fileName+".txt", JsonMapper.ToJson(lf));
 		AssetDatabase.Refresh ();
 	}
 
