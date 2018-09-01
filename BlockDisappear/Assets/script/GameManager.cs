@@ -315,21 +315,7 @@ public class GameManager : MonoBehaviour {
 		Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
 		container =  new GameObject ("block container");
 		int counts = B_Width * B_Width;
-//		blocksLeftCounts = counts;
-		// int bColor = -1;
-		// int bFloor = 0;
 		for (int i = 0; i < counts; i++){	
-			// bColor = loadGridData[0];
-			// bFloor = 0;
-			// for(int j = 0 ; j < levelFloor ; j++){
-			// 	if(loadGridData[j * counts] != -1){
-			// 		bColor = loadGridData[j * counts];
-			// 		bFloor = j;
-			// 		break;
-			// 	}
-			// 	allBlocks[j,i] = null;
-			// }
-			// if(bColor != -1){
 			if(loadGridData[0] != -1){
 				v.x = Mathf.Ceil (i / B_Width) * 1.0f + 0.5f;
 				v.z = i % B_Width * 1.0f+0.5f ;
@@ -360,20 +346,10 @@ public class GameManager : MonoBehaviour {
 				blockStates [0,i].color = -1;
 				blockStates [0,i].floor = currentFloor;
 			}
-				
-				
-			// }else{
-			// 	blockStates [0, i] = new BlockState ();
-			// 	blockStates [0,i].color = -1;
-			// 	blockStates [0,i].floor = -1;
-			// 	loadGridData.RemoveAt (0);
-			// }
 			updateLeftText ();
 		}
 
 		container.transform.position = new Vector3(-(B_Width * 1.0f) / 2,0,-(B_Width * 1.0f) / 2);
-		//generateBlock (1);
-//		container.transform.position = new Vector3(-(B_Width * 1.0f) / 2,0,-(B_Width * 1.0f) / 2);
 	}
 
 	void addBoomParticle(Vector3 v){
@@ -403,7 +379,7 @@ public class GameManager : MonoBehaviour {
     }
 
 	
-	//生产层数
+	//生产层数 只会检查当前层的下一层
 	void generateBlock(int floor){
 		int counts = B_Width * B_Width;
 		currentFloor = floor;
@@ -646,7 +622,6 @@ public class GameManager : MonoBehaviour {
 
 		int upIndex = index - B_Width;
 	
-
 		if (rightIndex >= 0  && currentDir != 8) {
 			if (getTopBlockColor (rightIndex) == color) {
 				if (addDisappearIndex (topIndex2originalIndex(rightIndex))) {

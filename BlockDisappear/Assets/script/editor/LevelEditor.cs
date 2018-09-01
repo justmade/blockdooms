@@ -92,17 +92,6 @@ public class LevelEditor : EditorWindow {
 			}
 		}
 		blockContainer = new GameObject ("block container");
-
-		// files = new List<string> ();
-		// foreach (var path in Directory.GetFiles(Application.dataPath+"/levels/")) {
-		// 	if (System.IO.Path.GetExtension (path) == ".txt") {
-		// 		string name =  (System.IO.Path.GetFileName(path));
-		// 		Debug.LogFormat ("file {0}", name);
-		// 		files.Add (name);
-		// 	}
-		// }
-
-		//mapSize = EditorGUILayout.Vector2IntField("Map Size:", mapSize);
 	}
 
 
@@ -133,15 +122,20 @@ public class LevelEditor : EditorWindow {
 					if ((k) != currentFloor) {
 						for (int j = 0; j < totalGrids; j++) {
 							Debug.LogFormat ("{0},{1}", k, currentFloor);
-							BlockBase bb = allBlock [k, j].GetComponent<BlockBase> ();
-							bb.hideObject();
+							if(allBlock [k, j] != null){
+								BlockBase bb = allBlock [k, j].GetComponent<BlockBase> ();
+								bb.hideObject();
+							}
+							
 						}
 					
 					} else {
 						for (int j = 0; j < totalGrids; j++) {
 							Debug.LogFormat ("display{0},{1}", k, currentFloor);
-							BlockBase bb = allBlock [k, j].GetComponent<BlockBase> ();
-							bb.displayObject();
+							if(allBlock [k, j] != null){
+								BlockBase bb = allBlock [k, j].GetComponent<BlockBase> ();
+								bb.displayObject();
+							}
 						}
 					}
 				}
@@ -165,11 +159,11 @@ public class LevelEditor : EditorWindow {
 					lastIndex = 0;
 					for (int k = 0; k < totalGrids; k++) {
 						if (lastIndex >= lastMapSize.x * lastMapSize.y) {
-							blockGrids [f, k] = "0";
+							blockGrids [f, k] = "-1";
 						}
 
 						else if (k % (mapSize.x) >= (lastMapSize.x)) {
-							blockGrids [f, k] = "0";
+							blockGrids [f, k] = "-1";
 						} 
 						else {
 							//Debug.LogFormat ("lastIndex ,k,f  {0} {1} {2}", f,k,JsonMapper.ToJson(blockGrids));
@@ -184,7 +178,7 @@ public class LevelEditor : EditorWindow {
 					lastIndex = 0;
 					for(int k = 0; k < totalGrids; k++) {
 						if (lastIndex >= lastMapSize.x * lastMapSize.y) {
-							blockGrids [f, k] = "0";
+							blockGrids [f, k] = "-1";
 						}
 						Debug.LogFormat ("lastIndex ,k,f  {0} {1} {2}", f,k,JsonMapper.ToJson(blockGrids));
 						blockGrids [f, k] = lastGrids[f, lastIndex];
@@ -250,30 +244,6 @@ public class LevelEditor : EditorWindow {
 		if (newTxtAsset != txtAsset) {
 			ReadTextAsset (newTxtAsset);
 		}
-//		if(GUILayout.Button("打开通知",GUILayout.Width(200)))
-//		{
-//			//打开一个通知栏
-//			this.ShowNotification(new GUIContent("This is a Notification"));
-//		}
-//
-//		if(GUILayout.Button("关闭通知",GUILayout.Width(200)))
-//		{
-//			//关闭通知栏
-//			this.RemoveNotification();
-//		}
-//
-//		//文本框显示鼠标在窗口的位置
-//		EditorGUILayout.LabelField ("鼠标在窗口的位置", Event.current.mousePosition.ToString ());
-//
-//		//选择贴图
-//		texture =  EditorGUILayout.ObjectField("添加贴图",texture,typeof(Texture),true) as Texture;
-//
-//		if(GUILayout.Button("关闭窗口",GUILayout.Width(200)))
-//		{
-//			//关闭窗口
-//			this.Close();
-//		}
-
 	}
 
 	void ReadTextAsset(TextAsset txt){
@@ -387,23 +357,26 @@ public class LevelEditor : EditorWindow {
 			Vector3 v = new Vector3 (0,i+1,0);
 			Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
 			for (int j = 0; j < totalGrids; j++) {
-				v.x =  (j % lastMapSize.x) * 1.0f + 0.5f;
-				v.z = -Mathf.Ceil(j / lastMapSize.x) * 1.0f+0.5f ;
-				Object blockPreb = Resources.Load( "BlockBase", typeof( GameObject ) );
-				GameObject block = Instantiate( blockPreb,v ,turnRotation) as GameObject;	
-				block.transform.parent = blockContainer.transform;
-				block.transform.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
-				BlockBase bBase = block.GetComponent<BlockBase> ();
-				int color = bBase.getColorIndex ();
-				int value = int.Parse (lastGrids [i, j]);
-				if (value < 0) {
-					value = 0;
+				if(int.Parse (lastGrids[i, j]) >= 0){
+					v.x =  (j % lastMapSize.x) * 1.0f + 0.5f;
+					v.z = -Mathf.Ceil(j / lastMapSize.x) * 1.0f+0.5f ;
+					Object blockPreb = Resources.Load( "BlockBase", typeof( GameObject ) );
+					GameObject block = Instantiate( blockPreb,v ,turnRotation) as GameObject;	
+					block.transform.parent = blockContainer.transform;
+					block.transform.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
+					BlockBase bBase = block.GetComponent<BlockBase> ();
+					int color = bBase.getColorIndex ();
+					int value = int.Parse (lastGrids [i, j]);
+					// if (value < 0) {
+					// 	value = 0;
+					// }
+					allBlock [i, j] = block;
+					bBase.setEditorColor (value);
+					Debug.Log (color);
+				}else{
+					allBlock [i, j] = null;
 				}
-				allBlock [i, j] = block;
-				bBase.setEditorColor (value);
-				Debug.Log (color);
 			}
-		
 		}
 	}
 
