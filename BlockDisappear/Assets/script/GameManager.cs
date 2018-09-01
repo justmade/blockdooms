@@ -291,10 +291,19 @@ public class GameManager : MonoBehaviour {
                 cameraMove = 0;
             }
         }
-
-
-
     }
+
+	//检查同一格子下层的block是否存在
+	int checkBlockBlockFloor(int blockIndex){
+		int counts = B_Width * B_Width;
+		for(int i = 0 ; i < levelFloor ; i++){
+			if(loadGridData[0 + i * counts] != -1){
+				return loadGridData[0 + i * counts];
+			}
+			allBlocks[0,blockIndex] = null;
+		}
+		return -1;
+	}
 
 	void initAllBlock(){
 		blocksLeftCounts = 0;
@@ -307,31 +316,58 @@ public class GameManager : MonoBehaviour {
 		container =  new GameObject ("block container");
 		int counts = B_Width * B_Width;
 //		blocksLeftCounts = counts;
-	
-		for (int i = 0; i < counts; i++){			
-			v.x = Mathf.Ceil (i / B_Width) * 1.0f + 0.5f;
-			v.z = i % B_Width * 1.0f+0.5f ;
-			// ... create them, set their player number and references needed for control.
-			GameObject block = 
-				Instantiate(m_BlockPrefabs, v, turnRotation) as GameObject;
-			allBlocks[0,i] = block;
-			block.transform.localScale = new Vector3 (1f, 1f, 1f);
-			block.tag = "Block";
-			block.transform.parent = container.transform;
-			BlockBase bBase = block.GetComponent<BlockBase> ();
-			bBase.setColor (loadGridData[0],loadGridData[counts]);
-			loadGridData.RemoveAt (0);
-			int color = bBase.getColorIndex ();
-			blockStates [0, i] = new BlockState ();
-			blockStates [0,i].color = color;
-			blockStates [0,i].floor = currentFloor;
-			topBlockSates[i] = new BlockState ();
-			topBlockSates[i].color = -1;
-
-			if(color != elementConfig.Unlock){
-				Debug.LogFormat ("color,{0},{1}", color,blocksLeftCounts);
-				blocksLeftCounts++;
+		// int bColor = -1;
+		// int bFloor = 0;
+		for (int i = 0; i < counts; i++){	
+			// bColor = loadGridData[0];
+			// bFloor = 0;
+			// for(int j = 0 ; j < levelFloor ; j++){
+			// 	if(loadGridData[j * counts] != -1){
+			// 		bColor = loadGridData[j * counts];
+			// 		bFloor = j;
+			// 		break;
+			// 	}
+			// 	allBlocks[j,i] = null;
+			// }
+			// if(bColor != -1){
+			if(loadGridData[0] != -1){
+				v.x = Mathf.Ceil (i / B_Width) * 1.0f + 0.5f;
+				v.z = i % B_Width * 1.0f+0.5f ;
+				// ... create them, set their player number and references needed for control.
+				GameObject block = 
+					Instantiate(m_BlockPrefabs, v, turnRotation) as GameObject;
+				allBlocks[0,i] = block;
+				block.transform.localScale = new Vector3 (1f, 1f, 1f);
+				block.tag = "Block";
+				block.transform.parent = container.transform;
+				BlockBase bBase = block.GetComponent<BlockBase> ();
+				bBase.setColor (loadGridData[0],loadGridData[counts]);
+				loadGridData.RemoveAt (0);
+				int color = bBase.getColorIndex ();
+				blockStates [0, i] = new BlockState ();
+				blockStates [0,i].color = color;
+				blockStates [0,i].floor = currentFloor;
+				topBlockSates[i] = new BlockState ();
+				topBlockSates[i].color = -1;
+				if(color != elementConfig.Unlock){
+					Debug.LogFormat ("color,{0},{1}", color,blocksLeftCounts);
+					blocksLeftCounts++;
+				}
+			}else{
+				allBlocks[0,i] = null;
+				loadGridData.RemoveAt (0);
+				blockStates [0, i] = new BlockState ();
+				blockStates [0,i].color = -1;
+				blockStates [0,i].floor = currentFloor;
 			}
+				
+				
+			// }else{
+			// 	blockStates [0, i] = new BlockState ();
+			// 	blockStates [0,i].color = -1;
+			// 	blockStates [0,i].floor = -1;
+			// 	loadGridData.RemoveAt (0);
+			// }
 			updateLeftText ();
 		}
 
@@ -366,46 +402,47 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+	
+	//生产层数
 	void generateBlock(int floor){
 		int counts = B_Width * B_Width;
-		//blocksLeftCounts = blocksLeftCounts + counts;
-
 		currentFloor = floor;
-		//for (int i = 0; i < (currentFloor); i++) {
-		//	for (int j = 0; j < counts; j++) {
-		//		if(allBlocks[i,j]){
-		//			allBlocks[i,j].transform.localPosition += new Vector3 (0,1,0);
-		//		}
-		//	}
-		//}
 		Debug.LogFormat ("currentFloor {0}", currentFloor);
 
 		Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
 		Vector3 v = new Vector3 (0,0,0);
-		for (int i = 0; i < counts; i++){			
-			v.x = Mathf.Ceil (i / B_Width) * 1.0f + 0.5f;
-			v.z = i % B_Width * 1.0f+0.5f ;
-			// ... create them, set their player number and references needed for control.
-			GameObject block = 
-				Instantiate(m_BlockPrefabs, Vector3.zero, turnRotation) as GameObject;
-			block.transform.parent = container.transform;
-			block.transform.localPosition = v;
-			block.transform.localScale = new Vector3 (0.0f, 0.0f, 0.0f);
-			block.tag = "Block";
-			allBlocks[currentFloor,i] = block;
-			BlockBase bBase = block.GetComponent<BlockBase> ();
-			bBase.setColor (loadGridData[0]);
-			loadGridData.RemoveAt (0);
-			int color = bBase.getColorIndex ();
-			if(blockStates [0,i].color == -1){
-				blockStates [0, i].color = color;
-				blockStates [0,i].floor = currentFloor;
-				bBase.playAmplify = true;
+		for (int i = 0; i < counts; i++){
+			if(loadGridData[0] != -1){
+				v.x = Mathf.Ceil (i / B_Width) * 1.0f + 0.5f;
+				v.z = i % B_Width * 1.0f+0.5f ;
+				// ... create them, set their player number and references needed for control.
+				GameObject block = 
+					Instantiate(m_BlockPrefabs, Vector3.zero, turnRotation) as GameObject;
+				block.transform.parent = container.transform;
+				block.transform.localPosition = v;
+				block.transform.localScale = new Vector3 (0.0f, 0.0f, 0.0f);
+				block.tag = "Block";
+				allBlocks[currentFloor,i] = block;
+				BlockBase bBase = block.GetComponent<BlockBase> ();
+				bBase.setColor (loadGridData[0]);
+				loadGridData.RemoveAt (0);
+				int color = bBase.getColorIndex ();
+				if(blockStates [0,i].color == -1){
+					blockStates [0, i].color = color;
+					blockStates [0 ,i].floor = currentFloor;
+					bBase.playAmplify = true;
+				}
+				if(color!=0){
+					Debug.LogFormat ("color,{0},{1}", color,blocksLeftCounts);
+					blocksLeftCounts++;
+				}
+			}else{
+				allBlocks[currentFloor,i] = null;
+				loadGridData.RemoveAt (0);
+				blockStates [0, i].color = -1;
 			}
-			if(color!=0){
-				Debug.LogFormat ("color,{0},{1}", color,blocksLeftCounts);
-				blocksLeftCounts++;
-			}
+			
+
 		}
 		updateLeftText ();
 	}
@@ -755,7 +792,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 
-
+	//补充新block
 	void updateBlockState(){
 		int counts = B_Width * B_Width;
 		for (int i = 0; i < counts; i++) {
