@@ -10,6 +10,8 @@ public class BlockState{
 
 	//原始数组的block下标
 	public int originalIndex;
+	//记录删除是的序列号
+	public int step;
 
 	public BlockState(){
 	

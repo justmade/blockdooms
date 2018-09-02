@@ -16,6 +16,10 @@ public class GameManager : MonoBehaviour {
 
 	//所有的block对象
 	public GameObject[,] allBlocks;
+	//记录每次的删除序列
+	private List<BlockState> removeSeuqence;
+	//需要撤销的数组
+	private List<BlockState> redoSeuqence;
 
 	public List<GameObject> dropBlocks;
 	public List<GameObject> moveBlocks;
@@ -37,6 +41,7 @@ public class GameManager : MonoBehaviour {
 	public Button addFloorBtn;
 
 	public Button addUpBtn;
+	public Button redoButton;
 
 	int currentFloor;
 
@@ -95,6 +100,8 @@ public class GameManager : MonoBehaviour {
 
 	//找到宝箱和钥匙
 	private bool findTreasureKey;
+	//记录操作序列
+	private int gameStep = 0;
 
     // Use this for initialization
     void Start () {
@@ -102,16 +109,20 @@ public class GameManager : MonoBehaviour {
 		LevelUIObj.GetComponent<LevelSelector> ().gm = this;
 		addFloorBtn.enabled = false;
 		addUpBtn.enabled = false;
+		redoButton.enabled = false;
 		addFloorBtn.gameObject.SetActive (false);
 		addUpBtn.gameObject.SetActive (false);
+		redoButton.gameObject.SetActive (false);
 	}
 
 	void GameStart(string _s){
 		Destroy (LevelUIObj);
 		addFloorBtn.gameObject.SetActive (true);
 		addUpBtn.gameObject.SetActive (true);
+		redoButton.gameObject.SetActive(true);
 		addFloorBtn.enabled = true;
 		addUpBtn.enabled = true;
+		redoButton.enabled = true;
 		currentLevelName = _s;
 //		Debug.Log(this.gameObject.name + " Get: "+_s);
 
@@ -122,6 +133,8 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void InitGame(string _s){
+		removeSeuqence = new List<BlockState>();
+		redoSeuqence = new List<BlockState>();
 		currentLevelName = _s;
 		loadLevelData (_s);
 
@@ -130,7 +143,8 @@ public class GameManager : MonoBehaviour {
 		btn.onClick.AddListener(onBack);
 		Button upBtn = addUpBtn.GetComponent<Button>();
 		upBtn.onClick.AddListener(onRetry);
-
+		Button redoBtn = redoButton.GetComponent<Button>();
+		redoBtn.onClick.AddListener(onRedo);
 
 		mainCamera.enabled = isMainC;
 		sideCamera.enabled = !isMainC;
@@ -172,6 +186,19 @@ public class GameManager : MonoBehaviour {
 	void onRetry(){
 		destoryAllBlocks ();
 		InitGame(currentLevelName);
+	}
+
+	void onRedo(){
+		if(removeSeuqence.Count > 0){
+			BlockState blockStep = removeSeuqence[removeSeuqence.Count-1];
+			removeSeuqence.RemoveAt(removeSeuqence.Count-1);
+			for(int i = removeSeuqence.Count - 1 ; i >=0 ; i--){
+				if(blockStep.step == removeSeuqence[i].step){
+					redoSeuqence.Add(blockStep);
+					removeSeuqence.RemoveAt(i);
+				}
+			}
+		}
 	}
 
 	void destoryAllBlocks(){
@@ -695,6 +722,7 @@ public class GameManager : MonoBehaviour {
 
 	void removeBlocks(){
 		if (allDisappearIndex.Count > 1) {
+			gameStep ++;
 			blocksLeftCounts -= allDisappearIndex.Count;
 			updateLeftText ();
 			needDestory = true;
@@ -709,6 +737,14 @@ public class GameManager : MonoBehaviour {
 						
 						Destroy (block);
 						//Debug.LogFormat ("removeIndex {0} , {1}", i, index);
+						BlockState recordStep = new BlockState();
+						recordStep.color = blockStates [0,index].color;
+						recordStep.floor = i;
+						recordStep.step = gameStep;
+						// removeSeuqence.Add(recordStep);
+						
+						removeSeuqence.Insert(0,recordStep);
+
 						allBlocks [i, index] = null;
 						blockStates [0,index].color = -1;
 						//addBoomParticle (block.transform.position);
