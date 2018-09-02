@@ -189,16 +189,20 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void onRedo(){
+		redoSeuqence.Clear();
 		if(removeSeuqence.Count > 0){
 			BlockState blockStep = removeSeuqence[removeSeuqence.Count-1];
 			removeSeuqence.RemoveAt(removeSeuqence.Count-1);
+			redoSeuqence.Add(blockStep);
 			for(int i = removeSeuqence.Count - 1 ; i >=0 ; i--){
 				if(blockStep.step == removeSeuqence[i].step){
-					redoSeuqence.Add(blockStep);
+					redoSeuqence.Add(removeSeuqence[i]);
 					removeSeuqence.RemoveAt(i);
 				}
 			}
 		}
+		Debug.LogFormat("redoSeuqence {0},",redoSeuqence.Count);
+		redoBlock();
 	}
 
 	void destoryAllBlocks(){
@@ -211,9 +215,6 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void onAddFloor(){
-//		isMainC = !isMainC;
-//		mainCamera.enabled = isMainC;
-//		sideCamera.enabled = !isMainC;
 		Application.LoadLevel(Application.loadedLevel);
     }
 
@@ -279,14 +280,12 @@ public class GameManager : MonoBehaviour {
         }
 
 		if (currentRotateFrame == rotateFrame) {
-			Debug.LogFormat("currentRotateFrame2 {0}",currentRotateFrame);
 			currentRotateFrame = -1;
 			isElevate = true;
 			deltaTime = 0f;
 			cameraMove = 0;
 			generateBlock(currentFloor + 1);
 			generateFloors--;
-			Debug.LogFormat ("generateFloors {0}", generateFloors);
 		}
 
         if (isElevate) {
@@ -436,7 +435,6 @@ public class GameManager : MonoBehaviour {
 					bBase.playAmplify = true;
 				}
 				if(color!=0){
-					Debug.LogFormat ("color,{0},{1}", color,blocksLeftCounts);
 					blocksLeftCounts++;
 				}
 			}else{
@@ -741,9 +739,8 @@ public class GameManager : MonoBehaviour {
 						recordStep.color = blockStates [0,index].color;
 						recordStep.floor = i;
 						recordStep.step = gameStep;
-						// removeSeuqence.Add(recordStep);
-						
-						removeSeuqence.Insert(0,recordStep);
+						recordStep.originalIndex = index;
+						removeSeuqence.Add(recordStep);
 
 						allBlocks [i, index] = null;
 						blockStates [0,index].color = -1;
@@ -751,10 +748,42 @@ public class GameManager : MonoBehaviour {
 						break;
 					}
 				}
-
 			}
 		}
+	}
 
+	void redoBlock(){
+		foreach(BlockState bs in redoSeuqence){
+			
+			int oIndex = bs.originalIndex;
+			int currentColor = blockStates [0,oIndex].color;
+			blockStates [0,bs.originalIndex].color = bs.color;
+			blockStates [0,bs.originalIndex].floor = bs.floor;
+			
+			Vector3 v = new Vector3 (0,1,0);
+			Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
+
+			v.x = Mathf.Ceil (oIndex / B_Width) * 1.0f + 0.5f;
+			v.z = oIndex % B_Width * 1.0f+0.5f ;
+			Vector3 v2 =  container.transform.InverseTransformVector(v);
+			// ... create them, set their player number and references needed for control.
+			GameObject block = 
+				Instantiate(m_BlockPrefabs,  Vector3.zero, turnRotation) as GameObject;
+			allBlocks [bs.floor,oIndex] = block;
+			block.transform.localScale = new Vector3 (1f, 1f, 1f);
+			block.tag = "Block";
+			block.transform.parent = container.transform;
+			block.transform.localPosition = v;
+			// block.transform.position = v; 
+			
+			BlockBase bBase = block.GetComponent<BlockBase> ();
+			if(currentColor !=-1){
+				bBase.setColor (bs.color,currentColor);
+				allBlocks [1,oIndex].transform.localScale = new Vector3 (0f, 0f, 0f);
+			}else{
+				bBase.setColor(bs.color);
+			}		
+		}
 	}
 
 	//下落格子
