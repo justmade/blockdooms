@@ -738,7 +738,13 @@ public class GameManager : MonoBehaviour {
 						BlockState recordStep = new BlockState();
 						recordStep.color = blockStates [0,index].color;
 						recordStep.floor = i;
-						recordStep.step = gameStep;
+						//如果需要消除的block是宝箱和钥匙，那么他们应该被算在上一步一起
+						if(recordStep.color == elementConfig.Treasure ||recordStep.color == elementConfig.Key ){
+							recordStep.step = gameStep - 1;
+						}else{
+							recordStep.step = gameStep;
+						}
+						
 						recordStep.originalIndex = index;
 						removeSeuqence.Add(recordStep);
 
