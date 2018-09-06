@@ -240,6 +240,7 @@ public class GameManager : MonoBehaviour {
 						if (allBlocks [k, i]) {
 							BlockBase bBase = allBlocks [k, i].GetComponent<BlockBase> ();
 							if (bBase.isPlayingAimation) {
+								redoButton.gameObject.SetActive (false);
 								return;
 							}
 						}
@@ -248,6 +249,7 @@ public class GameManager : MonoBehaviour {
 				}
 				checkAllBlocks ();
 			} else {
+				redoButton.gameObject.SetActive (true);
 				isPlaying = false;
 			}
 
@@ -720,7 +722,11 @@ public class GameManager : MonoBehaviour {
 
 	void removeBlocks(){
 		if (allDisappearIndex.Count > 1) {
-			gameStep ++;
+			//如果需要消除的block是宝箱和钥匙，那么他们应该被算在上一步一起
+			if(!findTreasureKey){
+				gameStep ++;
+			}
+			
 			blocksLeftCounts -= allDisappearIndex.Count;
 			updateLeftText ();
 			needDestory = true;
@@ -738,13 +744,7 @@ public class GameManager : MonoBehaviour {
 						BlockState recordStep = new BlockState();
 						recordStep.color = blockStates [0,index].color;
 						recordStep.floor = i;
-						//如果需要消除的block是宝箱和钥匙，那么他们应该被算在上一步一起
-						if(recordStep.color == elementConfig.Treasure ||recordStep.color == elementConfig.Key ){
-							recordStep.step = gameStep - 1;
-						}else{
-							recordStep.step = gameStep;
-						}
-						
+						recordStep.step = gameStep;
 						recordStep.originalIndex = index;
 						removeSeuqence.Add(recordStep);
 
