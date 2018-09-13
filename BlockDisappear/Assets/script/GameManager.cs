@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 using LitJson;
 using System.IO;
@@ -103,20 +104,24 @@ public class GameManager : MonoBehaviour {
 	//记录操作序列
 	private int gameStep = 0;
 
+	private LevelController levelController;
+
     // Use this for initialization
     void Start () {
-		LevelUIObj = Instantiate(LevelUI) as GameObject;
-		LevelUIObj.GetComponent<LevelSelector> ().gm = this;
-		addFloorBtn.enabled = false;
-		addUpBtn.enabled = false;
-		redoButton.enabled = false;
-		addFloorBtn.gameObject.SetActive (false);
-		addUpBtn.gameObject.SetActive (false);
-		redoButton.gameObject.SetActive (false);
+		// LevelUIObj = Instantiate(LevelUI) as GameObject;
+		// LevelUIObj.GetComponent<LevelSelector> ().gm = this;
+		// addFloorBtn.enabled = false;
+		// addUpBtn.enabled = false;
+		// redoButton.enabled = false;
+		// addFloorBtn.gameObject.SetActive (false);
+		// addUpBtn.gameObject.SetActive (false);
+		// redoButton.gameObject.SetActive (false);
+		levelController = FindObjectOfType<LevelController>();
+		GameStart(LevelDataInfo.selectLevelName);
 	}
 
 	void GameStart(string _s){
-		Destroy (LevelUIObj);
+		// Destroy (LevelUIObj);
 		addFloorBtn.gameObject.SetActive (true);
 		addUpBtn.gameObject.SetActive (true);
 		redoButton.gameObject.SetActive(true);
@@ -180,7 +185,9 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void onBack(){
-		Application.LoadLevel(Application.loadedLevel);
+		// Application.LoadLevel(Application.loadedLevel);
+		levelController.LevelComplete(currentLevelName);
+		SceneManager.LoadScene("LevelSelect");
 	}
 
 	void onRetry(){
