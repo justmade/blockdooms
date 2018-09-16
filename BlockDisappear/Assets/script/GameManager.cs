@@ -187,8 +187,13 @@ public class GameManager : MonoBehaviour {
 	void onBack(){
 		// Application.LoadLevel(Application.loadedLevel);
 		SceneManager.LoadScene("LevelSelect");
-		levelController.LevelComplete(currentLevelName,3);
 		
+		
+	}
+
+	void finishLevel(){
+		SceneManager.LoadScene("LevelSelect");
+		levelController.LevelComplete(currentLevelName,3);
 	}
 
 	void onRetry(){
@@ -260,10 +265,6 @@ public class GameManager : MonoBehaviour {
 				redoButton.gameObject.SetActive (true);
 				isPlaying = false;
 			}
-
-
-
-
 			if (deltaTime > 2 * totalMove) {
 				needDestory = false;
 				deltaTime = 0f;
@@ -382,7 +383,7 @@ public class GameManager : MonoBehaviour {
 				blockStates [0,i].color = -1;
 				blockStates [0,i].floor = currentFloor;
 			}
-			updateLeftText ();
+			// updateLeftText ();
 		}
 
 		container.transform.position = new Vector3(-(B_Width * 1.0f) / 2,0,-(B_Width * 1.0f) / 2);
@@ -501,12 +502,13 @@ public class GameManager : MonoBehaviour {
 				if (checkSameColor == false) {
 //                    currentRotateFrame = 0;
 //                    cameraMove = 1;
-					m_MessageText.text = "Gameover！ 剩余方块：" + blocksLeftCounts;
+						m_MessageText.text = "Gameover！ 剩余方块：" + blocksLeftCounts;
 					if(blocksLeftCounts == 0){
 						m_MessageText.text = "成功！！！";
+						finishLevel();
 					}
 				} else {
-					//m_MessageText.text = "消除";
+					// m_MessageText.text = "消除";
 				}
 			}
 		}
@@ -525,6 +527,10 @@ public class GameManager : MonoBehaviour {
 
 	void updateLeftText(){
 		m_MessageText.text = "剩余方块：" + blocksLeftCounts;
+		if(blocksLeftCounts == 0){
+			m_MessageText.text = "成功！！！";
+			finishLevel();
+		}
 	}
 
 	//在数组中找到对应的下标
@@ -789,7 +795,8 @@ public class GameManager : MonoBehaviour {
 			block.transform.parent = container.transform;
 			block.transform.localPosition = v;
 			// block.transform.position = v; 
-			
+			blocksLeftCounts ++;
+			updateLeftText();
 			BlockBase bBase = block.GetComponent<BlockBase> ();
 			if(currentColor !=-1){
 				bBase.setColor (bs.color,currentColor);

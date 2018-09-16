@@ -20,9 +20,7 @@ public class LevelController : MonoBehaviour {
 		if(LevelDataInfo.levels == null){
 			Object[] levelFiles = Resources.LoadAll("Levels", typeof(TextAsset));
 			for(int i = 0 ; i < levelFiles.Length ; i++ ){
-				// Level l = new Level(i+1 ,levelFiles[i].name , false,0,false);
 				levels.Add(new Level(i+1 ,levelFiles[i].name , false,0,false));
-				// Debug.Log(levels[i].name);
 				LevelDataInfo.levels = levels;
 			}
 		} else{
