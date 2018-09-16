@@ -186,8 +186,9 @@ public class GameManager : MonoBehaviour {
 
 	void onBack(){
 		// Application.LoadLevel(Application.loadedLevel);
-		levelController.LevelComplete(currentLevelName);
 		SceneManager.LoadScene("LevelSelect");
+		levelController.LevelComplete(currentLevelName,3);
+		
 	}
 
 	void onRetry(){

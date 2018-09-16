@@ -21,7 +21,7 @@ public class UILevelSelect : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		levelSelectPanel = transform;
-
+		levelPopup.gameObject.SetActive(false);
 		for(int i = 0 ; i < levelController.levels.Count ; i++ ){
 			levelList.Add(levelUI);
 		}
@@ -39,6 +39,7 @@ public class UILevelSelect : MonoBehaviour {
 			Level level = levelController.levels[(pageSize * page) +i];
 			UILevel uiLevel = Instantiate(pageLists[i]);
 			uiLevel.SetStars(level.Stars);
+			Debug.LogFormat("level.Stars{0}",level.Stars);
 			uiLevel.transform.SetParent(levelSelectPanel);
 			uiLevel.GetComponent<Button>().onClick.AddListener(() => SelectLevel(level));
 

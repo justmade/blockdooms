@@ -4,4 +4,6 @@ using UnityEngine;
 
 public static class LevelDataInfo  {
 	public static string selectLevelName;
+
+	public static List<Level> levels;
 }
