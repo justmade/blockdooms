@@ -33,7 +33,7 @@ public class UILevelSelect : MonoBehaviour {
 		currentPage = page;
 		int pageSize = 12;
 		List<UILevel> pageLists = levelList.Skip(page * pageSize).Take(pageSize).ToList();
-		maxPage = Mathf.FloorToInt(Mathf.Ceil(pageLists.Count/12));
+		maxPage = Mathf.CeilToInt(levelList.Count/12);
 
 		for(int i = 0 ; i < pageLists.Count ; i++){
 			Level level = levelController.levels[(pageSize * page) +i];
