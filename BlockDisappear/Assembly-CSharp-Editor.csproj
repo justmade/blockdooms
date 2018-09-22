@@ -60,15 +60,23 @@
      <Compile Include="Assets\script\editor\LevelEditor.cs" />
      <Compile Include="Assets\VSCode\Plugins\Editor\VSCode.cs" />
      <None Include="Assets\Resources\levels\Level-t4.txt" />
+     <None Include="Assets\Resources\levels\Level-c2-2.txt" />
      <None Include="Assets\Resources\levels\Level2.txt" />
      <None Include="Assets\Resources\levels\Level3.txt" />
      <None Include="Assets\Resources\levels\Level-t1.txt" />
      <None Include="Assets\Resources\levels\Level-e1.txt" />
+     <None Include="Assets\Resources\levels\Level-a3.txt" />
      <None Include="Assets\level.txt" />
      <None Include="Assets\Resources\levels\Level-t3.txt" />
+     <None Include="Assets\Resources\levels\Level-a4.txt" />
+     <None Include="Assets\Resources\levels\Level-a2.txt" />
+     <None Include="Assets\Resources\levels\Level-c3-3-0922.txt" />
      <None Include="Assets\Resources\levels\Level-treasure.txt" />
      <None Include="Assets\Resources\levels\Level1.txt" />
+     <None Include="Assets\Resources\levels\Level-c2-2-0920.txt" />
      <None Include="Assets\Resources\levels\Level9.txt" />
+     <None Include="Assets\Resources\levels\Level-c3-4-0920.txt" />
+     <None Include="Assets\Resources\levels\Level-c3-3-0920.txt" />
      <None Include="Assets\Resources\levels\Level4.txt" />
      <None Include="Assets\Resources\levels\Level5.txt" />
      <None Include="Assets\Resources\levels\Level6.txt" />
@@ -78,6 +86,7 @@
      <None Include="Assets\Resources\levels\Level-t2.txt" />
      <None Include="Assets\Resources\levels\Level7.txt" />
      <None Include="Assets\Resources\levels\Level-a1.txt" />
+     <None Include="Assets\Resources\levels\Level-a5.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
