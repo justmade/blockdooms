@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using LitJson;
+using System.IO;
+using LFormat;
 
 public class LevelController : MonoBehaviour {
 
@@ -13,7 +16,26 @@ public class LevelController : MonoBehaviour {
 		if(FindObjectsOfType<LevelController>().Length > 1){
 			Destroy(gameObject);
 		}
-		GetAllLevel();
+		// GetAllLevel();
+		GetLevelConfig();
+	}
+	
+	//读取配置好的 levelconfig
+	void GetLevelConfig(){
+		if(LevelDataInfo.levels == null){
+			var config = Resources.Load<TextAsset>("levelconfig");
+			string _levelData = config.text;
+			JsonData levelObj = JsonMapper.ToObject(_levelData);
+			
+			for(int i = 1; i <= levelObj.Count ; i ++){
+				var levelData = levelObj[i.ToString()];
+				levels.Add(new Level(i ,levelData["Name"].ToString(), false,0,false));
+				LevelDataInfo.levels = levels;
+			}
+		} else{
+			levels = LevelDataInfo.levels;
+		}
+		
 	}
 
 	void GetAllLevel(){
