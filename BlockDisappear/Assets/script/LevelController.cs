@@ -10,14 +10,20 @@ public class LevelController : MonoBehaviour {
 
 	public List<Level> levels = new List<Level>{};
 
+	public bool isTest = true;
+
 	void Awake()
 	{
 		DontDestroyOnLoad(gameObject);
 		if(FindObjectsOfType<LevelController>().Length > 1){
 			Destroy(gameObject);
 		}
-		// GetAllLevel();
-		GetLevelConfig();
+		if(isTest){
+			GetAllLevel();
+		}else{
+			GetLevelConfig();
+		}	
+		
 	}
 	
 	//读取配置好的 levelconfig
