@@ -141,6 +141,7 @@ public class GameManager : MonoBehaviour {
 		removeSeuqence = new List<BlockState>();
 		redoSeuqence = new List<BlockState>();
 		currentLevelName = _s;
+		gameStep = 0 ;	
 		loadLevelData (_s);
 
 		initAllBlock ();
@@ -197,6 +198,12 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void onRetry(){
+		Button btn = addFloorBtn.GetComponent<Button>();
+		btn.onClick.RemoveAllListeners();
+		Button upBtn = addUpBtn.GetComponent<Button>();
+		upBtn.onClick.RemoveAllListeners();
+		Button redoBtn = redoButton.GetComponent<Button>();
+		redoBtn.onClick.RemoveAllListeners();
 		destoryAllBlocks ();
 		InitGame(currentLevelName);
 	}
