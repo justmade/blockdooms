@@ -48,21 +48,21 @@ public class BlockBase : MonoBehaviour {
 
 	public void setColor(int i , int centreIndex=-1){
 		
-		if (centreIndex == -1) {
-			centreIndex = i;
-			Transform centre = this.gameObject.transform.Find ("Cube");
-			centre.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
-		} else {
-			Transform centre = this.gameObject.transform.Find ("Cube");
-			centre.localScale = new Vector3 (0.3f, 0.3f, 0.3f);
-		}
+		// if (centreIndex == -1) {
+		// 	centreIndex = i;
+		// 	Transform centre = this.gameObject.transform.Find ("Cube");
+		// 	centre.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
+		// } else {
+		// 	Transform centre = this.gameObject.transform.Find ("Cube");
+		// 	centre.localScale = new Vector3 (0.3f, 0.3f, 0.3f);
+		// }
 
 
-		setMaterial (_materials [centreIndex], "Cube");
-		setMaterial (_materials [i], "Cube_Up");
-		setMaterial (_materials [i], "Cube_Down");
-		setMaterial (_materials [i], "Cube_Right");
-		setMaterial (_materials [i], "Cube_Left");
+		// setMaterial (_materials [centreIndex], "Cube");
+		// setMaterial (_materials [i], "Cube_Up");
+		// setMaterial (_materials [i], "Cube_Down");
+		// setMaterial (_materials [i], "Cube_Right");
+		// setMaterial (_materials [i], "Cube_Left");
 		colorIndex = i;
 	}
 

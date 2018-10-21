@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlockDisappear", "Assembly-CSharp.csproj", "{4DAB7B13-A53C-14BB-3643-6951FBB7BBEC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{4DAB7B13-A53C-14BB-3643-6951FBB7BBEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlockDisappear", "Assembly-CSharp-Editor.csproj", "{405BDF7F-F352-3E3F-0037-64578B616B78}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{405BDF7F-F352-3E3F-0037-64578B616B78}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
