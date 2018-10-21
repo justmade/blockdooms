@@ -48,29 +48,38 @@ public class BlockBase : MonoBehaviour {
 
 	public void setColor(int i , int centreIndex=-1){
 		
-		// if (centreIndex == -1) {
-		// 	centreIndex = i;
-		// 	Transform centre = this.gameObject.transform.Find ("Cube");
-		// 	centre.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
-		// } else {
-		// 	Transform centre = this.gameObject.transform.Find ("Cube");
-		// 	centre.localScale = new Vector3 (0.3f, 0.3f, 0.3f);
-		// }
+		if (centreIndex == -1) {
+			centreIndex = i;
+			// Transform centre = this.gameObject.transform.Find ("Cube");
+			// centre.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
+		} else {
+			// Transform centre = this.gameObject.transform.Find ("Cube");
+			// centre.localScale = new Vector3 (0.3f, 0.3f, 0.3f);
+		}
 
 
 		// setMaterial (_materials [centreIndex], "Cube");
-		// setMaterial (_materials [i], "Cube_Up");
+		setMaterial (_materials [i], "Cube_Up");
 		// setMaterial (_materials [i], "Cube_Down");
 		// setMaterial (_materials [i], "Cube_Right");
 		// setMaterial (_materials [i], "Cube_Left");
+		
 		colorIndex = i;
 	}
 
 	private void setMaterial(Material mat , string cubeName){
 		Material material = new Material(mat);
 		material.CopyPropertiesFromMaterial (mat);
-		Transform centre = this.gameObject.transform.Find (cubeName);
-		centre.gameObject.GetComponent<Renderer> ().material = material;
+		// Transform centre = this.gameObject.transform.Find (cubeName);
+		// gameObject.GetComponent<Renderer>().materials[2].SetColor("_EMISSION", new Color(0.0927F, 0.4852F, 0.2416F, 0.42F));
+		VoxelImporter.VoxelObject vo = this.GetComponent<VoxelImporter.VoxelObject>();
+		// vo.materialData[0].material = material;
+		// vo.materials[0] = material;
+		// vo.GetComponent
+		// vo.GetComponent<Renderer>().materials[1].SetColor("_EMISSION", new Color(0.927F, 0.4852F, 0.2416F, 0.42F));
+		vo.GetComponent<Renderer>().materials[1].EnableKeyword("_EmissionColor");
+		vo.GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", Color.yellow);
+		// vo.GetComponent<Renderer>().materials[1].color = Color.green;
 	}
 
 

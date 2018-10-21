@@ -23,9 +23,10 @@ GameObject:
   - component: {fileID: 33841467326291694}
   - component: {fileID: 114090578521838740}
   - component: {fileID: 114919295655467712}
+  - component: {fileID: 65330333648948912}
   m_Layer: 0
   m_Name: VoxelBlock
-  m_TagString: Untagged
+  m_TagString: Block
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 1
@@ -201,7 +202,7 @@ Material:
   m_Name: mat1
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: _EMISSION _SPECULARHIGHLIGHTS_OFF
-  m_LightmapFlags: 1
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -264,7 +265,7 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.6670747, g: 1, b: 0, a: 1}
     - _EmissionColor: {r: 1.3224831, g: 0, b: 0.2834695, a: 7}
 --- !u!23 &23507190177345578
 MeshRenderer:
@@ -524,6 +525,18 @@ Mesh:
   m_MeshMetrics[0]: 1
   m_MeshMetrics[1]: 1
   m_MeshOptimized: 0
+--- !u!65 &65330333648948912
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1276275048517870}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2, y: 0.6, z: 1.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114090578521838740
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -957,7 +970,7 @@ MonoBehaviour:
       emissionPower: 0
   materialIndexes: 000000000100000002000000
   edit_importFoldout: 0
-  edit_objectFoldout: 0
+  edit_objectFoldout: 1
   edit_generateLightmapUVsAdvancedFoldout: 0
   edit_helpEnable: 0
   edit_configureMode: 0
