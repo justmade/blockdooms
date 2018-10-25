@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+// using UnityEngine.Assertions;
+using System;
+using System.IO;
 
 public class BlockBase : MonoBehaviour {
 
@@ -42,7 +45,7 @@ public class BlockBase : MonoBehaviour {
 	// Use this for initialization
 	void Awake(){
 		_materials = elements._materials;
-		int index = Mathf.FloorToInt(Random.Range(0f,_materials.Length));
+		int index = Mathf.FloorToInt(UnityEngine.Random.Range(0f,_materials.Length));
 		colorIndex = index;
 	}
 
@@ -59,11 +62,24 @@ public class BlockBase : MonoBehaviour {
 
 
 		// setMaterial (_materials [centreIndex], "Cube");
-		setMaterial (_materials [i], "Cube_Up");
+		// setMaterial (_materials [i], "Cube_Up");
 		// setMaterial (_materials [i], "Cube_Down");
 		// setMaterial (_materials [i], "Cube_Right");
 		// setMaterial (_materials [i], "Cube_Left");
-		
+		// VoxelImporter.VoxelObject vo = this.GetComponent<VoxelImporter.VoxelObject>();
+		// vo.f
+		// VoxelImporter.VoxelObject vo = this.GetComponent<VoxelImporter.VoxelObject>();
+		// string voxelFilePath = "Assets/Resources/voxel/sparklyblock-3-white.vox";
+		// var assetPath = voxelFilePath.Substring(voxelFilePath.IndexOf("Assets/"));
+		// var fullPath = Application.dataPath + "/" + assetPath.Remove(0, "Assets/".Length);
+		// if (File.Exists(fullPath))
+		// {
+		// 	UnityEngine.Object voxelFileObject = UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(assetPath);
+		// 	vo.voxelFileObject = voxelFileObject;
+		// 	// vo.
+		// }
+		// // vo.voxelFilePath = "Resources/voxel/sparklyblock-3-white.vox";
+		// // vo.EditorInitialize();
 		colorIndex = i;
 	}
 
@@ -73,6 +89,7 @@ public class BlockBase : MonoBehaviour {
 		// Transform centre = this.gameObject.transform.Find (cubeName);
 		// gameObject.GetComponent<Renderer>().materials[2].SetColor("_EMISSION", new Color(0.0927F, 0.4852F, 0.2416F, 0.42F));
 		VoxelImporter.VoxelObject vo = this.GetComponent<VoxelImporter.VoxelObject>();
+		// vo.voxelFilePath = ;
 		// vo.materialData[0].material = material;
 		// vo.materials[0] = material;
 		// vo.GetComponent

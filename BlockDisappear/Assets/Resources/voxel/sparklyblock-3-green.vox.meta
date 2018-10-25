@@ -1,17 +1,17 @@
 fileFormatVersion: 2
-guid: 8053bf3e761b844ecbe21931f377bafe
+guid: 020bcf73a0dcd4a759a66dc77944d842
 ScriptedImporter:
   fileIDToRecycleName:
-    100000: sparklyblock-3/sparklyblock-3
-    400000: sparklyblock-3/sparklyblock-3/Transform
+    100000: sparklyblock-3-green/sparklyblock-3-green
+    400000: sparklyblock-3-green/sparklyblock-3-green/Transform
     2100000: mat0
     2100002: mat1
     2100004: mat2
-    2300000: sparklyblock-3/sparklyblock-3/MeshRenderer
+    2300000: sparklyblock-3-green/sparklyblock-3-green/MeshRenderer
     2800000: tex
-    3300000: sparklyblock-3/sparklyblock-3/MeshFilter
+    3300000: sparklyblock-3-green/sparklyblock-3-green/MeshFilter
     4300000: mesh
-    100100000: sparklyblock-3
+    100100000: sparklyblock-3-green
   externalObjects: {}
   userData: 
   assetBundleName: 

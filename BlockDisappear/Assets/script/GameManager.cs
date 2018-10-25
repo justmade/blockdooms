@@ -349,6 +349,16 @@ public class GameManager : MonoBehaviour {
 		return -1;
 	}
 
+	// GameObject GetBlockPrefabByID(int blockColorID){
+	// 	Object blockPreb
+	// 	if(blockColorID == elementConfig.Red){
+	// 		blockPreb = Resources.Load( "BlockBase", typeof( GameObject ) );
+	// 	}
+
+
+	// 	return 
+	// }
+
 	void initAllBlock(){
 		blocksLeftCounts = 0;
 		blockStates = new BlockState[B_Height, B_Width * B_Width];
