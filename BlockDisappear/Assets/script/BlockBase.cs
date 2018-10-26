@@ -61,7 +61,7 @@ public class BlockBase : MonoBehaviour {
 		}
 
 
-		// setMaterial (_materials [centreIndex], "Cube");
+		setMaterial (_materials [centreIndex], "Cube");
 		// setMaterial (_materials [i], "Cube_Up");
 		// setMaterial (_materials [i], "Cube_Down");
 		// setMaterial (_materials [i], "Cube_Right");
@@ -84,8 +84,8 @@ public class BlockBase : MonoBehaviour {
 	}
 
 	private void setMaterial(Material mat , string cubeName){
-		Material material = new Material(mat);
-		material.CopyPropertiesFromMaterial (mat);
+		// Material material = new Material(mat);
+		// material.CopyPropertiesFromMaterial (mat);
 		// Transform centre = this.gameObject.transform.Find (cubeName);
 		// gameObject.GetComponent<Renderer>().materials[2].SetColor("_EMISSION", new Color(0.0927F, 0.4852F, 0.2416F, 0.42F));
 		VoxelImporter.VoxelObject vo = this.GetComponent<VoxelImporter.VoxelObject>();
@@ -96,7 +96,7 @@ public class BlockBase : MonoBehaviour {
 		// vo.GetComponent<Renderer>().materials[1].SetColor("_EMISSION", new Color(0.927F, 0.4852F, 0.2416F, 0.42F));
 		vo.GetComponent<Renderer>().materials[1].EnableKeyword("_EmissionColor");
 		vo.GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", Color.yellow);
-		// vo.GetComponent<Renderer>().materials[1].color = Color.green;
+		vo.GetComponent<Renderer>().materials[1].color = Color.green;
 	}
 
 

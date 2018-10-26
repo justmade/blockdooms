@@ -349,15 +349,23 @@ public class GameManager : MonoBehaviour {
 		return -1;
 	}
 
-	// GameObject GetBlockPrefabByID(int blockColorID){
-	// 	Object blockPreb
-	// 	if(blockColorID == elementConfig.Red){
-	// 		blockPreb = Resources.Load( "BlockBase", typeof( GameObject ) );
-	// 	}
+	Object GetBlockPrefabByID(int blockColorID){
+		Object blockPreb;
+		Debug.LogFormat("bb{0}",blockColorID);
+		if(blockColorID == elementConfig.Blue){
+			blockPreb = Resources.Load( "VoxelBlockBlue", typeof( GameObject ) );
+		}else if(blockColorID == elementConfig.Green){
+			blockPreb = Resources.Load( "VoxelBlockGreen", typeof( GameObject ) );
+		}else if(blockColorID == elementConfig.Red){
+			blockPreb = Resources.Load( "VoxelBlockRed", typeof( GameObject ) );
+		}else if(blockColorID == elementConfig.Yellow){
+			blockPreb = Resources.Load( "VoxelBlockYellow", typeof( GameObject ) );
+		}else{
+			blockPreb = Resources.Load( "VoxelBlockWhite", typeof( GameObject ) );
+		}
 
-
-	// 	return 
-	// }
+		return blockPreb;
+	}
 
 	void initAllBlock(){
 		blocksLeftCounts = 0;
@@ -374,8 +382,9 @@ public class GameManager : MonoBehaviour {
 				v.x = Mathf.Ceil (i / B_Width) * 1.0f + 0.5f;
 				v.z = i % B_Width * 1.0f+0.5f ;
 				// ... create them, set their player number and references needed for control.
+				// Object prefab = Resources.Load("VoxelBlockGreen", typeof( GameObject ));
 				GameObject block = 
-					Instantiate(m_BlockPrefabs, v, turnRotation) as GameObject;
+					Instantiate(GetBlockPrefabByID(loadGridData[0]), v, turnRotation) as GameObject;
 				allBlocks[0,i] = block;
 				block.transform.localScale = new Vector3 (1f, 1f, 1f);
 				block.tag = "Block";
@@ -447,7 +456,7 @@ public class GameManager : MonoBehaviour {
 				v.z = i % B_Width * 1.0f+0.5f ;
 				// ... create them, set their player number and references needed for control.
 				GameObject block = 
-					Instantiate(m_BlockPrefabs, Vector3.zero, turnRotation) as GameObject;
+					Instantiate(GetBlockPrefabByID(loadGridData[0]), Vector3.zero, turnRotation) as GameObject;
 				block.transform.parent = container.transform;
 				block.transform.localPosition = v;
 				block.transform.localScale = new Vector3 (0.0f, 0.0f, 0.0f);
@@ -805,7 +814,7 @@ public class GameManager : MonoBehaviour {
 			Vector3 v2 =  container.transform.InverseTransformVector(v);
 			// ... create them, set their player number and references needed for control.
 			GameObject block = 
-				Instantiate(m_BlockPrefabs,  Vector3.zero, turnRotation) as GameObject;
+				Instantiate(GetBlockPrefabByID(bs.color),  Vector3.zero, turnRotation) as GameObject;
 			allBlocks [bs.floor,oIndex] = block;
 			block.transform.localScale = new Vector3 (1f, 1f, 1f);
 			block.tag = "Block";
