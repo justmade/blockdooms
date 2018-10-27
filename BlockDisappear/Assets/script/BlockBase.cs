@@ -52,16 +52,17 @@ public class BlockBase : MonoBehaviour {
 	public void setColor(int i , int centreIndex=-1){
 		
 		if (centreIndex == -1) {
-			centreIndex = i;
+			// centreIndex = i;
+			setCenterColor(-1);
 			// Transform centre = this.gameObject.transform.Find ("Cube");
 			// centre.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
 		} else {
+			setCenterColor(centreIndex);
 			// Transform centre = this.gameObject.transform.Find ("Cube");
 			// centre.localScale = new Vector3 (0.3f, 0.3f, 0.3f);
 		}
 
-
-		setMaterial (_materials [centreIndex], "Cube");
+		// setMaterial (_materials [centreIndex], "Cube");
 		// setMaterial (_materials [i], "Cube_Up");
 		// setMaterial (_materials [i], "Cube_Down");
 		// setMaterial (_materials [i], "Cube_Right");
@@ -82,6 +83,25 @@ public class BlockBase : MonoBehaviour {
 		// // vo.EditorInitialize();
 		colorIndex = i;
 	}
+
+	private void setCenterColor(int colorID){
+		VoxelImporter.VoxelObject vo = this.GetComponent<VoxelImporter.VoxelObject>();
+		Elements elementConfig = new Elements();
+		Debug.Log(colorID);
+		vo.GetComponent<Renderer>().materials[1].EnableKeyword("_EmissionColor");
+		if(colorID == elementConfig.Red){
+			vo.GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", Color.red);
+		}else if(colorID == elementConfig.Green){
+			vo.GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", Color.green);
+		}else if(colorID == elementConfig.Blue){
+			vo.GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", Color.blue);
+		}else if(colorID == elementConfig.Yellow){
+			vo.GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", Color.yellow);
+		}else{
+			vo.GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", Color.white);
+		}
+ 	}
+
 
 	private void setMaterial(Material mat , string cubeName){
 		// Material material = new Material(mat);
