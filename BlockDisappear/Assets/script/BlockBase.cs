@@ -88,17 +88,25 @@ public class BlockBase : MonoBehaviour {
 		VoxelImporter.VoxelObject vo = this.GetComponent<VoxelImporter.VoxelObject>();
 		Elements elementConfig = new Elements();
 		vo.GetComponent<Renderer>().materials[1].EnableKeyword("_EmissionColor");
+		Color newColor; 
 		if(colorID == elementConfig.Red){
-			vo.GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", Color.red);
+			newColor = new Color(120/255f, 192/255f ,168/255f, 1f);
+			Debug.Log(newColor.ToString());
+			vo.GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", newColor);
 		}else if(colorID == elementConfig.Green){
-			vo.GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", Color.green);
+			newColor = new Color(240/255f, 92/255f, 66/255f, 1f);
+			vo.GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", newColor);
 		}else if(colorID == elementConfig.Blue){
-			vo.GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", Color.blue);
+			newColor = new Color(59/255f, 85/255f, 120/255f, 1f);
+			vo.GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", newColor);
 		}else if(colorID == elementConfig.Yellow){
-			vo.GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", Color.yellow);
+			newColor = new Color(240/255f, 120/255f, 24/255f, 1f);
+			vo.GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", newColor);
 		}else{
 			vo.GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", Color.white);
 		}
+		
+
  	}
 
 

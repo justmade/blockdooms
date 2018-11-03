@@ -292,7 +292,7 @@ public class GameManager : MonoBehaviour {
 		}else if (cameraMove == 1 && currentRotateFrame >= 0 && currentRotateFrame <= rotateFrame) {
 			
             currentRotateFrame++;
-			Debug.LogFormat("currentRotateFrame {0}",currentRotateFrame);
+			// Debug.LogFormat("currentRotateFrame {0}",currentRotateFrame);
             mainCamera.transform.RotateAround(Vector3.zero, Vector3.left, rotateAngle / rotateFrame);
 
         }
@@ -351,7 +351,6 @@ public class GameManager : MonoBehaviour {
 
 	Object GetBlockPrefabByID(int blockColorID){
 		Object blockPreb;
-		Debug.LogFormat("bb{0}",blockColorID);
 		if(blockColorID == elementConfig.Blue){
 			blockPreb = Resources.Load( "VoxelBlockBlue", typeof( GameObject ) );
 		}else if(blockColorID == elementConfig.Green){
@@ -399,7 +398,7 @@ public class GameManager : MonoBehaviour {
 				topBlockSates[i] = new BlockState ();
 				topBlockSates[i].color = -1;
 				if(color != elementConfig.Unlock){
-					Debug.LogFormat ("color,{0},{1}", color,blocksLeftCounts);
+					// Debug.LogFormat ("color,{0},{1}", color,blocksLeftCounts);
 					blocksLeftCounts++;
 				}
 			}else{
@@ -446,7 +445,7 @@ public class GameManager : MonoBehaviour {
 	void generateBlock(int floor){
 		int counts = B_Width * B_Width;
 		currentFloor = floor;
-		Debug.LogFormat ("currentFloor {0}", currentFloor);
+		// Debug.LogFormat ("currentFloor {0}", currentFloor);
 
 		Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
 		Vector3 v = new Vector3 (0,0,0);
