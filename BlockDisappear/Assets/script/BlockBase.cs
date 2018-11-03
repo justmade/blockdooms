@@ -52,7 +52,7 @@ public class BlockBase : MonoBehaviour {
 	public void setColor(int i , int centreIndex=-1){
 		
 		if (centreIndex == -1) {
-			// centreIndex = i;
+			centreIndex = i;
 			setCenterColor(-1);
 			// Transform centre = this.gameObject.transform.Find ("Cube");
 			// centre.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
@@ -87,7 +87,6 @@ public class BlockBase : MonoBehaviour {
 	private void setCenterColor(int colorID){
 		VoxelImporter.VoxelObject vo = this.GetComponent<VoxelImporter.VoxelObject>();
 		Elements elementConfig = new Elements();
-		Debug.Log(colorID);
 		vo.GetComponent<Renderer>().materials[1].EnableKeyword("_EmissionColor");
 		if(colorID == elementConfig.Red){
 			vo.GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", Color.red);
