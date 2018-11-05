@@ -100,21 +100,26 @@ public class BlockBase : MonoBehaviour {
 		}else if(colorID == elementConfig.Yellow){
 			newColor = new Color(240/255f, 120/255f, 24/255f, 1f);
 		}else if(colorID == -1){
-			newColor = new Color(240/255f, 120/255f, 24/255f, 0.1f);
+			// newColor = new Color(240/255f, 120/255f, 24/255f, 0.1f);
+			newColor = Color.white;
 			Debug.Log("empty!!!!!");
 		}else{
 			newColor = Color.white;
 		}
+			// Material material = new Material(Shader.Find("Transparent/Diffuse"));
+			// material.CopyPropertiesFromMaterial (vo.GetComponent<Renderer>().materials[1]);
+			// vo.GetComponent<Renderer>().material= material;
 		if(colorID == -1){
 			// Material material = new Material(Shader.Find("Transparent/Diffuse"));
 			// material.CopyPropertiesFromMaterial (vo.GetComponent<Renderer>().materials[1]);
 			// vo.GetComponent<Renderer>().materials[1]= material;
-			// vo.GetComponent<Renderer>().materials[1].color = newColor;
+			vo.GetComponent<Renderer>().materials[1].color = newColor;
 			vo.GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", newColor);
-			vo.GetComponent<Renderer>().materials[1].SetColor("_Color",newColor);
+			// vo.GetComponent<Renderer>().materials[1].SetColor("_Color",newColor);
 		}else{
+			vo.GetComponent<Renderer>().materials[1].color = newColor;
 			vo.GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", newColor);
-			vo.GetComponent<Renderer>().materials[1].SetColor("_Color",newColor);
+			// vo.GetComponent<Renderer>().materials[1].SetColor("_Color",newColor);
 		}
  	}
 
