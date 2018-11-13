@@ -42,6 +42,8 @@ public class BlockBase : MonoBehaviour {
 
 	public bool isPlayingAimation = false;
 
+	private GameObject centerBlock;
+
 	// Use this for initialization
 	void Awake(){
 		_materials = elements._materials;
@@ -61,6 +63,7 @@ public class BlockBase : MonoBehaviour {
 			// Transform centre = this.gameObject.transform.Find ("Cube");
 			// centre.localScale = new Vector3 (0.3f, 0.3f, 0.3f);
 		}
+
 
 		// setMaterial (_materials [centreIndex], "Cube");
 		// setMaterial (_materials [i], "Cube_Up");
@@ -84,17 +87,26 @@ public class BlockBase : MonoBehaviour {
 		colorIndex = i;
 	}
 
+	private GameObject AddCenterBlock(){
+		GameObject block = 
+			Instantiate(Resources.Load( "VoxelBlackCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+		block.transform.localScale = new Vector3 (1f, 1f, 1f);
+		block.transform.parent = this.gameObject.transform;
+		block.transform.position = this.gameObject.transform.position + new Vector3 (0,0.3f,0) ;
+		return block;
+	}
+
 	private void setCenterColor(int colorID){
-		VoxelImporter.VoxelObject vo = this.GetComponent<VoxelImporter.VoxelObject>();
+		VoxelImporter.VoxelObject vo = AddCenterBlock().GetComponent<VoxelImporter.VoxelObject>();
 		Elements elementConfig = new Elements();
-		vo.GetComponent<Renderer>().materials[1].EnableKeyword("_EmissionColor");
-		vo.GetComponent<Renderer>().materials[1].EnableKeyword("_Color");
+		vo.GetComponent<Renderer>().materials[0].EnableKeyword("_EmissionColor");
+		vo.GetComponent<Renderer>().materials[0].EnableKeyword("_Color");
 		Color newColor; 
 		if(colorID == elementConfig.Red){
 			newColor = new Color(240/255f, 92/255f, 66/255f, 1f);
 			Debug.Log(newColor.ToString());
 		}else if(colorID == elementConfig.Green){
-			newColor = new Color(120/255f, 192/255f ,168/255f, 1f);
+			newColor = new Color(0/255f, 132/255f ,83/255f, 1f);
 		}else if(colorID == elementConfig.Blue){
 			newColor = new Color(59/255f, 85/255f, 120/255f, 1f);
 		}else if(colorID == elementConfig.Yellow){
@@ -113,13 +125,13 @@ public class BlockBase : MonoBehaviour {
 			// Material material = new Material(Shader.Find("Transparent/Diffuse"));
 			// material.CopyPropertiesFromMaterial (vo.GetComponent<Renderer>().materials[1]);
 			// vo.GetComponent<Renderer>().materials[1]= material;
-			vo.GetComponent<Renderer>().materials[1].color = newColor;
-			vo.GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", newColor);
-			// vo.GetComponent<Renderer>().materials[1].SetColor("_Color",newColor);
+			vo.GetComponent<Renderer>().materials[0].color = newColor;
+			vo.GetComponent<Renderer>().materials[0].SetColor("_EmissionColor", newColor);
+			vo.GetComponent<Renderer>().materials[0].SetColor("_Color",newColor);
 		}else{
-			vo.GetComponent<Renderer>().materials[1].color = newColor;
-			vo.GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", newColor);
-			// vo.GetComponent<Renderer>().materials[1].SetColor("_Color",newColor);
+			vo.GetComponent<Renderer>().materials[0].color = newColor;
+			vo.GetComponent<Renderer>().materials[0].SetColor("_EmissionColor", newColor);
+			vo.GetComponent<Renderer>().materials[0].SetColor("_Color",newColor);
 		}
  	}
 
