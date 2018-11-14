@@ -810,6 +810,7 @@ public class GameManager : MonoBehaviour {
 
 			v.x = Mathf.Ceil (oIndex / B_Width) * 1.2f + 0.5f;
 			v.z = oIndex % B_Width * 1.2f+0.5f ;
+			v.y = 2 - bs.floor;
 			Vector3 v2 =  container.transform.InverseTransformVector(v);
 			// ... create them, set their player number and references needed for control.
 			GameObject block = 

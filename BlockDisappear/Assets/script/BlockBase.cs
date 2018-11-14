@@ -56,34 +56,9 @@ public class BlockBase : MonoBehaviour {
 		if (centreIndex == -1) {
 			centreIndex = i;
 			setCenterColor(-1);
-			// Transform centre = this.gameObject.transform.Find ("Cube");
-			// centre.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
 		} else {
 			setCenterColor(centreIndex);
-			// Transform centre = this.gameObject.transform.Find ("Cube");
-			// centre.localScale = new Vector3 (0.3f, 0.3f, 0.3f);
 		}
-
-
-		// setMaterial (_materials [centreIndex], "Cube");
-		// setMaterial (_materials [i], "Cube_Up");
-		// setMaterial (_materials [i], "Cube_Down");
-		// setMaterial (_materials [i], "Cube_Right");
-		// setMaterial (_materials [i], "Cube_Left");
-		// VoxelImporter.VoxelObject vo = this.GetComponent<VoxelImporter.VoxelObject>();
-		// vo.f
-		// VoxelImporter.VoxelObject vo = this.GetComponent<VoxelImporter.VoxelObject>();
-		// string voxelFilePath = "Assets/Resources/voxel/sparklyblock-3-white.vox";
-		// var assetPath = voxelFilePath.Substring(voxelFilePath.IndexOf("Assets/"));
-		// var fullPath = Application.dataPath + "/" + assetPath.Remove(0, "Assets/".Length);
-		// if (File.Exists(fullPath))
-		// {
-		// 	UnityEngine.Object voxelFileObject = UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(assetPath);
-		// 	vo.voxelFileObject = voxelFileObject;
-		// 	// vo.
-		// }
-		// // vo.voxelFilePath = "Resources/voxel/sparklyblock-3-white.vox";
-		// // vo.EditorInitialize();
 		colorIndex = i;
 	}
 
@@ -92,15 +67,20 @@ public class BlockBase : MonoBehaviour {
 			Instantiate(Resources.Load( "VoxelBlackCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
 		block.transform.localScale = new Vector3 (1f, 1f, 1f);
 		block.transform.parent = this.gameObject.transform;
-		block.transform.position = this.gameObject.transform.position + new Vector3 (0,0.3f,0) ;
+		block.transform.position = this.gameObject.transform.position + new Vector3 (0,0.2f,0) ;
 		return block;
 	}
 
 	private void setCenterColor(int colorID){
+
+		if(colorID == -1){
+			return;
+		}
 		VoxelImporter.VoxelObject vo = AddCenterBlock().GetComponent<VoxelImporter.VoxelObject>();
 		Elements elementConfig = new Elements();
 		vo.GetComponent<Renderer>().materials[0].EnableKeyword("_EmissionColor");
 		vo.GetComponent<Renderer>().materials[0].EnableKeyword("_Color");
+
 		Color newColor; 
 		if(colorID == elementConfig.Red){
 			newColor = new Color(240/255f, 92/255f, 66/255f, 1f);
@@ -111,28 +91,13 @@ public class BlockBase : MonoBehaviour {
 			newColor = new Color(59/255f, 85/255f, 120/255f, 1f);
 		}else if(colorID == elementConfig.Yellow){
 			newColor = new Color(240/255f, 120/255f, 24/255f, 1f);
-		}else if(colorID == -1){
-			// newColor = new Color(240/255f, 120/255f, 24/255f, 0.1f);
-			newColor = Color.white;
-			Debug.Log("empty!!!!!");
 		}else{
 			newColor = Color.white;
 		}
-			// Material material = new Material(Shader.Find("Transparent/Diffuse"));
-			// material.CopyPropertiesFromMaterial (vo.GetComponent<Renderer>().materials[1]);
-			// vo.GetComponent<Renderer>().material= material;
-		if(colorID == -1){
-			// Material material = new Material(Shader.Find("Transparent/Diffuse"));
-			// material.CopyPropertiesFromMaterial (vo.GetComponent<Renderer>().materials[1]);
-			// vo.GetComponent<Renderer>().materials[1]= material;
-			vo.GetComponent<Renderer>().materials[0].color = newColor;
-			vo.GetComponent<Renderer>().materials[0].SetColor("_EmissionColor", newColor);
-			vo.GetComponent<Renderer>().materials[0].SetColor("_Color",newColor);
-		}else{
-			vo.GetComponent<Renderer>().materials[0].color = newColor;
-			vo.GetComponent<Renderer>().materials[0].SetColor("_EmissionColor", newColor);
-			vo.GetComponent<Renderer>().materials[0].SetColor("_Color",newColor);
-		}
+		vo.GetComponent<Renderer>().materials[0].color = newColor;
+		vo.GetComponent<Renderer>().materials[0].SetColor("_EmissionColor", newColor);
+		vo.GetComponent<Renderer>().materials[0].SetColor("_Color",newColor);
+		
  	}
 
 
