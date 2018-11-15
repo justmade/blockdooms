@@ -414,14 +414,32 @@ public class GameManager : MonoBehaviour {
 		container.transform.position = new Vector3(-(B_Width * 1.0f) / 2,0,-(B_Width * 1.0f) / 2);
 	}
 
-	void addBoomParticle(Vector3 v){
+	void addBoomParticle(Vector3 v,int color){
 		v.y++;
 		GameObject boom = 
 			Instantiate(boomParticle, v, Quaternion.Euler (0f, 0f, 0f)) as GameObject;
 		boom.transform.parent = container.transform;
 		ParticleSystem p = boom.GetComponent<ParticleSystem> ();
+		boom.GetComponent<Renderer>().material.color = getColorByID(color);
 		p.Play ();
 		Destroy(p,p.startLifetime); 
+	}
+
+	Color getColorByID(int colorID){
+		Color newColor;
+		if(colorID == elementConfig.Red){
+			newColor = new Color(240/255f, 92/255f, 66/255f, 1f);
+			Debug.Log(newColor.ToString());
+		}else if(colorID == elementConfig.Green){
+			newColor = new Color(0/255f, 132/255f ,83/255f, 1f);
+		}else if(colorID == elementConfig.Blue){
+			newColor = new Color(59/255f, 85/255f, 120/255f, 1f);
+		}else if(colorID == elementConfig.Yellow){
+			newColor = new Color(240/255f, 120/255f, 24/255f, 1f);
+		}else{
+			newColor = Color.white;
+		}
+		return newColor;
 	}
 
 
@@ -789,7 +807,7 @@ public class GameManager : MonoBehaviour {
 
 						allBlocks [i, index] = null;
 						blockStates [0,index].color = -1;
-						//addBoomParticle (block.transform.position);
+						addBoomParticle (block.transform.position,recordStep.color);
 						break;
 					}
 				}

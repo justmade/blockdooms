@@ -23,7 +23,7 @@ RenderSettings:
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
-  m_AmbientIntensity: 0.78
+  m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 0}
+  m_Sun: {fileID: 2096407625}
   m_IndirectSpecularColor: {r: 0.4381598, g: 0.48616606, b: 0.566443, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
@@ -172,7 +172,7 @@ Light:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
-  m_SpotAngle: 30
+  m_SpotAngle: 47.9
   m_CookieSize: 10
   m_Shadows:
     m_Type: 2
@@ -189,9 +189,9 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
-  m_AreaSize: {x: 1, y: 1}
+  m_AreaSize: {x: 3.8448982, y: 4.2146564}
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
@@ -204,7 +204,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 311812628}
   m_LocalRotation: {x: -0.53135973, y: -0.38808778, z: -0.15872541, w: 0.73610526}
-  m_LocalPosition: {x: -2.56, y: 0.626606, z: 3.360816}
+  m_LocalPosition: {x: -11.01, y: -3.71, z: 1.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 408983644}
@@ -553,11 +553,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4247959121718142, guid: ea0631e6027a542668c7eabf1b387ad1, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 5.0370055e-17
+      value: 1.83
       objectReference: {fileID: 0}
     - target: {fileID: 4247959121718142, guid: ea0631e6027a542668c7eabf1b387ad1, type: 2}
       propertyPath: m_LocalPosition.z
-      value: -2.2684655
+      value: -3.74
       objectReference: {fileID: 0}
     - target: {fileID: 4247959121718142, guid: ea0631e6027a542668c7eabf1b387ad1, type: 2}
       propertyPath: m_LocalRotation.x
@@ -578,6 +578,16 @@ Prefab:
     - target: {fileID: 4247959121718142, guid: ea0631e6027a542668c7eabf1b387ad1, type: 2}
       propertyPath: m_RootOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 198574061493357668, guid: ea0631e6027a542668c7eabf1b387ad1,
+        type: 2}
+      propertyPath: ClampVelocityModule.drag.scalar
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 198574061493357668, guid: ea0631e6027a542668c7eabf1b387ad1,
+        type: 2}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea0631e6027a542668c7eabf1b387ad1, type: 2}
