@@ -107,6 +107,11 @@ public class GameManager : MonoBehaviour {
 	private LevelController levelController;
 
     // Use this for initialization
+
+	void Awake(){
+		Application.targetFrameRate = 60;
+	}
+
     void Start () {
 		// LevelUIObj = Instantiate(LevelUI) as GameObject;
 		// LevelUIObj.GetComponent<LevelSelector> ().gm = this;
