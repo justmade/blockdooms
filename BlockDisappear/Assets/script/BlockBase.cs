@@ -46,9 +46,13 @@ public class BlockBase : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake(){
-		_materials = elements._materials;
-		int index = Mathf.FloorToInt(UnityEngine.Random.Range(0f,_materials.Length));
-		colorIndex = index;
+		if(elements != null){
+			_materials = elements._materials;
+			int index = Mathf.FloorToInt(UnityEngine.Random.Range(0f,_materials.Length));
+			colorIndex = index;
+		}else{
+			colorIndex = 0;
+		}
 	}
 
 	public void setColor(int i , int centreIndex=-1){
@@ -62,10 +66,19 @@ public class BlockBase : MonoBehaviour {
 		colorIndex = i;
 	}
 
-	private GameObject AddCenterBlock(){
-		GameObject block = 
-			Instantiate(Resources.Load( "VoxelBlackCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+	private GameObject AddCenterBlock(int colorID){
+		Elements elementConfig = new Elements();
+		GameObject block;
+		if(colorID == elementConfig.Treasure){
+			block =	Instantiate(Resources.Load( "VoxelBlackTLeft", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+			block.transform.localScale = new Vector3 (1/3f, 1/3f, 1/3f);
+		}else if(colorID == elementConfig.Key){
+			block = Instantiate(Resources.Load( "VoxelBlackTRight", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+			block.transform.localScale = new Vector3 (1/3f, 1/3f, 1/3f);
+		}else{
+			block = Instantiate(Resources.Load( "VoxelBlackCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
 		block.transform.localScale = new Vector3 (1f, 1f, 1f);
+		}	
 		block.transform.parent = this.gameObject.transform;
 		block.transform.position = this.gameObject.transform.position + new Vector3 (0,0.2f,0) ;
 		return block;
@@ -76,7 +89,7 @@ public class BlockBase : MonoBehaviour {
 		if(colorID == -1){
 			return;
 		}
-		VoxelImporter.VoxelObject vo = AddCenterBlock().GetComponent<VoxelImporter.VoxelObject>();
+		VoxelImporter.VoxelObject vo = AddCenterBlock(colorID).GetComponent<VoxelImporter.VoxelObject>();
 		Elements elementConfig = new Elements();
 		vo.GetComponent<Renderer>().materials[0].EnableKeyword("_EmissionColor");
 		vo.GetComponent<Renderer>().materials[0].EnableKeyword("_Color");

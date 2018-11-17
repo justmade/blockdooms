@@ -364,8 +364,12 @@ public class GameManager : MonoBehaviour {
 			blockPreb = Resources.Load( "VoxelBlockRed", typeof( GameObject ) );
 		}else if(blockColorID == elementConfig.Yellow){
 			blockPreb = Resources.Load( "VoxelBlockYellow", typeof( GameObject ) );
+		}else if(blockColorID == elementConfig.Treasure){
+			blockPreb = Resources.Load( "VoxelBlackTLeft", typeof( GameObject ) );
+		}else if(blockColorID == elementConfig.Key){
+			blockPreb = Resources.Load( "VoxelBlackTRight", typeof( GameObject ) );
 		}else{
-			blockPreb = Resources.Load( "VoxelBlockWhite", typeof( GameObject ) );
+			blockPreb = Resources.Load( "VoxelBlackTRight", typeof( GameObject ) );
 		}
 
 		return blockPreb;
