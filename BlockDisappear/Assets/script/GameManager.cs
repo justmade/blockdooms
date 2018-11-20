@@ -444,7 +444,7 @@ public class GameManager : MonoBehaviour {
 		}else if(colorID == elementConfig.Blue){
 			newColor = new Color(59/255f, 85/255f, 120/255f, 1f);
 		}else if(colorID == elementConfig.Yellow){
-			newColor = new Color(240/255f, 120/255f, 24/255f, 1f);
+			newColor = new Color(205/255f, 164/255f, 0/255f, 1f);
 		}else{
 			newColor = Color.white;
 		}

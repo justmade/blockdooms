@@ -96,12 +96,12 @@ public class BlockBase : MonoBehaviour {
 
 		Color newColor; 
 		if(colorID == elementConfig.Red){
-			newColor = new Color(240/255f, 92/255f, 66/255f, 1f);
+			newColor = new Color(180/255f, 67/255f, 50/255f, 1f);
 			Debug.Log(newColor.ToString());
 		}else if(colorID == elementConfig.Green){
-			newColor = new Color(0/255f, 132/255f ,83/255f, 1f);
+			newColor = new Color(0/255f, 101/255f ,62/255f, 1f);
 		}else if(colorID == elementConfig.Blue){
-			newColor = new Color(59/255f, 85/255f, 120/255f, 1f);
+			newColor = new Color(49/255f, 71/255f, 101/255f, 1f);
 		}else if(colorID == elementConfig.Yellow){
 			newColor = new Color(240/255f, 120/255f, 24/255f, 1f);
 		}else{
