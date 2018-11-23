@@ -416,7 +416,8 @@ public class GameManager : MonoBehaviour {
 				blockStates [0, i] = new BlockState ();
 				blockStates [0,i].color = -1;
 				blockStates [0,i].floor = currentFloor;
-			}
+			}	
+			loadGridData.Add(1);
 			// updateLeftText ();
 		}
 
@@ -477,36 +478,35 @@ public class GameManager : MonoBehaviour {
 		Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
 		Vector3 v = new Vector3 (0,0,0);
 		for (int i = 0; i < counts; i++){
-			if(loadGridData[0] != -1){
-				v.x = Mathf.Ceil (i / B_Width) * 1.2f + 0.5f;
-				v.z = i % B_Width * 1.2f+0.5f ;
-				// ... create them, set their player number and references needed for control.
-				GameObject block = 
-					Instantiate(GetBlockPrefabByID(loadGridData[0]), Vector3.zero, turnRotation) as GameObject;
-				block.transform.parent = container.transform;
-				block.transform.localPosition = v;
-				block.transform.localScale = new Vector3 (0.0f, 0.0f, 0.0f);
-				block.tag = "Block";
-				allBlocks[currentFloor,i] = block;
-				BlockBase bBase = block.GetComponent<BlockBase> ();
-				bBase.setColor (loadGridData[0]);
-				loadGridData.RemoveAt (0);
-				int color = bBase.getColorIndex ();
-				if(blockStates [0,i].color == -1){
-					blockStates [0, i].color = color;
-					blockStates [0 ,i].floor = currentFloor;
-					bBase.playAmplify = true;
-				}
-				if(color!=0){
-					blocksLeftCounts++;
-				}
-			}else{
-				allBlocks[currentFloor,i] = null;
-				loadGridData.RemoveAt (0);
-				blockStates [0, i].color = -1;
-			}
-			
-
+			generateSingleBlock(currentFloor,i);
+			// if(loadGridData[0] != -1){
+			// 	v.x = Mathf.Ceil (i / B_Width) * 1.2f + 0.5f;
+			// 	v.z = i % B_Width * 1.2f+0.5f ;
+			// 	// ... create them, set their player number and references needed for control.
+			// 	GameObject block = 
+			// 		Instantiate(GetBlockPrefabByID(loadGridData[0]), Vector3.zero, turnRotation) as GameObject;
+			// 	block.transform.parent = container.transform;
+			// 	block.transform.localPosition = v;
+			// 	block.transform.localScale = new Vector3 (1.0f, 1.0f, 1.0f);
+			// 	block.tag = "Block";
+			// 	allBlocks[currentFloor,i] = block;
+			// 	BlockBase bBase = block.GetComponent<BlockBase> ();
+			// 	bBase.setColor (loadGridData[0],loadGridData[counts]);
+			// 	loadGridData.RemoveAt (0);
+			// 	int color = bBase.getColorIndex ();
+			// 	if(blockStates [0,i].color == -1){
+			// 		blockStates [0, i].color = color;
+			// 		blockStates [0 ,i].floor = currentFloor;
+			// 		bBase.playAmplify = true;
+			// 	}
+			// 	if(color!=0){
+			// 		blocksLeftCounts++;
+			// 	}
+			// }else{
+			// 	allBlocks[currentFloor,i] = null;
+			// 	loadGridData.RemoveAt (0);
+			// 	blockStates [0, i].color = -1;
+			// }
 		}
 		updateLeftText ();
 	}
@@ -814,7 +814,8 @@ public class GameManager : MonoBehaviour {
 						recordStep.originalIndex = index;
 						removeSeuqence.Add(recordStep);
 
-						allBlocks [i, index] = null;
+						allBlocks [i, index] = allBlocks [i+1, index];
+						allBlocks [i+1, index] = generateSingleBlock(2,index);
 						blockStates [0,index].color = -1;
 						addBoomParticle (block.transform.position,recordStep.color);
 						break;
@@ -822,6 +823,44 @@ public class GameManager : MonoBehaviour {
 				}
 			}
 		}
+	}
+
+	GameObject generateSingleBlock(int floor,int index){
+		currentFloor = floor;
+
+		Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
+		Vector3 v = new Vector3 (0,0,0);
+		int i = index;
+		if(loadGridData[0] != -1){
+			v.x = Mathf.Ceil (i / B_Width) * 1.2f + 0.5f;
+			v.z = i % B_Width * 1.2f+0.5f ;
+			// ... create them, set their player number and references needed for control.
+			GameObject block = 
+				Instantiate(GetBlockPrefabByID(loadGridData[0]), Vector3.zero, turnRotation) as GameObject;
+			block.transform.parent = container.transform;
+			block.transform.localPosition = v;
+			block.transform.localScale = new Vector3 (1.0f, 1.0f, 1.0f);
+			block.tag = "Block";
+			allBlocks[currentFloor,i] = block;
+			BlockBase bBase = block.GetComponent<BlockBase> ();
+			bBase.setColor (loadGridData[0],loadGridData[B_Width * B_Width]);
+			loadGridData.RemoveAt (0);
+			int color = bBase.getColorIndex ();
+			if(blockStates [0,i].color == -1){
+				blockStates [0, i].color = color;
+				blockStates [0 ,i].floor = currentFloor;
+				bBase.playAmplify = true;
+			}
+			if(color!=0){
+				blocksLeftCounts++;
+			}
+		}else{
+			allBlocks[currentFloor,i] = null;
+			loadGridData.RemoveAt (0);
+			blockStates [0, i].color = -1;
+		}
+		loadGridData.Add(Mathf.FloorToInt(UnityEngine.Random.Range(1f,4f)));
+		return allBlocks[currentFloor,i];
 	}
 
 	void redoBlock(){

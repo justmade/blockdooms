@@ -49,7 +49,7 @@ public class LevelSelector : MonoBehaviour {
 	void GetAllLevel(){
 		files = new List<string> ();
 	
-		Object[] textures = Resources.LoadAll("Levels", typeof(TextAsset));
+		Object[] textures = Resources.LoadAll("levels", typeof(TextAsset));
 
 		foreach (var t in textures)
 		{

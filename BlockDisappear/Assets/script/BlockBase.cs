@@ -77,7 +77,7 @@ public class BlockBase : MonoBehaviour {
 			block.transform.localScale = new Vector3 (1/3f, 1/3f, 1/3f);
 		}else{
 			block = Instantiate(Resources.Load( "VoxelBlackCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-		block.transform.localScale = new Vector3 (1f, 1f, 1f);
+			block.transform.localScale = new Vector3 (1f, 1f, 1f);
 		}	
 		block.transform.parent = this.gameObject.transform;
 		block.transform.position = this.gameObject.transform.position + new Vector3 (0,0.2f,0) ;
@@ -89,7 +89,8 @@ public class BlockBase : MonoBehaviour {
 		if(colorID == -1){
 			return;
 		}
-		VoxelImporter.VoxelObject vo = AddCenterBlock(colorID).GetComponent<VoxelImporter.VoxelObject>();
+		centerBlock = AddCenterBlock(colorID);
+		VoxelImporter.VoxelObject vo = centerBlock.GetComponent<VoxelImporter.VoxelObject>();
 		Elements elementConfig = new Elements();
 		vo.GetComponent<Renderer>().materials[0].EnableKeyword("_EmissionColor");
 		vo.GetComponent<Renderer>().materials[0].EnableKeyword("_Color");
@@ -189,6 +190,7 @@ public class BlockBase : MonoBehaviour {
 			if (amplifyFrames <= amplifyTime) {
 				float value = 0.5f + AniScale.Evaluate (amplifyFrames / amplifyTime) * 0.5f;
 				this.transform.localScale =  new Vector3 (value, value, value);
+				// centerBlock.transform.localScale = new Vector3 (value, value, value);
 			}
 			if (amplifyFrames == amplifyTime) {
 				amplifyFrames = 0;

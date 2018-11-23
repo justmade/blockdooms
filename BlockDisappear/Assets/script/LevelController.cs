@@ -46,7 +46,7 @@ public class LevelController : MonoBehaviour {
 
 	void GetAllLevel(){
 		if(LevelDataInfo.levels == null){
-			Object[] levelFiles = Resources.LoadAll("Levels", typeof(TextAsset));
+			Object[] levelFiles = Resources.LoadAll("levels", typeof(TextAsset));
 			for(int i = 0 ; i < levelFiles.Length ; i++ ){
 				levels.Add(new Level(i+1 ,levelFiles[i].name , false,0,false));
 				LevelDataInfo.levels = levels;
