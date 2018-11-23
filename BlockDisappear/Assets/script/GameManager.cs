@@ -831,20 +831,22 @@ public class GameManager : MonoBehaviour {
 		Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
 		Vector3 v = new Vector3 (0,0,0);
 		int i = index;
-		if(loadGridData[0] != -1){
+		if(loadGridData[i] != -1){
+			int blockColor = loadGridData[i];
 			v.x = Mathf.Ceil (i / B_Width) * 1.2f + 0.5f;
 			v.z = i % B_Width * 1.2f+0.5f ;
 			// ... create them, set their player number and references needed for control.
 			GameObject block = 
-				Instantiate(GetBlockPrefabByID(loadGridData[0]), Vector3.zero, turnRotation) as GameObject;
+				Instantiate(GetBlockPrefabByID(blockColor), Vector3.zero, turnRotation) as GameObject;
 			block.transform.parent = container.transform;
 			block.transform.localPosition = v;
 			block.transform.localScale = new Vector3 (1.0f, 1.0f, 1.0f);
 			block.tag = "Block";
 			allBlocks[currentFloor,i] = block;
 			BlockBase bBase = block.GetComponent<BlockBase> ();
-			bBase.setColor (loadGridData[0],loadGridData[B_Width * B_Width]);
-			loadGridData.RemoveAt (0);
+			loadGridData[i] = Mathf.FloorToInt(UnityEngine.Random.Range(1f,4f));
+			bBase.setColor (blockColor,loadGridData[i]);
+			// loadGridData.RemoveAt (0);
 			int color = bBase.getColorIndex ();
 			if(blockStates [0,i].color == -1){
 				blockStates [0, i].color = color;
@@ -856,10 +858,9 @@ public class GameManager : MonoBehaviour {
 			}
 		}else{
 			allBlocks[currentFloor,i] = null;
-			loadGridData.RemoveAt (0);
+			// loadGridData.RemoveAt (0);
 			blockStates [0, i].color = -1;
 		}
-		loadGridData.Add(Mathf.FloorToInt(UnityEngine.Random.Range(1f,4f)));
 		return allBlocks[currentFloor,i];
 	}
 
@@ -959,6 +960,9 @@ public class GameManager : MonoBehaviour {
 						blockStates [0, i].color = color;
 						blockStates [0, i].floor = k;
 						bBase.setPlayAmplify (true);
+						allBlocks[k,i].transform.position = new Vector3(allBlocks[k,i].transform.position.x 
+																					,1
+																					,allBlocks[k,i].transform.position.z);
 						break;
 
 					}
