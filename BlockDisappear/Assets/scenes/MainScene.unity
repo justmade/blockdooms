@@ -579,16 +579,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 198574061493357668, guid: ea0631e6027a542668c7eabf1b387ad1,
-        type: 2}
-      propertyPath: ClampVelocityModule.drag.scalar
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 198574061493357668, guid: ea0631e6027a542668c7eabf1b387ad1,
-        type: 2}
-      propertyPath: InitialModule.startLifetime.scalar
-      value: 0.8
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea0631e6027a542668c7eabf1b387ad1, type: 2}
   m_IsPrefabAsset: 0
