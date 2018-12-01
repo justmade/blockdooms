@@ -128,6 +128,7 @@
      <None Include="Assets\Resources\levels\Level2.txt" />
      <None Include="Assets\Resources\levels\Level3.txt" />
      <None Include="Assets\Resources\levels\Level-ct4-4-1007.txt" />
+     <None Include="Assets\Resources\levels\Level-colortest.txt" />
      <None Include="Assets\Resources\levels\Level-c4-4.5-1006.txt" />
      <None Include="Assets\Resources\levels\Level-c3-2-9022.txt" />
      <None Include="Assets\Resources\levels\Level-ct3-2-1007.txt" />
@@ -140,8 +141,10 @@
      <None Include="Assets\VoxelImporter\ReadMe_en.txt" />
      <None Include="Assets\Resources\levels\Level-c3-2-0922.txt" />
      <None Include="Assets\Resources\levels\Level-a4.txt" />
+     <None Include="Assets\Resources\levels\Level-ct4a-3.5-1125.txt" />
      <None Include="Assets\VoxelImporter\Shader\Explosion\VoxelExplosion-Opaque.shader" />
      <None Include="Assets\Resources\levels\Level-a2.txt" />
+     <None Include="Assets\Resources\levels\Level-ct4a-5-1125.txt" />
      <None Include="Assets\Resources\levels\Level-c3-3-0922.txt" />
      <None Include="Assets\Resources\levels\Level-treasure.txt" />
      <None Include="Assets\Resources\levels\Level1.txt" />
@@ -156,11 +159,14 @@
      <None Include="Assets\Resources\levels\Level4.txt" />
      <None Include="Assets\Resources\levels\Level5.txt" />
      <None Include="Assets\Resources\levels\Level6.txt" />
+     <None Include="Assets\Resources\levels\Level-ct4a-4-1201-2.txt" />
+     <None Include="Assets\Resources\levels\Level-ct4a-4-1201.txt" />
      <None Include="Assets\Resources\levels\Leveltest.txt" />
      <None Include="Assets\VoxelImporter\ReadMe_jp.txt" />
      <None Include="Assets\Resources\levels\Level10-4color.txt" />
      <None Include="Assets\Resources\levels\Level8.txt" />
      <None Include="Assets\Resources\levels\Level-t2.txt" />
+     <None Include="Assets\Resources\levels\Level-ct4-4-1122.txt" />
      <None Include="Assets\Resources\levels\Level7.txt" />
      <None Include="Assets\Resources\levels\Level-a1.txt" />
      <None Include="Assets\Resources\levels\Level-a5.txt" />
