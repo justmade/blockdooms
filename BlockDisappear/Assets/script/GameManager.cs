@@ -475,7 +475,7 @@ public class GameManager : MonoBehaviour {
 		// Debug.LogFormat ("currentFloor {0}", currentFloor);
 
 		Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
-		Vector3 v = new Vector3 (0,0,0);
+		Vector3 v = new Vector3 (0,1,0);
 		for (int i = 0; i < counts; i++){
 			if(loadGridData[0] != -1){
 				v.x = Mathf.Ceil (i / B_Width) * 1.2f + 0.5f;
@@ -831,13 +831,17 @@ public class GameManager : MonoBehaviour {
 			int currentColor = blockStates [0,oIndex].color;
 			blockStates [0,bs.originalIndex].color = bs.color;
 			blockStates [0,bs.originalIndex].floor = bs.floor;
+
+			// if(allBlocks[bs.floor+1,oIndex] != null){
+			// 	allBlocks[bs.floor+1,oIndex].transform.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
+			// }	
 			
-			Vector3 v = new Vector3 (0,1,0);
+			Vector3 v = new Vector3 (0,2,0);
 			Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
 
 			v.x = Mathf.Ceil (oIndex / B_Width) * 1.2f + 0.5f;
 			v.z = oIndex % B_Width * 1.2f+0.5f ;
-			v.y = 2 - bs.floor;
+			// v.y = 2 - bs.floor;
 			Vector3 v2 =  container.transform.InverseTransformVector(v);
 			// ... create them, set their player number and references needed for control.
 			GameObject block = 

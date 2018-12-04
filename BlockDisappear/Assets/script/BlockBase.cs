@@ -38,7 +38,9 @@ public class BlockBase : MonoBehaviour {
 
 	private float amplifyFrames = 0;
 
-	private float amplifyTime = 20f;
+	private float amplifyTime = 40f;
+
+	private float startTime = 8f;
 
 	public bool isPlayingAimation = false;
 
@@ -186,11 +188,14 @@ public class BlockBase : MonoBehaviour {
 		if (playAmplify) {
 			isPlayingAimation = true;
 			amplifyFrames++;
-			if (amplifyFrames <= amplifyTime) {
-				float value = 0.5f + AniScale.Evaluate (amplifyFrames / amplifyTime) * 0.5f;
+
+			if(amplifyFrames <= startTime){
+				this.transform.localScale =  new Vector3 (0.5f, 0.5f, 0.5f);
+			}	
+			else if (amplifyFrames < amplifyTime && amplifyFrames > startTime) {
+				float value = 0.5f + AniScale.Evaluate ((amplifyFrames-startTime) / (amplifyTime-startTime)) * 0.5f;
 				this.transform.localScale =  new Vector3 (value, value, value);
-			}
-			if (amplifyFrames == amplifyTime) {
+			}else if (amplifyFrames == amplifyTime) {
 				amplifyFrames = 0;
 				playAmplify = false;
 				isPlayingAimation = false;

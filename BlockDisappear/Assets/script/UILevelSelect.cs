@@ -25,7 +25,7 @@ public class UILevelSelect : MonoBehaviour {
 		for(int i = 0 ; i < levelController.levels.Count ; i++ ){
 			levelList.Add(levelUI);
 		}
-		BuildLevelPage(0);	
+		BuildLevelPage(LevelDataInfo.lastPage);	
 	}
 	
 	void BuildLevelPage(int page){
@@ -64,12 +64,14 @@ public class UILevelSelect : MonoBehaviour {
 
 	public void NextPage(){
 		if(currentPage < maxPage){
+			LevelDataInfo.lastPage = currentPage+1;
 			BuildLevelPage(currentPage+1);	
 		}
 	}
 
 	public void PrePage(){
 		if(currentPage >0){
+			LevelDataInfo.lastPage = currentPage-1;
 			BuildLevelPage(currentPage-1);	
 		}
 	}
