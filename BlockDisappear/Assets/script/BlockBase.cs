@@ -40,7 +40,7 @@ public class BlockBase : MonoBehaviour {
 
 	private float amplifyTime = 40f;
 
-	private float startTime = 8f;
+	private float startTime = 7f;
 
 	public bool isPlayingAimation = false;
 
@@ -73,16 +73,16 @@ public class BlockBase : MonoBehaviour {
 		GameObject block;
 		if(colorID == elementConfig.Treasure){
 			block =	Instantiate(Resources.Load( "VoxelBlackTLeft", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-			block.transform.localScale = new Vector3 (1/3f, 1/3f, 1/3f);
+			block.transform.localScale = new Vector3 (1/3f, 1f, 1/3f);
 		}else if(colorID == elementConfig.Key){
 			block = Instantiate(Resources.Load( "VoxelBlackTRight", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-			block.transform.localScale = new Vector3 (1/3f, 1/3f, 1/3f);
+			block.transform.localScale = new Vector3 (1/3f, 1f, 1/3f);
 		}else{
 			block = Instantiate(Resources.Load( "VoxelBlackCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-		block.transform.localScale = new Vector3 (1f, 1f, 1f);
+			block.transform.localScale = new Vector3 (1f, 1f, 1f);
 		}	
 		block.transform.parent = this.gameObject.transform;
-		block.transform.position = this.gameObject.transform.position + new Vector3 (0,0.2f,0) ;
+		block.transform.position = this.gameObject.transform.position + new Vector3 (0,0.05f,0) ;
 		return block;
 	}
 
