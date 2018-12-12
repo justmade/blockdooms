@@ -82,7 +82,7 @@ public class BlockBase : MonoBehaviour {
 			block.transform.localScale = new Vector3 (1f, 1f, 1f);
 		}	
 		block.transform.parent = this.gameObject.transform;
-		block.transform.position = this.gameObject.transform.position + new Vector3 (0,0.05f,0) ;
+		block.transform.position = this.gameObject.transform.position + new Vector3 (0,0.5f,0) ;
 		return block;
 	}
 

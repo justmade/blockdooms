@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 using LitJson;
 using System.IO;
 using LFormat;
-
+using UnityEditor;
 
 public class GameManager : MonoBehaviour {
 
@@ -509,6 +509,13 @@ public class GameManager : MonoBehaviour {
 
 		}
 		updateLeftText ();
+		// Lightmapping.BakeAsync();
+		// Lightmapping.
+
+		Lightmapping.bakedGI = true;
+		Lightmapping.realtimeGI = true;
+
+		// Lightmapping.Bake();
 	}
 
 	void touchBlock(){
@@ -528,8 +535,6 @@ public class GameManager : MonoBehaviour {
 
 			if(Physics.Raycast (ray,out hit))    //如果真的发生了碰撞，ray这条射线在hit点与别的物体碰撞了
 			{
-				
-
 				allDisappearIndex.Clear ();
 				checkSameColor = false;
 				if (hit.collider.gameObject.tag == "Block") {
