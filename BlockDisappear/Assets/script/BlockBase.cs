@@ -82,7 +82,7 @@ public class BlockBase : MonoBehaviour {
 			block.transform.localScale = new Vector3 (1f, 1f, 1f);
 		}	
 		block.transform.parent = this.gameObject.transform;
-		block.transform.position = this.gameObject.transform.position + new Vector3 (0,0.5f,0) ;
+		block.transform.position = this.gameObject.transform.position + new Vector3 (0,0.1f,0) ;
 		return block;
 	}
 
@@ -98,14 +98,14 @@ public class BlockBase : MonoBehaviour {
 
 		Color newColor; 
 		if(colorID == elementConfig.Red){
-			newColor = new Color(180/255f, 67/255f, 50/255f, 1f);
+			newColor = new Color(240/255f, 99/255f, 72/255f, 1f);
 			Debug.Log(newColor.ToString());
 		}else if(colorID == elementConfig.Green){
-			newColor = new Color(0/255f, 101/255f ,62/255f, 1f);
+			newColor = new Color(2/255f, 148/255f ,92/255f, 1f);
 		}else if(colorID == elementConfig.Blue){
-			newColor = new Color(49/255f, 71/255f, 101/255f, 1f);
+			newColor = new Color(58/255f, 115/255f, 156/255f, 1f);
 		}else if(colorID == elementConfig.Yellow){
-			newColor = new Color(240/255f, 120/255f, 24/255f, 1f);
+			newColor = new Color(209/255f, 173/255f, 46/255f, 1f);
 		}else{
 			newColor = Color.white;
 		}
