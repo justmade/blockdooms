@@ -40,10 +40,10 @@ MonoBehaviour:
         stationaryBlending: 0.95
         motionBlending: 0.85
   ambientOcclusion:
-    m_Enabled: 0
+    m_Enabled: 1
     m_Settings:
-      intensity: 1
-      radius: 0.3
+      intensity: 0.2
+      radius: 0.1
       sampleCount: 10
       downsampling: 1
       forceForwardCompatibility: 0
@@ -71,8 +71,8 @@ MonoBehaviour:
   depthOfField:
     m_Enabled: 0
     m_Settings:
-      focusDistance: 10
-      aperture: 5.6
+      focusDistance: 13.06
+      aperture: 0.1
       focalLength: 50
       useCameraFov: 0
       kernelSize: 1
@@ -138,7 +138,7 @@ MonoBehaviour:
           power: {r: 1, g: 1, b: 1, a: 0}
           offset: {r: 1, g: 1, b: 1, a: 0}
         linear:
-          lift: {r: 0.9773048, g: 1, b: 0.99760187, a: 0}
+          lift: {r: 0.9773048, g: 1, b: 0.99760187, a: -0.03245436}
           gamma: {r: 1, g: 1, b: 1, a: 0}
           gain: {r: 1, g: 1, b: 1, a: 0}
       curves:

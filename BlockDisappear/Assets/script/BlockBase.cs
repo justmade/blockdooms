@@ -61,9 +61,9 @@ public class BlockBase : MonoBehaviour {
 		
 		if (centreIndex == -1) {
 			centreIndex = i;
-			setCenterColor(-1);
+			setCenterColor(-1,i);
 		} else {
-			setCenterColor(centreIndex);
+			setCenterColor(centreIndex,-1);
 		}
 		colorIndex = i;
 	}
@@ -82,13 +82,33 @@ public class BlockBase : MonoBehaviour {
 			block.transform.localScale = new Vector3 (1f, 1f, 1f);
 		}	
 		block.transform.parent = this.gameObject.transform;
-		block.transform.position = this.gameObject.transform.position + new Vector3 (0,0.1f,0) ;
+		block.transform.position = this.gameObject.transform.position + new Vector3 (0,0.0f,0) ;
 		return block;
 	}
 
-	private void setCenterColor(int colorID){
+
+	private GameObject AddCenterBodyBlock(int colorID){
+		Elements elementConfig = new Elements();
+		GameObject block;
+		if(colorID == elementConfig.Red){
+			block =	Instantiate(Resources.Load( "RedCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+		}else if(colorID == elementConfig.Blue){
+			block = Instantiate(Resources.Load( "BlueCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+		}else if(colorID == elementConfig.Yellow){
+			block = Instantiate(Resources.Load( "YellowCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+		}else{
+			block = Instantiate(Resources.Load( "GreenCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+		}
+		block.transform.localScale = new Vector3 (1f, 1f, 1f);
+		block.transform.parent = this.gameObject.transform;
+		block.transform.position = this.gameObject.transform.position + new Vector3 (1,0.1f,0) ;
+		return block;
+	}
+
+	private void setCenterColor(int colorID,int BodyColor){
 
 		if(colorID == -1){
+			AddCenterBodyBlock(BodyColor);
 			return;
 		}
 		VoxelImporter.VoxelObject vo = AddCenterBlock(colorID).GetComponent<VoxelImporter.VoxelObject>();
