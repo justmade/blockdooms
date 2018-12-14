@@ -74,11 +74,11 @@ public class BlockBase : MonoBehaviour {
 		Elements elementConfig = new Elements();
 		GameObject block;
 		if(colorID == elementConfig.Treasure){
-			block =	Instantiate(Resources.Load( "VoxelBlackTLeft", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-			block.transform.localScale = new Vector3 (1/3f, 1f, 1/3f);
+			block =	Instantiate(Resources.Load( "BlockRightCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+			block.transform.localScale = new Vector3 (-1f, 1f, 1f);
 		}else if(colorID == elementConfig.Key){
-			block = Instantiate(Resources.Load( "VoxelBlackTRight", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-			block.transform.localScale = new Vector3 (1/3f, 1f, 1/3f);
+			block = Instantiate(Resources.Load( "BlockRightCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+			block.transform.localScale = new Vector3 (1f, 1f, 1f);
 		}else{
 			block = Instantiate(Resources.Load( "VoxelBlackCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
 			block.transform.localScale = new Vector3 (1f, 1f, 1f);
@@ -101,7 +101,17 @@ public class BlockBase : MonoBehaviour {
 		}else if(colorID == elementConfig.Yellow){
 			block = Instantiate(Resources.Load( "YellowCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
 			block.transform.localScale = new Vector3 (1f, 1f, 1f);
-		}else{
+		}else if(colorID == elementConfig.Green){
+			block = Instantiate(Resources.Load( "GreenCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+			block.transform.localScale = new Vector3 (1f, 1f, 1f);
+		}else if(colorID == elementConfig.Treasure){
+			block = Instantiate(Resources.Load( "LeftCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+			block.transform.localScale = new Vector3 (1f, 1f, 1f);
+		}else if(colorID == elementConfig.Key){
+			block = Instantiate(Resources.Load( "RightCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+			block.transform.localScale = new Vector3 (1f, 1f, 1f);
+		}
+		else{
 			block = Instantiate(Resources.Load( "GreenCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
 			block.transform.localScale = new Vector3 (1f, 1f, 1f);
 		}
