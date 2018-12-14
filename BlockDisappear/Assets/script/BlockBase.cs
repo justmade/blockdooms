@@ -46,6 +46,8 @@ public class BlockBase : MonoBehaviour {
 
 	private GameObject centerBlock;
 
+	private GameObject centerBodyBlock;
+
 	// Use this for initialization
 	void Awake(){
 		if(elements != null){
@@ -61,7 +63,7 @@ public class BlockBase : MonoBehaviour {
 		
 		if (centreIndex == -1) {
 			centreIndex = i;
-			setCenterColor(-1,i);
+			centerBodyBlock = AddCenterBodyBlock(centreIndex);
 		} else {
 			setCenterColor(centreIndex,-1);
 		}
@@ -92,14 +94,18 @@ public class BlockBase : MonoBehaviour {
 		GameObject block;
 		if(colorID == elementConfig.Red){
 			block =	Instantiate(Resources.Load( "RedCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+			block.transform.localScale = new Vector3 (1f, 1f, 1f);
 		}else if(colorID == elementConfig.Blue){
 			block = Instantiate(Resources.Load( "BlueCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+			block.transform.localScale = new Vector3 (1f, 1f, 1f);
 		}else if(colorID == elementConfig.Yellow){
 			block = Instantiate(Resources.Load( "YellowCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+			block.transform.localScale = new Vector3 (1f, 1f, 1f);
 		}else{
 			block = Instantiate(Resources.Load( "GreenCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+			block.transform.localScale = new Vector3 (1f, 1f, 1f);
 		}
-		block.transform.localScale = new Vector3 (1f, 1f, 1f);
+		// block.transform.localScale = new Vector3 (1f, 1f, 1f);
 		block.transform.parent = this.gameObject.transform;
 		block.transform.position = this.gameObject.transform.position + new Vector3 (1,0.1f,0) ;
 		return block;
@@ -108,7 +114,7 @@ public class BlockBase : MonoBehaviour {
 	private void setCenterColor(int colorID,int BodyColor){
 
 		if(colorID == -1){
-			AddCenterBodyBlock(BodyColor);
+			// AddCenterBodyBlock(BodyColor);
 			return;
 		}
 		VoxelImporter.VoxelObject vo = AddCenterBlock(colorID).GetComponent<VoxelImporter.VoxelObject>();
@@ -211,11 +217,16 @@ public class BlockBase : MonoBehaviour {
 
 			if(amplifyFrames <= startTime){
 				this.transform.localScale =  new Vector3 (0.5f, 0.5f, 0.5f);
+				this.centerBodyBlock.transform.localScale =  new Vector3 (0.5f, 0.5f, 0.5f);
 			}	
 			else if (amplifyFrames < amplifyTime && amplifyFrames > startTime) {
 				float value = 0.5f + AniScale.Evaluate ((amplifyFrames-startTime) / (amplifyTime-startTime)) * 0.5f;
 				this.transform.localScale =  new Vector3 (value, value, value);
+				this.centerBodyBlock.transform.localScale =  new Vector3 (value, value, value);
 			}else if (amplifyFrames == amplifyTime) {
+				centerBodyBlock.transform.localScale =  new Vector3 (1f, 1f, 1f);
+				centerBodyBlock.transform.parent = this.gameObject.transform;
+				centerBodyBlock.transform.position = this.gameObject.transform.position + new Vector3 (0,0.1f,0) ;
 				amplifyFrames = 0;
 				playAmplify = false;
 				isPlayingAimation = false;
