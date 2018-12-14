@@ -107,7 +107,7 @@ public class BlockBase : MonoBehaviour {
 		}
 		// block.transform.localScale = new Vector3 (1f, 1f, 1f);
 		block.transform.parent = this.gameObject.transform;
-		block.transform.position = this.gameObject.transform.position + new Vector3 (1,0.1f,0) ;
+		block.transform.position = this.gameObject.transform.position + new Vector3 (0,0.1f,0) ;
 		return block;
 	}
 
@@ -216,17 +216,16 @@ public class BlockBase : MonoBehaviour {
 			amplifyFrames++;
 
 			if(amplifyFrames <= startTime){
+				centerBodyBlock.transform.parent = this.gameObject.transform;
 				this.transform.localScale =  new Vector3 (0.5f, 0.5f, 0.5f);
-				this.centerBodyBlock.transform.localScale =  new Vector3 (0.5f, 0.5f, 0.5f);
+				this.centerBodyBlock.transform.localScale =  new Vector3 (1f, 1f, 1f);
+				centerBodyBlock.transform.position = this.gameObject.transform.position + new Vector3 (0,0.05f,0) ;
 			}	
 			else if (amplifyFrames < amplifyTime && amplifyFrames > startTime) {
 				float value = 0.5f + AniScale.Evaluate ((amplifyFrames-startTime) / (amplifyTime-startTime)) * 0.5f;
 				this.transform.localScale =  new Vector3 (value, value, value);
-				this.centerBodyBlock.transform.localScale =  new Vector3 (value, value, value);
 			}else if (amplifyFrames == amplifyTime) {
 				centerBodyBlock.transform.localScale =  new Vector3 (1f, 1f, 1f);
-				centerBodyBlock.transform.parent = this.gameObject.transform;
-				centerBodyBlock.transform.position = this.gameObject.transform.position + new Vector3 (0,0.1f,0) ;
 				amplifyFrames = 0;
 				playAmplify = false;
 				isPlayingAimation = false;

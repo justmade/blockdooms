@@ -511,10 +511,6 @@ public class GameManager : MonoBehaviour {
 		updateLeftText ();
 		// Lightmapping.BakeAsync();
 		// Lightmapping.
-
-		Lightmapping.bakedGI = true;
-		Lightmapping.realtimeGI = true;
-
 		// Lightmapping.Bake();
 	}
 
