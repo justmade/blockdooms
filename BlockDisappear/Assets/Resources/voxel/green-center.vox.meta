@@ -5,7 +5,6 @@ ScriptedImporter:
     100000: green-center/green-center
     400000: green-center/green-center/Transform
     2100000: mat0
-    2100002: mat1
     2300000: green-center/green-center/MeshRenderer
     2800000: tex
     3300000: green-center/green-center/MeshFilter
