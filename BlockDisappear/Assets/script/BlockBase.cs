@@ -137,12 +137,12 @@ public class BlockBase : MonoBehaviour {
 			newColor = new Color(240/255f, 99/255f, 72/255f, 1f);
 			Debug.Log(newColor.ToString());
 		}else if(colorID == elementConfig.Green){
-			newColor = new Color(2/255f, 148/255f ,92/255f, 1f);
+			newColor = new Color(0/255f, 132/255f ,83/255f, 1f);
 		}else if(colorID == elementConfig.Blue){
-			newColor = new Color(58/255f, 115/255f, 156/255f, 1f);
+			newColor = new Color(50/255f, 104/255f, 139/255f, 1f);
 		}else if(colorID == elementConfig.Yellow){
-			newColor = new Color(209/255f, 173/255f, 46/255f, 1f);
-		}else{
+			newColor = new Color(205/255f, 164/255f, 0/255f, 1f);
+		}else{  
 			newColor = Color.white;
 		}
 		vo.GetComponent<Renderer>().materials[0].color = newColor;
