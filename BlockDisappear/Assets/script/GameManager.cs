@@ -398,7 +398,11 @@ public class GameManager : MonoBehaviour {
 				block.tag = "Block";
 				block.transform.parent = container.transform;
 				BlockBase bBase = block.GetComponent<BlockBase> ();
-				bBase.setColor (loadGridData[0],loadGridData[counts]);
+				if(loadGridData.Count > counts){
+					bBase.setColor (loadGridData[0],loadGridData[counts]);
+				}else{
+					bBase.setColor (loadGridData[0],-1);
+				}
 				loadGridData.RemoveAt (0);
 				int color = bBase.getColorIndex ();
 				blockStates [0, i] = new BlockState ();
@@ -477,6 +481,9 @@ public class GameManager : MonoBehaviour {
 		Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
 		Vector3 v = new Vector3 (0,1,0);
 		for (int i = 0; i < counts; i++){
+			if(loadGridData.Count <= 0){
+				return;
+			}
 			if(loadGridData[0] != -1){
 				v.x = Mathf.Ceil (i / B_Width) * 1.2f + 0.5f;
 				v.z = i % B_Width * 1.2f+0.5f ;
