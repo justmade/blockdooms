@@ -48,6 +48,8 @@ public class BlockBase : MonoBehaviour {
 
 	private GameObject centerBodyBlock;
 
+	private Renderer centerRender;
+
 	// Use this for initialization
 	void Awake(){
 		if(elements != null){
@@ -148,7 +150,7 @@ public class BlockBase : MonoBehaviour {
 		vo.GetComponent<Renderer>().materials[0].color = newColor;
 		vo.GetComponent<Renderer>().materials[0].SetColor("_EmissionColor", newColor);
 		vo.GetComponent<Renderer>().materials[0].SetColor("_Color",newColor);
-		
+		centerRender = vo.GetComponent<Renderer>();
  	}
 
 
@@ -189,6 +191,13 @@ public class BlockBase : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if(centerRender != null){
+			Color c = Color.Lerp(new Color(240/255f, 99/255f, 72/255f, 1f),Color.white, Mathf.PingPong(Time.time, 1));
+			centerRender.materials[0].color = c;
+			centerRender.materials[0].SetColor("_EmissionColor", c);
+			centerRender.materials[0].SetColor("_Color",c);	
+			
+		}
 		amplify ();
 	}
 
