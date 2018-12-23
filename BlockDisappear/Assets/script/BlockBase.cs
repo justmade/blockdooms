@@ -40,7 +40,7 @@ public class BlockBase : MonoBehaviour {
 
 	private float amplifyTime = 40f;
 
-	private float startTime = 7f;
+	private float startTime = 30f;
 
 	public bool isPlayingAimation = false;
 
@@ -191,13 +191,13 @@ public class BlockBase : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(centerRender != null){
-			Color c = Color.Lerp(new Color(240/255f, 99/255f, 72/255f, 1f),Color.white, Mathf.PingPong(Time.time, 1));
-			centerRender.materials[0].color = c;
-			centerRender.materials[0].SetColor("_EmissionColor", c);
-			centerRender.materials[0].SetColor("_Color",c);	
+		// if(centerRender != null){
+		// 	Color c = Color.Lerp(new Color(240/255f, 99/255f, 72/255f, 1f),Color.white, Mathf.PingPong(Time.time, 1));
+		// 	centerRender.materials[0].color = c;
+		// 	centerRender.materials[0].SetColor("_EmissionColor", c);
+		// 	centerRender.materials[0].SetColor("_Color",c);	
 			
-		}
+		// }
 		amplify ();
 	}
 
@@ -227,6 +227,16 @@ public class BlockBase : MonoBehaviour {
 	public void displayObject(){
 		Color c = this.GetComponent<Renderer> ().sharedMaterial.color;
 		gameObject.GetComponent<Renderer> ().sharedMaterial.color  = new Color(c.r,c.g,c.b,1.0f);
+	}
+
+	public void tapEffect(){
+		GameObject pEffect = Instantiate(Resources.Load("particle/BlockTap", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+		pEffect.transform.parent = this.gameObject.transform;
+		pEffect.transform.position = this.gameObject.transform.position + new Vector3 (0,0.2f,0) ;
+		ParticleSystem p = pEffect.GetComponent<ParticleSystem> ();
+		p.Play ();
+		Destroy(p,p.startLifetime); 
+		Destroy(this.gameObject,0.4f);
 	}
 
 	public void amplify(){

@@ -546,6 +546,8 @@ public class GameManager : MonoBehaviour {
 						return;					
 					}
 
+					// bb.tapEffect();
+					// return;
 					BlockState bs = findBlockIndex (hit.collider.gameObject);
 					addDisappearIndex (bs.originalIndex);
 					if (isMainC) {
@@ -812,8 +814,8 @@ public class GameManager : MonoBehaviour {
 				for (int i = 0; i < currentFloor + 1; i++) {
 					GameObject block = allBlocks [i,index];
 					if (block) {
-						
-						Destroy (block);
+						block.GetComponent<BlockBase>().tapEffect();
+						//Destroy (block);
 						//Debug.LogFormat ("removeIndex {0} , {1}", i, index);
 						BlockState recordStep = new BlockState();
 						recordStep.color = blockStates [0,index].color;
@@ -824,7 +826,7 @@ public class GameManager : MonoBehaviour {
 
 						allBlocks [i, index] = null;
 						blockStates [0,index].color = -1;
-						addBoomParticle (block.transform.position,recordStep.color);
+						// addBoomParticle (block.transform.position,recordStep.color);
 						break;
 					}
 				}
