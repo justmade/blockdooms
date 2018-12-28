@@ -50,6 +50,7 @@ public class BlockBase : MonoBehaviour {
 
 	private Renderer centerRender;
 
+	private bool isSingleBlock;
 	// Use this for initialization
 	void Awake(){
 		if(elements != null){
@@ -64,9 +65,11 @@ public class BlockBase : MonoBehaviour {
 	public void setColor(int i , int centreIndex=-1){
 		
 		if (centreIndex == -1) {
+			isSingleBlock = true;
 			centreIndex = i;
 			centerBodyBlock = AddCenterBodyBlock(centreIndex);
 		} else {
+			isSingleBlock = false;
 			setCenterColor(centreIndex,-1);
 		}
 		colorIndex = i;
@@ -230,7 +233,13 @@ public class BlockBase : MonoBehaviour {
 	}
 
 	public void tapEffect(){
-		GameObject pEffect = Instantiate(Resources.Load("particle/BlockTap", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+		String particleName = "BlockTapWhole";
+		if(isSingleBlock){
+			particleName = "BlockTapWhole";
+		}else{
+			particleName = "BlockTap";
+		}
+		GameObject pEffect = Instantiate(Resources.Load("particle/"+particleName, typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
 		pEffect.transform.parent = this.gameObject.transform;
 		pEffect.transform.position = this.gameObject.transform.position + new Vector3 (0,0.2f,0) ;
 		ParticleSystem p = pEffect.GetComponent<ParticleSystem> ();
