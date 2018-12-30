@@ -546,8 +546,8 @@ public class GameManager : MonoBehaviour {
 						return;					
 					}
 
-					// bb.tapEffect();
-					// return;
+					bb.tapEffect();
+					return;
 					BlockState bs = findBlockIndex (hit.collider.gameObject);
 					addDisappearIndex (bs.originalIndex);
 					if (isMainC) {

@@ -233,9 +233,9 @@ public class BlockBase : MonoBehaviour {
 	}
 
 	public void tapEffect(){
-		String particleName = "BlockTapWhole";
+		String particleName = "BlockTapW";
 		if(isSingleBlock){
-			particleName = "BlockTapWhole";
+			particleName = "BlockTapW";
 		}else{
 			particleName = "BlockTap";
 		}
