@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 198278171062668244}
   - component: {fileID: 199184313044908342}
   m_Layer: 0
-  m_Name: BlockTapW
+  m_Name: BlockTapRed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

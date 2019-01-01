@@ -233,9 +233,23 @@ public class BlockBase : MonoBehaviour {
 	}
 
 	public void tapEffect(){
-		String particleName = "BlockTapW";
+		String particleName = "BlockTapBlue";
+		Elements elementConfig = new Elements();
 		if(isSingleBlock){
-			particleName = "BlockTapW";
+			if(colorIndex == elementConfig.Red){
+				particleName = "BlockTapRed";
+			}else if(colorIndex == elementConfig.Blue){
+				particleName = "BlockTapBlue";
+			}else if(colorIndex == elementConfig.Yellow){
+				particleName = "BlockTapYellow";
+			}else if(colorIndex == elementConfig.Green){
+				particleName = "BlockTapGreen";
+			}else if(colorIndex == elementConfig.Key){
+				particleName = "BlockTapRight";
+			}else if(colorIndex == elementConfig.Treasure){
+				particleName = "BlockTapLeft";
+			}
+			
 		}else{
 			particleName = "BlockTap";
 		}

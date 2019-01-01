@@ -378,12 +378,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   advancedMode: 1
-  voxelFilePath: /Users/tianyunshi/blockdooms/BlockDisappear/Assets/Resources/voxel/sparklyblock-3-left.vox
+  voxelFilePath: /Users/sty/Documents/unity/BlockDisappear/BlockDisappear/Assets/Resources/voxel/sparklyblock-3-left-frame.vox
   voxelFileGUID: 
-  voxelFileObject: {fileID: 100000, guid: a5fbf34185fbc40b29f8a709fcc9d43b, type: 3}
+  voxelFileObject: {fileID: 100000, guid: e6f4f28586c4147b8b8eee7908f4ea4a, type: 3}
   voxelFileSubIndex: 0
   fileType: 0
-  fileRefreshLastTimeTicks: 636803860285591810
+  fileRefreshLastTimeTicks: 636819389529915210
   dataVersion: 114
   legacyVoxImport: 0
   importMode: 1

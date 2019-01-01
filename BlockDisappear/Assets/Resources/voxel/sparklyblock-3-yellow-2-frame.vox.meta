@@ -1,15 +1,15 @@
 fileFormatVersion: 2
-guid: 1565910f16a8d44a3921d4696d0d43f6
+guid: 3c1da619001ad452889da804e595f2a0
 ScriptedImporter:
   fileIDToRecycleName:
-    100000: sparklyblock-3-yellow-2-1/sparklyblock-3-yellow-2-1
-    400000: sparklyblock-3-yellow-2-1/sparklyblock-3-yellow-2-1/Transform
+    100000: sparklyblock-3-yellow-2-frame/sparklyblock-3-yellow-2-frame
+    400000: sparklyblock-3-yellow-2-frame/sparklyblock-3-yellow-2-frame/Transform
     2100000: mat0
-    2300000: sparklyblock-3-yellow-2-1/sparklyblock-3-yellow-2-1/MeshRenderer
+    2300000: sparklyblock-3-yellow-2-frame/sparklyblock-3-yellow-2-frame/MeshRenderer
     2800000: tex
-    3300000: sparklyblock-3-yellow-2-1/sparklyblock-3-yellow-2-1/MeshFilter
+    3300000: sparklyblock-3-yellow-2-frame/sparklyblock-3-yellow-2-frame/MeshFilter
     4300000: mesh
-    100100000: sparklyblock-3-yellow-2-1
+    100100000: sparklyblock-3-yellow-2-frame
   externalObjects: {}
   userData: 
   assetBundleName: 

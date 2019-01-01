@@ -378,12 +378,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   advancedMode: 0
-  voxelFilePath: /Users/sty/Documents/unity/BlockDisappear/BlockDisappear/Assets/Resources/voxel/sparklyblock-3-yellow-2-0.vox
+  voxelFilePath: /Users/sty/Documents/unity/BlockDisappear/BlockDisappear/Assets/Resources/voxel/sparklyblock-3-yellow-2-frame.vox
   voxelFileGUID: 
-  voxelFileObject: {fileID: 100000, guid: c29b6e8da64104bbab79fca8e4c1c926, type: 3}
+  voxelFileObject: {fileID: 100000, guid: 3c1da619001ad452889da804e595f2a0, type: 3}
   voxelFileSubIndex: 0
   fileType: 0
-  fileRefreshLastTimeTicks: 636818505790507780
+  fileRefreshLastTimeTicks: 636819360574860180
   dataVersion: 114
   legacyVoxImport: 0
   importMode: 1
