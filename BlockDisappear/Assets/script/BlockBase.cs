@@ -255,7 +255,7 @@ public class BlockBase : MonoBehaviour {
 		}
 		GameObject pEffect = Instantiate(Resources.Load("particle/"+particleName, typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
 		pEffect.transform.parent = this.gameObject.transform;
-		pEffect.transform.position = this.gameObject.transform.position + new Vector3 (0,0.2f,0) ;
+		pEffect.transform.position = this.gameObject.transform.position + new Vector3 (0,0.3f,0) ;
 		ParticleSystem p = pEffect.GetComponent<ParticleSystem> ();
 		p.Play ();
 		Destroy(p,p.startLifetime); 

@@ -197,7 +197,8 @@ public class GameManager : MonoBehaviour {
 		
 	}
 
-	void finishLevel(){
+	IEnumerator finishLevel(){
+		yield return new WaitForSeconds(0.7f);
 		SceneManager.LoadScene("LevelSelect");
 		levelController.LevelComplete(currentLevelName,3);
 	}
@@ -567,7 +568,7 @@ public class GameManager : MonoBehaviour {
 						m_MessageText.text = "Gameover！ 剩余方块：" + blocksLeftCounts;
 					if(blocksLeftCounts == 0){
 						m_MessageText.text = "成功！！！";
-						finishLevel();
+						StartCoroutine(finishLevel());
 					}
 				} else {
 					// m_MessageText.text = "消除";
@@ -591,9 +592,11 @@ public class GameManager : MonoBehaviour {
 		m_MessageText.text = "剩余方块：" + blocksLeftCounts;
 		if(blocksLeftCounts == 0){
 			m_MessageText.text = "成功！！！";
-			finishLevel();
+			StartCoroutine(finishLevel());
 		}
 	}
+
+
 
 	//在数组中找到对应的下标
 	BlockState findBlockIndex(GameObject bBase){
