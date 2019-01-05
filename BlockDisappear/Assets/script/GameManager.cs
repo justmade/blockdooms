@@ -550,6 +550,7 @@ public class GameManager : MonoBehaviour {
 					// bb.tapEffect();
 					// return;/
 					BlockState bs = findBlockIndex (hit.collider.gameObject);
+					Debug.LogFormat("hit {0},color{1}",bs.originalIndex,bb.getColorIndex ());
 					addDisappearIndex (bs.originalIndex);
 					if (isMainC) {
 						findNeighbour (bs.originalIndex, bb.getColorIndex (), 0);
@@ -805,14 +806,13 @@ public class GameManager : MonoBehaviour {
 			if(!findTreasureKey){
 				gameStep ++;
 			}
-			
 			blocksLeftCounts -= allDisappearIndex.Count;
 			updateLeftText ();
 			needDestory = true;
 //			Debug.LogFormat ("remove {0}", allDisappearIndex.Count);
 			foreach (int element in allDisappearIndex) 
 			{
-				
+				Debug.Log(element);
 				int index = element;
 				for (int i = 0; i < currentFloor + 1; i++) {
 					GameObject block = allBlocks [i,index];

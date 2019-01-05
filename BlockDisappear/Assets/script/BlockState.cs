@@ -9,7 +9,7 @@ public class BlockState{
 	public int floor;
 
 	//原始数组的block下标
-	public int originalIndex;
+	public int originalIndex=-1;
 	//记录删除是的序列号
 	public int step;
 
