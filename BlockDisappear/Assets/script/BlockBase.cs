@@ -234,6 +234,7 @@ public class BlockBase : MonoBehaviour {
 
 	public void tapEffect(){
 		String particleName = "BlockTapBlue";
+		bool needBoomEffect = false;
 		if(isSingleBlock){
 			if(colorIndex == elementConfig.Red){
 				particleName = "BlockTapRed";
@@ -245,34 +246,43 @@ public class BlockBase : MonoBehaviour {
 				particleName = "BlockTapGreen";
 			}else if(colorIndex == elementConfig.Key){
 				particleName = "BlockTapRight";
+				needBoomEffect = true;
 			}else if(colorIndex == elementConfig.Treasure){
 				particleName = "BlockTapLeft";
+				needBoomEffect = true;
 			}
 			
 		}else{
 			if(colorIndex == elementConfig.Key){
 				particleName = "BlockTapTreasure";
+				needBoomEffect = true;
 			}else if(colorIndex == elementConfig.Treasure){
 				particleName = "BlockTapTreasure";
+				needBoomEffect = true;
 			}else{
 				particleName = "BlockTap";
 			}
 			
 		}
-		Debug.Log(particleName);
 		GameObject pEffect = Instantiate(Resources.Load("particle/"+particleName, typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
 		pEffect.transform.parent = this.gameObject.transform;
 		pEffect.transform.position = this.gameObject.transform.position + new Vector3 (0,0.3f,0) ;
 		ParticleSystem p = pEffect.GetComponent<ParticleSystem> ();
 		p.Play ();
-		Destroy(p,0.4f); 
-		StartCoroutine(addBoomParticle(colorIndex));
+		Destroy(p,0.5f); 
+		StartCoroutine(DestroyByTime());
+		if(needBoomEffect)
+			StartCoroutine(addBoomParticle(colorIndex));
 	}
 	
+	IEnumerator DestroyByTime(){
+		yield return new WaitForSeconds(0.5f);
+		Destroy(this.gameObject);
+	}
+
 
 	IEnumerator addBoomParticle(int color){
-		yield return new WaitForSeconds(0.4f);
-		this.gameObject.active = false;
+		yield return new WaitForSeconds(0.5f);
 		GameObject pEffect = Instantiate(Resources.Load("particle/BlockBoom", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
 		pEffect.transform.parent = this.gameObject.transform.parent.transform;
 		pEffect.transform.position = this.gameObject.transform.position + new Vector3 (0,1f,0) ;
@@ -281,7 +291,7 @@ public class BlockBase : MonoBehaviour {
 		p.Play ();
 		// this.gameObject.h
 		Destroy(pEffect,0.4f);
-		Destroy(this.gameObject,p.startLifetime);
+		
 	}
 
 
@@ -297,7 +307,12 @@ public class BlockBase : MonoBehaviour {
 			newColor = new Color(59/255f, 85/255f, 120/255f, 1f);
 		}else if(colorID == elementConfig.Yellow){
 			newColor = new Color(205/255f, 164/255f, 0/255f, 1f);
-		}else{
+		}else if(colorIndex == elementConfig.Key){
+			newColor = new Color(225/255f, 159/255f, 135/255f, 1f);
+		}else if(colorIndex == elementConfig.Treasure){
+			newColor = new Color(192/255f, 108/255f, 132/255f, 1f);
+		}
+		else{
 			newColor = Color.white;
 		}
 		return newColor;
