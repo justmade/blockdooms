@@ -40,7 +40,7 @@ public class BlockBase : MonoBehaviour {
 
 	private float amplifyTime = 40f;
 
-	private float startTime = 30f;
+	private float startTime = 15f;
 
 	public bool isPlayingAimation = false;
 
@@ -50,6 +50,7 @@ public class BlockBase : MonoBehaviour {
 
 	private Renderer centerRender;
 
+	private Elements elementConfig;
 	private bool isSingleBlock;
 	// Use this for initialization
 	void Awake(){
@@ -60,6 +61,7 @@ public class BlockBase : MonoBehaviour {
 		}else{
 			colorIndex = 0;
 		}
+		elementConfig = new Elements();
 	}
 
 	public void setColor(int i , int centreIndex=-1){
@@ -76,7 +78,7 @@ public class BlockBase : MonoBehaviour {
 	}
 
 	private GameObject AddCenterBlock(int colorID){
-		Elements elementConfig = new Elements();
+		
 		GameObject block;
 		if(colorID == elementConfig.Treasure){
 			block =	Instantiate(Resources.Load( "BlockRightCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
@@ -95,7 +97,6 @@ public class BlockBase : MonoBehaviour {
 
 
 	private GameObject AddCenterBodyBlock(int colorID){
-		Elements elementConfig = new Elements();
 		GameObject block;
 		if(colorID == elementConfig.Red){
 			block =	Instantiate(Resources.Load( "RedCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
@@ -133,7 +134,6 @@ public class BlockBase : MonoBehaviour {
 			return;
 		}
 		VoxelImporter.VoxelObject vo = AddCenterBlock(colorID).GetComponent<VoxelImporter.VoxelObject>();
-		Elements elementConfig = new Elements();
 		vo.GetComponent<Renderer>().materials[0].EnableKeyword("_EmissionColor");
 		vo.GetComponent<Renderer>().materials[0].EnableKeyword("_Color");
 
@@ -234,7 +234,6 @@ public class BlockBase : MonoBehaviour {
 
 	public void tapEffect(){
 		String particleName = "BlockTapBlue";
-		Elements elementConfig = new Elements();
 		if(isSingleBlock){
 			if(colorIndex == elementConfig.Red){
 				particleName = "BlockTapRed";
@@ -251,15 +250,57 @@ public class BlockBase : MonoBehaviour {
 			}
 			
 		}else{
-			particleName = "BlockTap";
+			if(colorIndex == elementConfig.Key){
+				particleName = "BlockTapTreasure";
+			}else if(colorIndex == elementConfig.Treasure){
+				particleName = "BlockTapTreasure";
+			}else{
+				particleName = "BlockTap";
+			}
+			
 		}
+		Debug.Log(particleName);
 		GameObject pEffect = Instantiate(Resources.Load("particle/"+particleName, typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
 		pEffect.transform.parent = this.gameObject.transform;
 		pEffect.transform.position = this.gameObject.transform.position + new Vector3 (0,0.3f,0) ;
 		ParticleSystem p = pEffect.GetComponent<ParticleSystem> ();
 		p.Play ();
-		Destroy(p,p.startLifetime); 
-		Destroy(this.gameObject,0.4f);
+		Destroy(p,0.4f); 
+		StartCoroutine(addBoomParticle(colorIndex));
+	}
+	
+
+	IEnumerator addBoomParticle(int color){
+		yield return new WaitForSeconds(0.4f);
+		this.gameObject.active = false;
+		GameObject pEffect = Instantiate(Resources.Load("particle/BlockBoom", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+		pEffect.transform.parent = this.gameObject.transform.parent.transform;
+		pEffect.transform.position = this.gameObject.transform.position + new Vector3 (0,1f,0) ;
+		ParticleSystem p = pEffect.GetComponent<ParticleSystem> ();
+		pEffect.GetComponent<Renderer>().material.color = getColorByID(color);
+		p.Play ();
+		// this.gameObject.h
+		Destroy(pEffect,0.4f);
+		Destroy(this.gameObject,p.startLifetime);
+	}
+
+
+
+	Color getColorByID(int colorID){
+		Color newColor;
+		if(colorID == elementConfig.Red){
+			newColor = new Color(240/255f, 92/255f, 66/255f, 1f);
+			Debug.Log(newColor.ToString());
+		}else if(colorID == elementConfig.Green){
+			newColor = new Color(0/255f, 132/255f ,83/255f, 1f);
+		}else if(colorID == elementConfig.Blue){
+			newColor = new Color(59/255f, 85/255f, 120/255f, 1f);
+		}else if(colorID == elementConfig.Yellow){
+			newColor = new Color(205/255f, 164/255f, 0/255f, 1f);
+		}else{
+			newColor = Color.white;
+		}
+		return newColor;
 	}
 
 	public void amplify(){

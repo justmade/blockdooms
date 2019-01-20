@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 198278171062668244}
   - component: {fileID: 199184313044908342}
   m_Layer: 0
-  m_Name: BlockTap
+  m_Name: BlockTapTreasure
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -113,7 +113,7 @@ ParticleSystem:
   lengthInSec: 1
   simulationSpeed: 1
   stopAction: 0
-  looping: 0
+  looping: 1
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -3753,7 +3753,7 @@ ParticleSystem:
     collisionShape3: {fileID: 0}
     collisionShape4: {fileID: 0}
     collisionShape5: {fileID: 0}
-    inside: 0
+    inside: 1
     outside: 0
     enter: 0
     exit: 0
@@ -9293,7 +9293,7 @@ ParticleSystem:
   lengthInSec: 1
   simulationSpeed: 1
   stopAction: 0
-  looping: 0
+  looping: 1
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -10572,7 +10572,7 @@ ParticleSystem:
         key0: {r: 1, g: 1, b: 1, a: 0}
         key1: {r: 1, g: 1, b: 1, a: 0.4509804}
         key2: {r: 1, g: 1, b: 1, a: 0}
-        key3: {r: 1, g: 1, b: 1, a: 1}
+        key3: {r: 1, g: 1, b: 1, a: 0.4509804}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
         key6: {r: 0, g: 0, b: 0, a: 0}
@@ -10586,16 +10586,16 @@ ParticleSystem:
         ctime6: 0
         ctime7: 0
         atime0: 0
-        atime1: 6554
-        atime2: 65535
-        atime3: 65535
-        atime4: 0
+        atime1: 6746
+        atime2: 32768
+        atime3: 45875
+        atime4: 65535
         atime5: 0
         atime6: 0
         atime7: 0
         m_Mode: 0
         m_NumColorKeys: 3
-        m_NumAlphaKeys: 3
+        m_NumAlphaKeys: 5
       minGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -13327,7 +13327,7 @@ ParticleSystem:
         m_NumAlphaKeys: 2
   CustomDataModule:
     enabled: 0
-    mode0: 2
+    mode0: 0
     vectorComponentCount0: 4
     color0:
       serializedVersion: 2

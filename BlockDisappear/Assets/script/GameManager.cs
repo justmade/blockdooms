@@ -429,14 +429,16 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void addBoomParticle(Vector3 v,int color){
-		v.y++;
-		GameObject boom = 
-			Instantiate(boomParticle, v, Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-		boom.transform.parent = container.transform;
-		ParticleSystem p = boom.GetComponent<ParticleSystem> ();
-		boom.GetComponent<Renderer>().material.color = getColorByID(color);
-		p.Play ();
-		Destroy(p,p.startLifetime); 
+		if(color == elementConfig.Key || color == elementConfig.Treasure){
+			v.y++;
+			GameObject boom = 
+				Instantiate(boomParticle, v, Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+			boom.transform.parent = container.transform;
+			ParticleSystem p = boom.GetComponent<ParticleSystem> ();
+			boom.GetComponent<Renderer>().material.color = getColorByID(color);
+			p.Play ();
+			Destroy(p,p.startLifetime);
+		}
 	}
 
 	Color getColorByID(int colorID){
@@ -826,7 +828,6 @@ public class GameManager : MonoBehaviour {
 						recordStep.step = gameStep;
 						recordStep.originalIndex = index;
 						removeSeuqence.Add(recordStep);
-
 						allBlocks [i, index] = null;
 						blockStates [0,index].color = -1;
 						// addBoomParticle (block.transform.position,recordStep.color);
@@ -836,6 +837,7 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 	}
+
 
 	void redoBlock(){
 		foreach(BlockState bs in redoSeuqence){
