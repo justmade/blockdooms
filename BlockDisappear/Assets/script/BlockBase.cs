@@ -40,7 +40,7 @@ public class BlockBase : MonoBehaviour {
 
 	private float amplifyTime = 40f;
 
-	private float startTime = 15f;
+	private float startTime = 20f;
 
 	public bool isPlayingAimation = false;
 
