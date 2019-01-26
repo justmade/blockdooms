@@ -38,9 +38,9 @@ public class BlockBase : MonoBehaviour {
 
 	private float amplifyFrames = 0;
 
-	private float amplifyTime = 40f;
+	public float amplifyTime = 40f;
 
-	private float startTime = 20f;
+	public float startTime = 20f;
 
 	public bool isPlayingAimation = false;
 

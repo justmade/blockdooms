@@ -160,6 +160,8 @@ public class GameManager : MonoBehaviour {
 		mainCamera.enabled = isMainC;
 		sideCamera.enabled = !isMainC;
 		onUp ();
+
+		generateBlock(currentFloor + 1);
 	}
 		
 
@@ -255,7 +257,6 @@ public class GameManager : MonoBehaviour {
 		if (isPlaying == false) {
 			touchBlock ();
 		} 
-
 		if (needDestory == true) {
 			isPlaying = true;
 			//找到钥匙和宝箱之后 先播放block的消失动画，在去消除key和treasure的block
@@ -271,76 +272,13 @@ public class GameManager : MonoBehaviour {
 							}
 						}
 					}
-
 				}
 				checkAllBlocks ();
 			} else {
 				redoButton.gameObject.SetActive (true);
 				isPlaying = false;
 			}
-			if (deltaTime > 2 * totalMove) {
-				needDestory = false;
-				deltaTime = 0f;
-				//isPlaying = false;
-			} else {
-				//isPlaying = true;
-				deltaTime++;
-				if (deltaTime <= totalMove) {
-					if (dropBlocks.Count == 0) {
-						deltaTime = totalMove;
-					}
-					//droping (deltaTime);
-				} else if (deltaTime > totalMove) {
-					//moving (deltaTime - totalMove);
-				}
-			}
-
-		}else if (cameraMove == 1 && currentRotateFrame >= 0 && currentRotateFrame <= rotateFrame) {
-			
-            currentRotateFrame++;
-			// Debug.LogFormat("currentRotateFrame {0}",currentRotateFrame);
-            mainCamera.transform.RotateAround(Vector3.zero, Vector3.left, rotateAngle / rotateFrame);
-
-        }
-
-		if (currentRotateFrame == rotateFrame) {
-			currentRotateFrame = -1;
-			isElevate = true;
-			deltaTime = 0f;
-			cameraMove = 0;
-			generateBlock(currentFloor + 1);
-			generateFloors--;
 		}
-
-        if (isElevate) {
-
-            if (deltaTime > totalMove)
-            {
-				if (generateFloors > 0) {
-					deltaTime = 0f;
-					currentRotateFrame = Mathf.FloorToInt(rotateFrame);
-				} else {
-					isElevate = false;
-					deltaTime = 0f;
-					currentRotateFrame = 0;
-					cameraMove = -1;
-				}
-            }
-            else {
-                deltaTime++;
-                elevateBlocks(deltaTime);
-            }
-        }else if (cameraMove == -1 && currentRotateFrame >= 0 && currentRotateFrame <= rotateFrame)
-        {
-            currentRotateFrame++;
-            mainCamera.transform.RotateAround(Vector3.zero, Vector3.left, -rotateAngle / rotateFrame);
-            if (currentRotateFrame == rotateFrame)
-            {
-                currentRotateFrame = -1;
-                deltaTime = 0f;
-                cameraMove = 0;
-            }
-        }
     }
 
 	//检查同一格子下层的block是否存在
@@ -506,6 +444,8 @@ public class GameManager : MonoBehaviour {
 					blockStates [0, i].color = color;
 					blockStates [0 ,i].floor = currentFloor;
 					bBase.playAmplify = true;
+					bBase.startTime = 1f;
+					bBase.amplifyTime = 20f;
 				}
 				if(color!=0){
 					blocksLeftCounts++;
