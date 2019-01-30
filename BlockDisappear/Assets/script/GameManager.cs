@@ -791,7 +791,7 @@ public class GameManager : MonoBehaviour {
 			// 	allBlocks[bs.floor+1,oIndex].transform.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
 			// }	
 			
-			Vector3 v = new Vector3 (0,2,0);
+			Vector3 v = new Vector3 (0,1,0);
 			Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
 
 			v.x = Mathf.Ceil (oIndex / B_Width) * 1.2f + 0.5f;
