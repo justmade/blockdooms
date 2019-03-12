@@ -144,7 +144,7 @@ public class BlockBase : MonoBehaviour {
 		}else if(colorID == elementConfig.Green){
 			newColor = new Color(0/255f, 132/255f ,83/255f, 1f);
 		}else if(colorID == elementConfig.Blue){
-			newColor = new Color(50/255f, 104/255f, 139/255f, 1f);
+			newColor = new Color(0/255f, 104/255f, 139/255f, 1f);
 		}else if(colorID == elementConfig.Yellow){
 			newColor = new Color(205/255f, 164/255f, 0/255f, 1f);
 		}else{  
