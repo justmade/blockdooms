@@ -139,14 +139,14 @@ public class BlockBase : MonoBehaviour {
 
 		Color newColor; 
 		if(colorID == elementConfig.Red){
-			newColor = new Color(240/255f, 99/255f, 72/255f, 1f);
+			newColor = new Color(148/255f, 17/255f, 0/255f, 1f);
 			Debug.Log(newColor.ToString());
 		}else if(colorID == elementConfig.Green){
-			newColor = new Color(0/255f, 132/255f ,83/255f, 1f);
+			newColor = new Color(87/255f, 197/255f ,29/255f, 1f);
 		}else if(colorID == elementConfig.Blue){
-			newColor = new Color(0/255f, 104/255f, 139/255f, 1f);
+			newColor = new Color(0/255f, 76/255f, 187/255f, 1f);
 		}else if(colorID == elementConfig.Yellow){
-			newColor = new Color(205/255f, 164/255f, 0/255f, 1f);
+			newColor = new Color(250/255f, 198/255f, 2/255f, 1f);
 		}else{  
 			newColor = Color.white;
 		}
@@ -299,14 +299,14 @@ public class BlockBase : MonoBehaviour {
 	Color getColorByID(int colorID){
 		Color newColor;
 		if(colorID == elementConfig.Red){
-			newColor = new Color(240/255f, 92/255f, 66/255f, 1f);
+			newColor = new Color(148/255f, 17/255f, 0/255f, 1f);
 			Debug.Log(newColor.ToString());
 		}else if(colorID == elementConfig.Green){
-			newColor = new Color(0/255f, 132/255f ,83/255f, 1f);
+			newColor = new Color(87/255f, 197/255f ,29/255f, 1f);
 		}else if(colorID == elementConfig.Blue){
-			newColor = new Color(59/255f, 85/255f, 120/255f, 1f);
+			newColor = new Color(0/255f, 76/255f, 187/255f, 1f);
 		}else if(colorID == elementConfig.Yellow){
-			newColor = new Color(205/255f, 164/255f, 0/255f, 1f);
+			newColor = new Color(250/255f, 198/255f, 2/255f, 1f);
 		}else if(colorIndex == elementConfig.Key){
 			newColor = new Color(225/255f, 159/255f, 135/255f, 1f);
 		}else if(colorIndex == elementConfig.Treasure){
