@@ -369,14 +369,14 @@ MonoBehaviour:
   voxelFileObject: {fileID: 100000, guid: f3a6a6ff326494396a1f3824ee8ce1ea, type: 3}
   voxelFileSubIndex: 0
   fileType: 0
-  fileRefreshLastTimeTicks: 636880251848890490
+  fileRefreshLastTimeTicks: 636884114108735750
   dataVersion: 114
   legacyVoxImport: 0
   importMode: 1
   importFlags: 0
   importScale: {x: 0.1, y: 0.1, z: 0.1}
   importOffset: {x: 0, y: 0, z: 0}
-  localOffset: {x: -3, y: 0, z: -3}
+  localOffset: {x: -3, y: -0, z: -3}
   enableFaceFlags: -1
   disableData:
     disableList: []

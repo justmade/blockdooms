@@ -43,8 +43,8 @@ Shader "Custom/Float Tex" {
             }
 
             float2 floating(float2 uv){
-                uv.x +=  _Time.x/6;
-                uv.y +=  _Time.x/6;
+                // uv.x +=  _Time.x/6;
+                // uv.y +=  _Time.x/6;
                 return uv;
             }
 

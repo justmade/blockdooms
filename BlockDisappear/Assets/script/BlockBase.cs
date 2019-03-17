@@ -139,14 +139,13 @@ public class BlockBase : MonoBehaviour {
 
 		Color newColor; 
 		if(colorID == elementConfig.Red){
-			newColor = new Color(148/255f, 17/255f, 0/255f, 1f);
-			Debug.Log(newColor.ToString());
+			newColor = new Color(255/255f, 94/255f, 0/255f, 1f);
 		}else if(colorID == elementConfig.Green){
 			newColor = new Color(87/255f, 197/255f ,29/255f, 1f);
 		}else if(colorID == elementConfig.Blue){
-			newColor = new Color(0/255f, 76/255f, 187/255f, 1f);
+			newColor = new Color(0/255f, 67/255f, 178/255f, 1f);
 		}else if(colorID == elementConfig.Yellow){
-			newColor = new Color(250/255f, 198/255f, 2/255f, 1f);
+			newColor = new Color(234/255f, 183/255f, 0/255f, 1f);
 		}else{  
 			newColor = Color.white;
 		}
@@ -299,14 +298,14 @@ public class BlockBase : MonoBehaviour {
 	Color getColorByID(int colorID){
 		Color newColor;
 		if(colorID == elementConfig.Red){
-			newColor = new Color(148/255f, 17/255f, 0/255f, 1f);
+			newColor = new Color(255/255f, 94/255f, 0/255f, 1f);
 			Debug.Log(newColor.ToString());
 		}else if(colorID == elementConfig.Green){
 			newColor = new Color(87/255f, 197/255f ,29/255f, 1f);
 		}else if(colorID == elementConfig.Blue){
-			newColor = new Color(0/255f, 76/255f, 187/255f, 1f);
+			newColor = new Color(0/255f, 67/255f, 178/255f, 1f);
 		}else if(colorID == elementConfig.Yellow){
-			newColor = new Color(250/255f, 198/255f, 2/255f, 1f);
+			newColor = new Color(234/255f, 183/255f, 0/255f, 1f);
 		}else if(colorIndex == elementConfig.Key){
 			newColor = new Color(225/255f, 159/255f, 135/255f, 1f);
 		}else if(colorIndex == elementConfig.Treasure){
@@ -330,7 +329,7 @@ public class BlockBase : MonoBehaviour {
 				centerBodyBlock.transform.position = this.gameObject.transform.position + new Vector3 (0,0.05f,0) ;
 			}	
 			else if (amplifyFrames < amplifyTime && amplifyFrames > startTime) {
-				float value = 0.5f + AniScale.Evaluate ((amplifyFrames-startTime) / (amplifyTime-startTime)) * 0.5f;
+				float value = 0.46f + AniScale.Evaluate ((amplifyFrames-startTime) / (amplifyTime-startTime)) * 0.5f;
 				this.transform.localScale =  new Vector3 (value, value, value);
 			}else if (amplifyFrames == amplifyTime) {
 				centerBodyBlock.transform.localScale =  new Vector3 (1f, 1f, 1f);

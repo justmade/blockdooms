@@ -333,7 +333,7 @@ public class GameManager : MonoBehaviour {
 				GameObject block = 
 					Instantiate(GetBlockPrefabByID(loadGridData[0]), v, turnRotation) as GameObject;
 				allBlocks[0,i] = block;
-				block.transform.localScale = new Vector3 (1f, 1f, 1f);
+				block.transform.localScale = new Vector3 (0.96f, 0.96f, 0.96f);
 				block.tag = "Block";
 				block.transform.parent = container.transform;
 				BlockBase bBase = block.GetComponent<BlockBase> ();
