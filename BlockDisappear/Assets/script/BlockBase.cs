@@ -324,12 +324,12 @@ public class BlockBase : MonoBehaviour {
 
 			if(amplifyFrames <= startTime){
 				centerBodyBlock.transform.parent = this.gameObject.transform;
-				this.transform.localScale =  new Vector3 (0.5f, 0.5f, 0.5f);
+				this.transform.localScale =  new Vector3 (0.4f, 0.4f, 0.4f);
 				this.centerBodyBlock.transform.localScale =  new Vector3 (1f, 1f, 1f);
 				centerBodyBlock.transform.position = this.gameObject.transform.position + new Vector3 (0,0.05f,0) ;
 			}	
 			else if (amplifyFrames < amplifyTime && amplifyFrames > startTime) {
-				float value = 0.46f + AniScale.Evaluate ((amplifyFrames-startTime) / (amplifyTime-startTime)) * 0.5f;
+				float value = 0.40f + AniScale.Evaluate ((amplifyFrames-startTime) / (amplifyTime-startTime)) * 0.56f;
 				this.transform.localScale =  new Vector3 (value, value, value);
 			}else if (amplifyFrames == amplifyTime) {
 				centerBodyBlock.transform.localScale =  new Vector3 (1f, 1f, 1f);
