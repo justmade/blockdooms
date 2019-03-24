@@ -116,6 +116,9 @@ public class BlockBase : MonoBehaviour {
 		}else if(colorID == elementConfig.Key){
 			block = Instantiate(Resources.Load( "RightCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
 			block.transform.localScale = new Vector3 (1f, 1f, 1f);
+		}else if(colorID == elementConfig.White){
+			block = Instantiate(Resources.Load( "WhiteCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+			block.transform.localScale = new Vector3 (1f, 1f, 1f);
 		}
 		else{
 			block = Instantiate(Resources.Load( "GreenCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
@@ -310,6 +313,8 @@ public class BlockBase : MonoBehaviour {
 			newColor = new Color(225/255f, 159/255f, 135/255f, 1f);
 		}else if(colorIndex == elementConfig.Treasure){
 			newColor = new Color(192/255f, 108/255f, 132/255f, 1f);
+		}else if(colorIndex == elementConfig.White){
+			newColor = new Color(219/255f, 223/255f, 220/255f, 1f);
 		}
 		else{
 			newColor = Color.white;
