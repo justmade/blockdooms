@@ -52,6 +52,8 @@ public class BlockBase : MonoBehaviour {
 
 	private Elements elementConfig;
 	private bool isSingleBlock;
+
+	private float blockScale = 0.96f;
 	// Use this for initialization
 	void Awake(){
 		if(elements != null){
@@ -82,13 +84,13 @@ public class BlockBase : MonoBehaviour {
 		GameObject block;
 		if(colorID == elementConfig.Treasure){
 			block =	Instantiate(Resources.Load( "BlockRightCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-			block.transform.localScale = new Vector3 (-1f, 1f, 1f);
+			block.transform.localScale = new Vector3 (-blockScale, blockScale, blockScale);
 		}else if(colorID == elementConfig.Key){
 			block = Instantiate(Resources.Load( "BlockRightCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-			block.transform.localScale = new Vector3 (1f, 1f, 1f);
+			block.transform.localScale = new Vector3 (blockScale, blockScale, blockScale);
 		}else{
 			block = Instantiate(Resources.Load( "VoxelBlackCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-			block.transform.localScale = new Vector3 (1f, 1f, 1f);
+			block.transform.localScale = new Vector3 (blockScale, blockScale, blockScale);
 		}	
 		block.transform.parent = this.gameObject.transform;
 		block.transform.position = this.gameObject.transform.position + new Vector3 (0,0.0f,0) ;
@@ -100,31 +102,31 @@ public class BlockBase : MonoBehaviour {
 		GameObject block;
 		if(colorID == elementConfig.Red){
 			block =	Instantiate(Resources.Load( "RedCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-			block.transform.localScale = new Vector3 (1f, 1f, 1f);
+			block.transform.localScale = new Vector3 (blockScale, blockScale, blockScale);
 		}else if(colorID == elementConfig.Blue){
 			block = Instantiate(Resources.Load( "BlueCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-			block.transform.localScale = new Vector3 (1f, 1f, 1f);
+			block.transform.localScale = new Vector3 (blockScale, blockScale, blockScale);
 		}else if(colorID == elementConfig.Yellow){
 			block = Instantiate(Resources.Load( "YellowCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-			block.transform.localScale = new Vector3 (1f, 1f, 1f);
+			block.transform.localScale = new Vector3 (blockScale, blockScale, blockScale);
 		}else if(colorID == elementConfig.Green){
 			block = Instantiate(Resources.Load( "GreenCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-			block.transform.localScale = new Vector3 (1f, 1f, 1f);
+			block.transform.localScale = new Vector3 (blockScale, blockScale, blockScale);
 		}else if(colorID == elementConfig.Treasure){
 			block = Instantiate(Resources.Load( "LeftCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-			block.transform.localScale = new Vector3 (1f, 1f, 1f);
+			block.transform.localScale = new Vector3 (blockScale, blockScale, blockScale);
 		}else if(colorID == elementConfig.Key){
 			block = Instantiate(Resources.Load( "RightCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-			block.transform.localScale = new Vector3 (1f, 1f, 1f);
+			block.transform.localScale = new Vector3 (blockScale, blockScale, blockScale);
 		}else if(colorID == elementConfig.White){
 			block = Instantiate(Resources.Load( "WhiteCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-			block.transform.localScale = new Vector3 (1f, 1f, 1f);
+			block.transform.localScale = new Vector3 (blockScale, blockScale, blockScale);
 		}
 		else{
 			block = Instantiate(Resources.Load( "GreenCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-			block.transform.localScale = new Vector3 (1f, 1f, 1f);
+			block.transform.localScale = new Vector3 (blockScale, blockScale, blockScale);
 		}
-		// block.transform.localScale = new Vector3 (1f, 1f, 1f);
+		// block.transform.localScale = new Vector3 (blockScale, blockScale, blockScale);
 		block.transform.parent = this.gameObject.transform;
 		block.transform.position = this.gameObject.transform.position + new Vector3 (0,0.1f,0) ;
 		return block;
