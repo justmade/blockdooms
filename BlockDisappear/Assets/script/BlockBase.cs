@@ -151,7 +151,10 @@ public class BlockBase : MonoBehaviour {
 			newColor = new Color(0/255f, 67/255f, 178/255f, 1f);
 		}else if(colorID == elementConfig.Yellow){
 			newColor = new Color(234/255f, 183/255f, 0/255f, 1f);
-		}else{  
+		}else if(colorIndex == elementConfig.White){
+			newColor = new Color(219/255f, 223/255f, 220/255f, 1f);
+		}
+		else{  
 			newColor = Color.white;
 		}
 		vo.GetComponent<Renderer>().materials[0].color = newColor;

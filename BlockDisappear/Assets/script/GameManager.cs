@@ -498,7 +498,7 @@ public class GameManager : MonoBehaviour {
 					Debug.LogFormat("hit {0},color{1}",bs.originalIndex,bb.getColorIndex ());
 					addDisappearIndex (bs.originalIndex);
 					if (isMainC) {
-						findNeighbour (bs.originalIndex, bb.getColorIndex (), 0);
+						findNeighbour (bs.originalIndex, bb.getColorIndex (), 0,true);
 					} else {
 						int topIndex = originalIndex2TopInde (bs.originalIndex , bs.floor);
 						findTopNeighbour(topIndex, bb.getColorIndex (), 0);
@@ -608,12 +608,13 @@ public class GameManager : MonoBehaviour {
 	}
 
 	//递归查找格子四周的同色目标 currentDir上次的位置，放置来回寻找堆栈溢出 1：上 2：下 4：右 8：左
-	void findNeighbour(int index , int color , int currentDir)
+	void findNeighbour(int index , int color , int currentDir , bool near = false)
 	{
 		int rightIndex = index + B_Width;
 
 		int leftIndex = index - B_Width;
 	
+		bool isWhiteBlock = false;
 
 		int downIndex = -1;
 		if (index % B_Width != 0) {
@@ -625,8 +626,13 @@ public class GameManager : MonoBehaviour {
 			upIndex = index + 1;
 		}
 
+
 		if (rightIndex < B_Width * B_Width && currentDir != 8) {
-			if (getBlockColor (rightIndex) == color) {
+			if (near){
+				isWhiteBlock = getBlockColor (rightIndex) == elementConfig.White ;
+			}
+			if (getBlockColor (rightIndex) == color
+				|| isWhiteBlock) {
 				if (addDisappearIndex (rightIndex)) {
 					findNeighbour (rightIndex, color , 4);
 				}
@@ -634,23 +640,41 @@ public class GameManager : MonoBehaviour {
 		}
 
 		if (leftIndex >= 0 && currentDir != 4) {
-			if (getBlockColor (leftIndex) == color) {
+			if (near){
+				isWhiteBlock = getBlockColor (leftIndex) == elementConfig.White ;
+			}
+			if (getBlockColor (leftIndex) == color
+				|| isWhiteBlock) {
 				if(addDisappearIndex(leftIndex)){
 					findNeighbour (leftIndex, color,8);
 				}
 			}
 		}
 
-		if (downIndex >= 0 && getBlockColor (downIndex) == color && currentDir != 1) {
-			if (addDisappearIndex (downIndex)) {
-				findNeighbour (downIndex, color,2);
+		if (downIndex >= 0 && currentDir != 1) {
+			if (near){
+				isWhiteBlock = getBlockColor (downIndex) == elementConfig.White ;
 			}
+			if(getBlockColor (downIndex) == color
+				|| isWhiteBlock){
+				if (addDisappearIndex (downIndex)) {
+					findNeighbour (downIndex, color,2);
+				}
+			}
+			
 		}
 
-		if (upIndex >= 0 && getBlockColor (upIndex) == color && currentDir != 2) {
-			if (addDisappearIndex (upIndex)) {
-				findNeighbour (upIndex, color,1);
+		if (upIndex >= 0 && currentDir != 2) {
+			if (near){
+				isWhiteBlock = getBlockColor (upIndex) == elementConfig.White ;
 			}
+			if(getBlockColor (upIndex) == color
+				|| isWhiteBlock) {
+				if (addDisappearIndex (upIndex)) {
+					findNeighbour (upIndex, color,1);
+				}
+			}
+			
 		}
 
 		return;
@@ -805,7 +829,7 @@ public class GameManager : MonoBehaviour {
 			GameObject block = 
 				Instantiate(GetBlockPrefabByID(bs.color),  Vector3.zero, turnRotation) as GameObject;
 			allBlocks [bs.floor,oIndex] = block;
-			block.transform.localScale = new Vector3 (1f, 1f, 1f);
+			block.transform.localScale = new Vector3 (0.96f, 0.96f, 0.96f);
 			block.tag = "Block";
 			block.transform.parent = container.transform;
 			block.transform.localPosition = v;
