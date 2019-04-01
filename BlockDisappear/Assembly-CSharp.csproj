@@ -203,8 +203,11 @@
      <None Include="Assets\shaders\Glow.shader" />
      <None Include="Assets\PostProcessing\Resources\Shaders\Tonemapping.cginc" />
      <None Include="Assets\Resources\levels\Level-e1.txt" />
+     <None Include="Assets\Resources\levels\Level-m7.txt" />
+     <None Include="Assets\Resources\levels\level-m5.txt" />
      <None Include="Assets\Resources\levels\Level-a3.txt" />
      <None Include="Assets\PostProcessing\Editor Resources\Monitors\HistogramCompute.compute" />
+     <None Include="Assets\Resources\levels\level-m2.txt" />
      <None Include="Assets\PostProcessing\Resources\Shaders\Uber.shader" />
      <None Include="Assets\level.txt" />
      <None Include="Assets\PostProcessing\Resources\Shaders\Blit.shader" />
@@ -224,6 +227,7 @@
      <None Include="Assets\Resources\levels\Level-c1-t0-1216.txt" />
      <None Include="Assets\PostProcessing\Resources\Bluenoise64\LICENSE.txt" />
      <None Include="Assets\PostProcessing\Resources\Shaders\BuiltinDebugViews.shader" />
+     <None Include="Assets\Resources\levels\level-m4.txt" />
      <None Include="Assets\Resources\levels\Level-a2.txt" />
      <None Include="Assets\Resources\levels\Level-ct4a-5-1125.txt" />
      <None Include="Assets\Resources\levels\Level-c3-3-0922.txt" />
@@ -254,13 +258,17 @@
      <None Include="Assets\PostProcessing\Resources\Shaders\DiskKernels.cginc" />
      <None Include="Assets\PostProcessing\Resources\Shaders\DepthOfField.cginc" />
      <None Include="Assets\Resources\levels\Level-ct4a-4-1201-2.txt" />
+     <None Include="Assets\Resources\levels\Level-m8.txt" />
+     <None Include="Assets\Resources\levels\Level-m9.txt" />
      <None Include="Assets\Resources\levels\Level-ct4a-4-1201.txt" />
      <None Include="Assets\Resources\levels\Leveltest.txt" />
      <None Include="Assets\PostProcessing\Resources\Shaders\ScreenSpaceRaytrace.cginc" />
      <None Include="Assets\Resources\levels\Level-c1-t2-1216.txt" />
      <None Include="Assets\Resources\levels\Level-c1-t1-1216.txt" />
      <None Include="Assets\PostProcessing\Resources\Shaders\Bloom.shader" />
+     <None Include="Assets\Resources\levels\level-m3.txt" />
      <None Include="Assets\VoxelImporter\ReadMe_jp.txt" />
+     <None Include="Assets\Resources\levels\level-m6.txt" />
      <None Include="Assets\PostProcessing\Editor Resources\Monitors\VectorscopeRender.shader" />
      <None Include="Assets\Resources\levels\Level10-4color.txt" />
      <None Include="Assets\PostProcessing\Resources\Shaders\EyeAdaptation.shader" />
