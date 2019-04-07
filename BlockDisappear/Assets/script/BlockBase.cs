@@ -297,7 +297,7 @@ public class BlockBase : MonoBehaviour {
 		pEffect.GetComponent<Renderer>().material.color = getColorByID(color);
 		p.Play ();
 		// this.gameObject.h
-		Destroy(pEffect,0.4f);
+		Destroy(pEffect,1.0f);
 		
 	}
 
