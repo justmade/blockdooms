@@ -106,6 +106,9 @@ public class GameManager : MonoBehaviour {
 
 	private LevelController levelController;
 
+	private Vector2 minPos = new Vector2(-1,-1);
+	private Vector2 maxPos = new Vector2(-1,-1);
+
     // Use this for initialization
 
 	void Awake(){
@@ -162,6 +165,8 @@ public class GameManager : MonoBehaviour {
 		onUp ();
 
 		generateBlock(currentFloor + 1);
+
+		Debug.LogFormat ("stageW {0}", Screen.width);
 	}
 		
 
@@ -331,6 +336,31 @@ public class GameManager : MonoBehaviour {
 			if(loadGridData[0] != -1){
 				v.x = Mathf.Ceil (i / B_Width) * 1.2f + 0.5f;
 				v.z = i % B_Width * 1.2f+0.5f ;
+
+				if(minPos.x == -1){
+					minPos.x = i / B_Width;
+				}else{
+					minPos.x = Mathf.Min(minPos.x ,i / B_Width);
+				}
+
+				if(minPos.y == -1){
+					minPos.y = i % B_Width;
+				}else{
+					minPos.y = Mathf.Min(minPos.y ,i % B_Width);
+				}
+
+				if(maxPos.x == -1){
+					maxPos.x = i / B_Width;
+				}else{
+					maxPos.x = Mathf.Max(maxPos.x ,i / B_Width);
+				}
+
+				if(maxPos.y == -1){
+					maxPos.y = i % B_Width;
+				}else{
+					maxPos.y = Mathf.Max(maxPos.y ,i % B_Width);
+				}
+
 				// ... create them, set their player number and references needed for control.
 				// Object prefab = Resources.Load("VoxelBlockGreen", typeof( GameObject ));
 				GameObject block = 
@@ -365,8 +395,15 @@ public class GameManager : MonoBehaviour {
 			}
 			// updateLeftText ();
 		}
-
-		container.transform.position = new Vector3(-(B_Width * 1.0f) / 2,0,-(B_Width * 1.0f) / 2);
+		centreContainer();
+		// container.transform.position = new Vector3(-(B_Width * 1.0f) / 2,0,-(B_Width * 1.0f) / 2);
+	}
+	
+	void centreContainer(){
+		Vector2 delatPos = maxPos - minPos;
+		delatPos = delatPos + new Vector2(1,1);
+		container.transform.position = new Vector3(0.1f-(delatPos.x * 1.2f) / 2,0,0.1f-(delatPos.y * 1.2f) / 2) 
+		- new Vector3((minPos.x * 1.2f) ,0,(minPos.y * 1.2f) );
 	}
 
 	void addBoomParticle(Vector3 v,int color){
@@ -431,6 +468,31 @@ public class GameManager : MonoBehaviour {
 			if(loadGridData[0] != -1){
 				v.x = Mathf.Ceil (i / B_Width) * 1.2f + 0.5f;
 				v.z = i % B_Width * 1.2f+0.5f ;
+
+				if(minPos.x == -1){
+					minPos.x = i / B_Width;
+				}else{
+					minPos.x = Mathf.Min(minPos.x ,i / B_Width);
+				}
+
+				if(minPos.y == -1){
+					minPos.y = i % B_Width;
+				}else{
+					minPos.y = Mathf.Min(minPos.y ,i % B_Width);
+				}
+
+				if(maxPos.x == -1){
+					maxPos.x = i / B_Width;
+				}else{
+					maxPos.x = Mathf.Max(maxPos.x ,i / B_Width);
+				}
+
+				if(maxPos.y == -1){
+					maxPos.y = i % B_Width;
+				}else{
+					maxPos.y = Mathf.Max(maxPos.y ,i % B_Width);
+				}
+
 				// ... create them, set their player number and references needed for control.
 				GameObject block = 
 					Instantiate(GetBlockPrefabByID(loadGridData[0]), Vector3.zero, turnRotation) as GameObject;
@@ -462,6 +524,8 @@ public class GameManager : MonoBehaviour {
 
 		}
 		updateLeftText ();
+
+		centreContainer();
 		// Lightmapping.BakeAsync();
 		// Lightmapping.
 		// Lightmapping.Bake();
