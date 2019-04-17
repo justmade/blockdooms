@@ -421,8 +421,8 @@ MonoBehaviour:
       emission: {r: 0, g: 0, b: 0, a: 0}
       emissionPower: 0
   materialIndexes: 00000000
-  edit_importFoldout: 1
-  edit_objectFoldout: 1
+  edit_importFoldout: 0
+  edit_objectFoldout: 0
   edit_generateLightmapUVsAdvancedFoldout: 1
   edit_helpEnable: 0
   edit_configureMode: 0
