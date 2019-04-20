@@ -858,12 +858,14 @@ public class GameManager : MonoBehaviour {
 						if(block.GetComponent<BlockBase>().getColorIndex() == elementConfig.White){
 
 							Vector3 pos = block.transform.position;
-							Quaternion ro = block.transform.rotation;	
+							Quaternion ro = block.transform.rotation;
+							int cColor = block.GetComponent<BlockBase>().centreColor;
 
 							block.GetComponent<BlockBase>().DestroyImmediately();
 							block = getNewBlock(lastBlockColor,pos,ro);
 							BlockBase bBase = block.GetComponent<BlockBase> ();
-							bBase.setColor (lastBlockColor,-1);
+							bBase.setColor (lastBlockColor,cColor);
+							// bBase.colorConvertEfx();
 						}
 						lastBlockColor = block.GetComponent<BlockBase>().getColorIndex();
 						block.GetComponent<BlockBase>().tapEffect();

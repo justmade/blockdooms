@@ -51,7 +51,10 @@ public class BlockBase : MonoBehaviour {
 	private Renderer centerRender;
 
 	private Elements elementConfig;
-	private bool isSingleBlock;
+
+	public bool isSingleBlock;
+
+	public int centreColor = -1;
 
 	private float blockScale = 0.96f;
 	// Use this for initialization
@@ -75,6 +78,7 @@ public class BlockBase : MonoBehaviour {
 		} else {
 			isSingleBlock = false;
 			setCenterColor(centreIndex,-1);
+			centreColor = centreIndex;
 		}
 		colorIndex = i;
 	}
@@ -257,8 +261,7 @@ public class BlockBase : MonoBehaviour {
 			}else if(colorIndex == elementConfig.Treasure){
 				particleName = "BlockTapLeft";
 				needBoomEffect = true;
-			}
-			
+			} 
 		}else{
 			if(colorIndex == elementConfig.Key){
 				particleName = "BlockTapTreasure";
