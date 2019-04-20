@@ -363,12 +363,8 @@ public class GameManager : MonoBehaviour {
 
 				// ... create them, set their player number and references needed for control.
 				// Object prefab = Resources.Load("VoxelBlockGreen", typeof( GameObject ));
-				GameObject block = 
-					Instantiate(GetBlockPrefabByID(loadGridData[0]), v, turnRotation) as GameObject;
+				GameObject block = getNewBlock(loadGridData[0], v, turnRotation);
 				allBlocks[0,i] = block;
-				block.transform.localScale = new Vector3 (0.96f, 0.96f, 0.96f);
-				block.tag = "Block";
-				block.transform.parent = container.transform;
 				BlockBase bBase = block.GetComponent<BlockBase> ();
 				if(loadGridData.Count > counts){
 					bBase.setColor (loadGridData[0],loadGridData[counts]);
@@ -399,6 +395,16 @@ public class GameManager : MonoBehaviour {
 		// container.transform.position = new Vector3(-(B_Width * 1.0f) / 2,0,-(B_Width * 1.0f) / 2);
 	}
 	
+	GameObject getNewBlock(int blockColor,Vector3 pos , Quaternion ro){
+		GameObject block = 
+				Instantiate(GetBlockPrefabByID(blockColor), pos, ro) as GameObject;
+		block.transform.localScale = new Vector3 (0.96f, 0.96f, 0.96f);
+		block.tag = "Block";
+		block.transform.parent = container.transform;
+		return block;
+	}
+
+
 	void centreContainer(){
 		Vector2 delatPos = maxPos - minPos;
 		delatPos = delatPos + new Vector2(1,1);
@@ -494,12 +500,9 @@ public class GameManager : MonoBehaviour {
 				}
 
 				// ... create them, set their player number and references needed for control.
-				GameObject block = 
-					Instantiate(GetBlockPrefabByID(loadGridData[0]), Vector3.zero, turnRotation) as GameObject;
-				block.transform.parent = container.transform;
+				GameObject block = getNewBlock(loadGridData[0], Vector3.zero, turnRotation);
 				block.transform.localPosition = v;
 				block.transform.localScale = new Vector3 (0.0f, 0.0f, 0.0f);
-				block.tag = "Block";
 				allBlocks[currentFloor,i] = block;
 				BlockBase bBase = block.GetComponent<BlockBase> ();
 				bBase.setColor (loadGridData[0]);
@@ -843,6 +846,7 @@ public class GameManager : MonoBehaviour {
 			updateLeftText ();
 			needDestory = true;
 //			Debug.LogFormat ("remove {0}", allDisappearIndex.Count);
+			int lastBlockColor = elementConfig.White;
 			foreach (int element in allDisappearIndex) 
 			{
 				Debug.Log(element);
@@ -850,6 +854,18 @@ public class GameManager : MonoBehaviour {
 				for (int i = 0; i < currentFloor + 1; i++) {
 					GameObject block = allBlocks [i,index];
 					if (block) {
+						
+						if(block.GetComponent<BlockBase>().getColorIndex() == elementConfig.White){
+
+							Vector3 pos = block.transform.position;
+							Quaternion ro = block.transform.rotation;	
+
+							block.GetComponent<BlockBase>().DestroyImmediately();
+							block = getNewBlock(lastBlockColor,pos,ro);
+							BlockBase bBase = block.GetComponent<BlockBase> ();
+							bBase.setColor (lastBlockColor,-1);
+						}
+						lastBlockColor = block.GetComponent<BlockBase>().getColorIndex();
 						block.GetComponent<BlockBase>().tapEffect();
 						//Destroy (block);
 						//Debug.LogFormat ("removeIndex {0} , {1}", i, index);
@@ -890,12 +906,8 @@ public class GameManager : MonoBehaviour {
 			// v.y = 2 - bs.floor;
 			Vector3 v2 =  container.transform.InverseTransformVector(v);
 			// ... create them, set their player number and references needed for control.
-			GameObject block = 
-				Instantiate(GetBlockPrefabByID(bs.color),  Vector3.zero, turnRotation) as GameObject;
+			GameObject block = getNewBlock(bs.color,  Vector3.zero, turnRotation);
 			allBlocks [bs.floor,oIndex] = block;
-			block.transform.localScale = new Vector3 (0.96f, 0.96f, 0.96f);
-			block.tag = "Block";
-			block.transform.parent = container.transform;
 			block.transform.localPosition = v;
 			// block.transform.position = v; 
 			blocksLeftCounts ++;

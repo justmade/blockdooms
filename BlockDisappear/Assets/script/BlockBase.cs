@@ -287,6 +287,10 @@ public class BlockBase : MonoBehaviour {
 		Destroy(this.gameObject);
 	}
 
+	public void DestroyImmediately(){
+		Destroy(this.gameObject);
+	}
+
 
 	IEnumerator addBoomParticle(int color){
 		yield return new WaitForSeconds(0.5f);
