@@ -865,7 +865,7 @@ public class GameManager : MonoBehaviour {
 							block = getNewBlock(lastBlockColor,pos,ro);
 							BlockBase bBase = block.GetComponent<BlockBase> ();
 							bBase.setColor (lastBlockColor,cColor);
-							// bBase.colorConvertEfx();
+							bBase.colorConvertEfx();
 						}
 						lastBlockColor = block.GetComponent<BlockBase>().getColorIndex();
 						block.GetComponent<BlockBase>().tapEffect();
