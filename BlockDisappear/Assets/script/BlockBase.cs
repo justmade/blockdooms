@@ -292,6 +292,11 @@ public class BlockBase : MonoBehaviour {
 		pEffect.transform.position = this.gameObject.transform.position + new Vector3 (0,0.3f,0) ;
 		ParticleSystem p = pEffect.GetComponent<ParticleSystem> ();
 		p.Play ();
+
+		GameObject q = Instantiate(Resources.Load("particle/CircleExpendEfx", typeof( GameObject ) ), new Vector3 (10,10,10), Quaternion.Euler (90f, 0f, 0f)) as GameObject;
+		q.transform.parent = this.gameObject.transform;
+		q.transform.position = this.gameObject.transform.position + new Vector3 (0,1.3f,0) ;
+		q.transform.localScale = new Vector3 (10.0f, 10.0f, 10.0f);
 	}
 	
 	IEnumerator DestroyByTime(){
