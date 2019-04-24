@@ -866,9 +866,12 @@ public class GameManager : MonoBehaviour {
 							BlockBase bBase = block.GetComponent<BlockBase> ();
 							bBase.setColor (lastBlockColor,cColor);
 							bBase.colorConvertEfx();
+							bBase.DestroyBlock(false);
+						}else{
+							block.GetComponent<BlockBase>().tapEffect();
 						}
 						lastBlockColor = block.GetComponent<BlockBase>().getColorIndex();
-						block.GetComponent<BlockBase>().tapEffect();
+						
 						//Destroy (block);
 						//Debug.LogFormat ("removeIndex {0} , {1}", i, index);
 						BlockState recordStep = new BlockState();
