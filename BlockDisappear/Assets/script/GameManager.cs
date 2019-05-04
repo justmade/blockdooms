@@ -207,7 +207,7 @@ public class GameManager : MonoBehaviour {
 	IEnumerator finishLevel(){
 		yield return new WaitForSeconds(0.7f);
 		SceneManager.LoadScene("LevelSelect");
-		levelController.LevelComplete(currentLevelName,3);
+		levelController.LevelComplete(currentLevelName,1);
 	}
 
 	void onRetry(){

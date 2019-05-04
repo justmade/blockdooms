@@ -19,9 +19,27 @@ public class CameraFollow : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		_cameraOffset = transform.position - targetTransform.position;
-
+		_cameraOffset = _cameraOffset/10;
 	}
 
+	
+	public void setCameraTarget(Transform _targetTransform){
+		targetTransform = _targetTransform;
+
+		Quaternion camTurnAngleY = Quaternion.AngleAxis (Input.GetAxis ("Mouse Y") * rotateSpeed , Vector3.left);
+		Quaternion camTurnAngleX = Quaternion.AngleAxis (Input.GetAxis ("Mouse X") * rotateSpeed , Vector3.forward);
+
+		Quaternion camTurnAngle = new Quaternion ();
+		camTurnAngle.x = camTurnAngleY.x;
+		camTurnAngle.z = camTurnAngleX.z;
+		camTurnAngle.w = 1f;
+
+		_cameraOffset = camTurnAngle * _cameraOffset;
+
+		Vector3 newPos = targetTransform.position + _cameraOffset;
+		transform.position = Vector3.Slerp (transform.position, newPos, 0.1f);
+		transform.LookAt (targetTransform,Vector3.forward);
+	}
 
 	
 	// Update is called once per frame
@@ -61,8 +79,5 @@ public class CameraFollow : MonoBehaviour {
 			transform.LookAt (targetTransform,Vector3.forward);
 
 		}
-
-
-
 	}
 }

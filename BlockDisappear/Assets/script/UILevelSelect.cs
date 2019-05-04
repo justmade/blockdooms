@@ -25,6 +25,10 @@ public class UILevelSelect : MonoBehaviour {
 		for(int i = 0 ; i < levelController.levels.Count ; i++ ){
 			levelList.Add(levelUI);
 		}
+
+		// levelSelectPanel.GetComponentInChildren<GridLayoutGroup>().cellSize = new Vector2(150,150);
+		// levelSelectPanel.GetComponentInChildren<GridLayoutGroup>().spacing = new Vector2(100,100);
+
 		BuildLevelPage(LevelDataInfo.lastPage);	
 	}
 	
