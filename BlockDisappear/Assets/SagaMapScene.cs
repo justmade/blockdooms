@@ -8,6 +8,8 @@ public class SagaMapScene : MonoBehaviour {
 
 	private GameObject LevelContainer;
 
+	private GameObject[] allLevelBlock;
+
 	void Start () {
 		createLevels();
 	}
@@ -21,6 +23,7 @@ public class SagaMapScene : MonoBehaviour {
 
 	void createLevels(){
 		LevelContainer = GameObject.Find("Sphere");
+		allLevelBlock = new GameObject[12];
 		float R = 20;
 		for(int i=0;i<12;i ++){
 			float fx = Mathf.Sin(Mathf.PI * 2 * i / 12);
@@ -37,9 +40,11 @@ public class SagaMapScene : MonoBehaviour {
 			g.transform.rotation = turnRotation;
 			// g.transform.parent = LevelContainer.transform;
 			g.tag = "LevelBlock";
-
+			allLevelBlock[i]=g;
 
 		}
+
+		mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[0].transform);
 	}
 
 	void touchLevel(){

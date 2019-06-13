@@ -17,7 +17,7 @@ public class CameraOrbit : MonoBehaviour
 
     public bool CameraDisabled = false;
 
-    protected Transform targetTsf ;
+    protected Transform targetTsf =null ;
 
 
     // Use this for initialization
@@ -30,7 +30,6 @@ public class CameraOrbit : MonoBehaviour
         targetTsf = _targetTransform ;
         // this.transform.parent.transform.position = _targetTransform.position;
 
-
         this._XForm_Camera = this.transform;
         this._XForm_Parent = this.transform.parent;
 
@@ -40,7 +39,12 @@ public class CameraOrbit : MonoBehaviour
     void LateUpdate() {
         if(targetTsf != null)
             this.transform.parent.transform.position = Vector3.Lerp( this.transform.parent.transform.position , targetTsf.position,Time.deltaTime*4);
+            Vector3 currentAngle = new Vector3(
+                Mathf.LerpAngle(this.transform.parent.transform.rotation.eulerAngles.x, targetTsf.rotation.eulerAngles.x, Time.deltaTime * 4),
+                Mathf.LerpAngle(this.transform.parent.transform.rotation.eulerAngles.y, targetTsf.rotation.eulerAngles.y, Time.deltaTime * 4),
+                Mathf.LerpAngle(this.transform.parent.transform.rotation.eulerAngles.z, targetTsf.rotation.eulerAngles.z, Time.deltaTime * 4));
 
+            // this.transform.parent.transform.eulerAngles = currentAngle;
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
             CameraDisabled = !CameraDisabled;
@@ -51,7 +55,7 @@ public class CameraOrbit : MonoBehaviour
             if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
             {
                 _LocalRotation.x += Input.GetAxis("Mouse X") * MouseSensitivity;
-                _LocalRotation.y += Input.GetAxis("Mouse Y") * MouseSensitivity;
+                _LocalRotation.y += Input.GetAxis("Mouse Y") * -MouseSensitivity;
 
                 //Clamp the y Rotation to horizon and not flipping over at the top
                 if (_LocalRotation.y < 0f)
