@@ -8,16 +8,18 @@ public class CameraOrbit : MonoBehaviour
     protected Transform _XForm_Parent;
 
     protected Vector3 _LocalRotation;
-    protected float _CameraDistance = 10f;
+    protected float _CameraDistance = 0f;
 
     public float MouseSensitivity = 4f;
     public float ScrollSensitvity = 2f;
     public float OrbitDampening = 10f;
     public float ScrollDampening = 6f;
 
-    public bool CameraDisabled = false;
+    public bool CameraDisabled = true;
 
     protected Transform targetTsf =null ;
+
+    public Transform[] views;
 
 
     // Use this for initialization
@@ -26,10 +28,11 @@ public class CameraOrbit : MonoBehaviour
         this._XForm_Parent = this.transform.parent;
     }
 
-    public void setCameraTarget(Transform _targetTransform){
-        targetTsf = _targetTransform ;
-        // this.transform.parent.transform.position = _targetTransform.position;
-
+    public void setCameraTarget(Transform _targetTransform,int _hitIndex){
+        // targetTsf = _targetTransform ;
+        Debug.LogFormat ("_hitIndex {0}", _hitIndex);
+        targetTsf = views[_hitIndex];
+        Debug.LogFormat ("targetTsf {0}", targetTsf.position);
         this._XForm_Camera = this.transform;
         this._XForm_Parent = this.transform.parent;
 
@@ -44,45 +47,45 @@ public class CameraOrbit : MonoBehaviour
                 Mathf.LerpAngle(this.transform.parent.transform.rotation.eulerAngles.y, targetTsf.rotation.eulerAngles.y, Time.deltaTime * 4),
                 Mathf.LerpAngle(this.transform.parent.transform.rotation.eulerAngles.z, targetTsf.rotation.eulerAngles.z, Time.deltaTime * 4));
 
-            // this.transform.parent.transform.eulerAngles = currentAngle;
+            this.transform.parent.transform.eulerAngles = currentAngle;
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-            CameraDisabled = !CameraDisabled;
+        // if (Input.GetKeyDown(KeyCode.LeftShift))
+        //     CameraDisabled = !CameraDisabled;
 
-        if (!CameraDisabled)
-        {
-            //Rotation of the Camera based on Mouse Coordinates
-            if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
-            {
-                _LocalRotation.x += Input.GetAxis("Mouse X") * MouseSensitivity;
-                _LocalRotation.y += Input.GetAxis("Mouse Y") * -MouseSensitivity;
+        // if (!CameraDisabled)
+        // {
+        //     //Rotation of the Camera based on Mouse Coordinates
+        //     if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
+        //     {
+        //         _LocalRotation.x += Input.GetAxis("Mouse X") * MouseSensitivity;
+        //         _LocalRotation.y += Input.GetAxis("Mouse Y") * -MouseSensitivity;
 
-                //Clamp the y Rotation to horizon and not flipping over at the top
-                if (_LocalRotation.y < 0f)
-                    _LocalRotation.y = 0f;
-                else if (_LocalRotation.y > 90f)
-                    _LocalRotation.y = 90f;
-            }
-            //Zooming Input from our Mouse Scroll Wheel
-            if (Input.GetAxis("Mouse ScrollWheel") != 0f)
-            {
-                float ScrollAmount = Input.GetAxis("Mouse ScrollWheel") * ScrollSensitvity;
+        //         //Clamp the y Rotation to horizon and not flipping over at the top
+        //         if (_LocalRotation.y < 0f)
+        //             _LocalRotation.y = 0f;
+        //         else if (_LocalRotation.y > 90f)
+        //             _LocalRotation.y = 90f;
+        //     }
+        //     //Zooming Input from our Mouse Scroll Wheel
+        //     if (Input.GetAxis("Mouse ScrollWheel") != 0f)
+        //     {
+        //         float ScrollAmount = Input.GetAxis("Mouse ScrollWheel") * ScrollSensitvity;
 
-                ScrollAmount *= (this._CameraDistance * 0.3f);
+        //         ScrollAmount *= (this._CameraDistance * 0.3f);
 
-                this._CameraDistance += ScrollAmount * -1f;
+        //         this._CameraDistance += ScrollAmount * -1f;
 
-                this._CameraDistance = Mathf.Clamp(this._CameraDistance, 1.5f, 100f);
-            }
-        }
+        //         this._CameraDistance = Mathf.Clamp(this._CameraDistance, 1.5f, 100f);
+        //     }
+        // }
 
-        //Actual Camera Rig Transformations
-        Quaternion QT = Quaternion.Euler(_LocalRotation.y, _LocalRotation.x, 0);
-        this._XForm_Parent.rotation = Quaternion.Lerp(this._XForm_Parent.rotation, QT, Time.deltaTime * OrbitDampening);
+        // //Actual Camera Rig Transformations
+        // Quaternion QT = Quaternion.Euler(_LocalRotation.y, _LocalRotation.x, 0);
+        // this._XForm_Parent.rotation = Quaternion.Lerp(this._XForm_Parent.rotation, QT, Time.deltaTime * OrbitDampening);
 
-        if ( this._XForm_Camera.localPosition.z != this._CameraDistance * -1f )
-        {
-            this._XForm_Camera.localPosition = new Vector3(0f, 0f, Mathf.Lerp(this._XForm_Camera.localPosition.z, this._CameraDistance * -1f, Time.deltaTime * ScrollDampening));
-        }
+        // if ( this._XForm_Camera.localPosition.z != this._CameraDistance * -1f )
+        // {
+        //     this._XForm_Camera.localPosition = new Vector3(0f, 0f, Mathf.Lerp(this._XForm_Camera.localPosition.z, this._CameraDistance * -1f, Time.deltaTime * ScrollDampening));
+        // }
     }
 }

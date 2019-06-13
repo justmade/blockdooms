@@ -44,7 +44,7 @@ public class SagaMapScene : MonoBehaviour {
 
 		}
 
-		mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[0].transform);
+		mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[0].transform,0);
 	}
 
 	void touchLevel(){
@@ -54,7 +54,13 @@ public class SagaMapScene : MonoBehaviour {
 		if(Physics.Raycast (ray,out hit))    //如果真的发生了碰撞，ray这条射线在hit点与别的物体碰撞了
 		{
 			if (hit.collider.gameObject.tag == "LevelBlock") {
-				mainCamera.GetComponent<CameraOrbit>().setCameraTarget(hit.collider.gameObject.transform);
+				int hitIndex = 0;
+				for(int i=0;i<12;i ++){
+					if(allLevelBlock[i] == hit.collider.gameObject){
+						hitIndex = i;
+					}
+				}
+				mainCamera.GetComponent<CameraOrbit>().setCameraTarget(hit.collider.gameObject.transform,hitIndex);
 			}
 		}
 	}
