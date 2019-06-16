@@ -40,6 +40,7 @@ public class CameraOrbit : MonoBehaviour
 
 
     void LateUpdate() {
+        // return;
         if(targetTsf != null)
             this.transform.parent.transform.position = Vector3.Lerp( this.transform.parent.transform.position , targetTsf.position,Time.deltaTime*4);
             Vector3 currentAngle = new Vector3(
@@ -77,7 +78,7 @@ public class CameraOrbit : MonoBehaviour
 
         //         this._CameraDistance = Mathf.Clamp(this._CameraDistance, 1.5f, 100f);
         //     }
-        // }
+        // } 
 
         // //Actual Camera Rig Transformations
         // Quaternion QT = Quaternion.Euler(_LocalRotation.y, _LocalRotation.x, 0);
