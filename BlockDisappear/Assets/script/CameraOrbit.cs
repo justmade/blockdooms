@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CameraOrbit : MonoBehaviour 
 {
-
+    [SerializeField] ReadyPanelPopup readyPanel;
     protected Transform _XForm_Camera;
     protected Transform _XForm_Parent;
 
@@ -31,15 +31,23 @@ public class CameraOrbit : MonoBehaviour
     private Vector3 startEular;
 
     private float fracJourney = 1.0f;
+    
+    private int currengLevelIndex = -1;
 
 
     // Use this for initialization
     void Start() {
         this._XForm_Camera = this.transform;
         this._XForm_Parent = this.transform.parent;
+        readyPanel.gameObject.SetActive(false);
     }
 
     public void setCameraTarget(Transform _targetTransform,int _hitIndex){
+        if(currengLevelIndex != _hitIndex){
+            currengLevelIndex = _hitIndex;
+        }else{
+            return;
+        }
         // targetTsf = _targetTransform ;
         Debug.LogFormat ("_hitIndex {0}", _hitIndex);
         targetTsf = views[_hitIndex];
@@ -51,6 +59,16 @@ public class CameraOrbit : MonoBehaviour
         startPos = this.transform.parent.transform.position;
         startEular = this.transform.parent.transform.rotation.eulerAngles;
         fracJourney = 0.0f;
+        // PopupReadyPanel(_hitIndex);
+    }
+
+    void PopupReadyPanel(int level){
+        readyPanel.gameObject.SetActive(true);
+        readyPanel.setLevel(level);
+    }
+
+    public void CloseReadyPanel(){
+        readyPanel.gameObject.SetActive(false);
     }
 
 
@@ -62,7 +80,7 @@ public class CameraOrbit : MonoBehaviour
             fracJourney = distCovered / journeyLength;
             // fracJourney = 1.0f;
 
-            Debug.LogFormat ("fracJourney {0}", fracJourney);
+           
 
             this.transform.parent.transform.position = Vector3.Lerp(startPos, targetTsf.position,fracJourney);
             Vector3 currentAngle = new Vector3(
@@ -72,7 +90,9 @@ public class CameraOrbit : MonoBehaviour
 
             this.transform.parent.transform.eulerAngles = currentAngle;
 
-
+            if(fracJourney >= 1.0f){
+                PopupReadyPanel(currengLevelIndex+1);
+            }
 
         }
            
