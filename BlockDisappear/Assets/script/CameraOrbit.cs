@@ -14,12 +14,23 @@ public class CameraOrbit : MonoBehaviour
     public float ScrollSensitvity = 2f;
     public float OrbitDampening = 10f;
     public float ScrollDampening = 6f;
+    public float MoveSpeed = 12f;
 
     public bool CameraDisabled = true;
 
     protected Transform targetTsf =null ;
 
     public Transform[] views;
+
+    private float startTime;
+
+    private float journeyLength;
+
+    private Vector3 startPos;
+
+    private Vector3 startEular;
+
+    private float fracJourney = 1.0f;
 
 
     // Use this for initialization
@@ -35,21 +46,36 @@ public class CameraOrbit : MonoBehaviour
         Debug.LogFormat ("targetTsf {0}", targetTsf.position);
         this._XForm_Camera = this.transform;
         this._XForm_Parent = this.transform.parent;
-
+        startTime = Time.time;
+        journeyLength =  Vector3.Distance(this.transform.parent.transform.position , targetTsf.position);
+        startPos = this.transform.parent.transform.position;
+        startEular = this.transform.parent.transform.rotation.eulerAngles;
+        fracJourney = 0.0f;
     }
 
 
     void LateUpdate() {
         // return;
-        if(targetTsf != null)
-            this.transform.parent.transform.position = Vector3.Lerp( this.transform.parent.transform.position , targetTsf.position,Time.deltaTime*4);
+        if(targetTsf != null && fracJourney < 1.0f){
+
+            float distCovered = (Time.time - startTime) * MoveSpeed;
+            fracJourney = distCovered / journeyLength;
+            // fracJourney = 1.0f;
+
+            Debug.LogFormat ("fracJourney {0}", fracJourney);
+
+            this.transform.parent.transform.position = Vector3.Lerp(startPos, targetTsf.position,fracJourney);
             Vector3 currentAngle = new Vector3(
-                Mathf.LerpAngle(this.transform.parent.transform.rotation.eulerAngles.x, targetTsf.rotation.eulerAngles.x, Time.deltaTime * 4),
-                Mathf.LerpAngle(this.transform.parent.transform.rotation.eulerAngles.y, targetTsf.rotation.eulerAngles.y, Time.deltaTime * 4),
-                Mathf.LerpAngle(this.transform.parent.transform.rotation.eulerAngles.z, targetTsf.rotation.eulerAngles.z, Time.deltaTime * 4));
+                Mathf.LerpAngle(startEular.x, targetTsf.rotation.eulerAngles.x, fracJourney),
+                Mathf.LerpAngle(startEular.y, targetTsf.rotation.eulerAngles.y, fracJourney),
+                Mathf.LerpAngle(startEular.z, targetTsf.rotation.eulerAngles.z, fracJourney));
 
             this.transform.parent.transform.eulerAngles = currentAngle;
 
+
+
+        }
+           
         if (Input.GetKeyDown(KeyCode.LeftShift))
             CameraDisabled = !CameraDisabled;
 
