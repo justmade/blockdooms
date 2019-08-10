@@ -10,13 +10,22 @@ public class SagaMapScene : MonoBehaviour {
 
 	private GameObject[] allLevelBlock;
 
+	//是否检测点击
+	private bool touchEnable = true;
+	private bool couldTouch = true;
+
 	void Start () {
 		createLevels();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetMouseButtonUp(0)) {
+		if (Input.GetMouseButtonDown(0)  && !touchEnable){
+			couldTouch = false;
+		}else if(Input.GetMouseButtonDown(0)  && touchEnable){
+			couldTouch = true;
+		}
+		if (Input.GetMouseButtonUp(0) && couldTouch) {
 			touchLevel();
 		}
 	}
@@ -44,7 +53,12 @@ public class SagaMapScene : MonoBehaviour {
 
 		}
 
-		mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[0].transform,0);
+		mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[0].transform,0,true);
+		mainCamera.GetComponent<CameraOrbit>().setTouchEnableState(OpenTouchEnable);
+	}
+
+	void OpenTouchEnable(){
+		touchEnable = true;
 	}
 
 	void touchLevel(){
@@ -60,7 +74,7 @@ public class SagaMapScene : MonoBehaviour {
 						hitIndex = i;
 					}
 				}
-				mainCamera.GetComponent<CameraOrbit>().setCameraTarget(hit.collider.gameObject.transform,hitIndex);
+				touchEnable = !mainCamera.GetComponent<CameraOrbit>().setCameraTarget(hit.collider.gameObject.transform,hitIndex);
 			}
 		}
 	}

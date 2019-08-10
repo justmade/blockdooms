@@ -34,6 +34,12 @@ public class CameraOrbit : MonoBehaviour
     
     private int currengLevelIndex = -1;
 
+    private bool notOpenPanel = false;
+
+    //设置点击的回调
+    public delegate void VoidDelegate();
+    VoidDelegate setTouch;
+
 
     // Use this for initialization
     void Start() {
@@ -42,11 +48,16 @@ public class CameraOrbit : MonoBehaviour
         readyPanel.gameObject.SetActive(false);
     }
 
-    public void setCameraTarget(Transform _targetTransform,int _hitIndex){
+    public bool setCameraTarget(Transform _targetTransform,int _hitIndex,bool _notOpenPanel=false){
+        notOpenPanel = _notOpenPanel;
+        if(readyPanel.gameObject.activeSelf){
+            return false;
+        }
         if(currengLevelIndex != _hitIndex){
             currengLevelIndex = _hitIndex;
         }else{
-            return;
+            PopupReadyPanel(currengLevelIndex+1);
+            return true;
         }
         // targetTsf = _targetTransform ;
         Debug.LogFormat ("_hitIndex {0}", _hitIndex);
@@ -59,16 +70,24 @@ public class CameraOrbit : MonoBehaviour
         startPos = this.transform.parent.transform.position;
         startEular = this.transform.parent.transform.rotation.eulerAngles;
         fracJourney = 0.0f;
-        // PopupReadyPanel(_hitIndex);
+        return true;
     }
 
     void PopupReadyPanel(int level){
-        readyPanel.gameObject.SetActive(true);
-        readyPanel.setLevel(level);
+        if(!notOpenPanel){
+            readyPanel.gameObject.SetActive(true);
+            readyPanel.setLevel(level);
+        }
     }
 
     public void CloseReadyPanel(){
         readyPanel.gameObject.SetActive(false);
+        setTouch();
+        // gameObject.SendMessage
+    }
+
+    public void setTouchEnableState(VoidDelegate callback){
+        setTouch = callback;
     }
 
 
