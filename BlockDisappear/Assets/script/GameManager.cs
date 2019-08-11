@@ -199,14 +199,16 @@ public class GameManager : MonoBehaviour {
 
 	void onBack(){
 		// Application.LoadLevel(Application.loadedLevel);
-		SceneManager.LoadScene("LevelSelect");
+		// SceneManager.LoadScene("LevelSelect");
+		SceneManager.LoadScene("SagaMap");
 		
 		
 	}
 
 	IEnumerator finishLevel(){
 		yield return new WaitForSeconds(0.7f);
-		SceneManager.LoadScene("LevelSelect");
+		// SceneManager.LoadScene("LevelSelect");
+		SceneManager.LoadScene("SagaMap");
 		levelController.LevelComplete(currentLevelName,1);
 	}
 

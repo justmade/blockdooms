@@ -80,6 +80,12 @@ public class CameraOrbit : MonoBehaviour
         }
     }
 
+    public void StartLevel(){
+        readyPanel.gameObject.SetActive(false);
+        setTouch();
+        readyPanel.startLevel();
+    }
+
     public void CloseReadyPanel(){
         readyPanel.gameObject.SetActive(false);
         setTouch();
