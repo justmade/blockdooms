@@ -52,7 +52,21 @@ public class SagaMapScene : MonoBehaviour {
 			allLevelBlock[i]=g;
 
 		}
+		initCameraPos();
 
+	}
+
+	void initCameraPos(){
+		for(int i= 0 ;i <LevelDataInfo.levels.Count;i++){
+			Level level = LevelDataInfo.levels[i];
+			if (level.LevelName == LevelDataInfo.selectLevelName){
+				Debug.LogFormat("selectLevelName222 {0}",level.LevelName);
+				Debug.LogFormat("cur {0}",i);
+				mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[i].transform,i,true);
+				mainCamera.GetComponent<CameraOrbit>().setTouchEnableState(OpenTouchEnable);
+				return;
+			}
+		}
 		mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[0].transform,0,true);
 		mainCamera.GetComponent<CameraOrbit>().setTouchEnableState(OpenTouchEnable);
 	}

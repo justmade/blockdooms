@@ -28,7 +28,7 @@ public class ReadyPanelPopup : MonoBehaviour {
 	}
 
 	private void onSelectLevel(int levelIndex){
-		Level level = levelController.levels[levelIndex];
+		Level level = levelController.levels[levelIndex-1];
 		levelController.LevelStart(level.LevelName);
 
 	}
