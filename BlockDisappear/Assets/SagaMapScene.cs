@@ -44,7 +44,9 @@ public class SagaMapScene : MonoBehaviour {
 
 
 			Quaternion turnRotation=  Quaternion.LookRotation(new Vector3(px,py,pz),Vector3.up);
-			GameObject g = GameObject.CreatePrimitive(PrimitiveType.Cube);
+			// GameObject g = GameObject.CreatePrimitive(PrimitiveType.Cube);
+			GameObject g =	Instantiate(Resources.Load( "UFO_level", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+			// block.transform.localScale = new Vector3 (-blockScale, blockScale, blockScale);
 			g.transform.position = new Vector3(px,py,pz);
 			g.transform.rotation = turnRotation;
 			// g.transform.parent = LevelContainer.transform;
