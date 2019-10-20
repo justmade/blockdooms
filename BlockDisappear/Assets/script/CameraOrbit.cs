@@ -4,6 +4,7 @@ using System.Collections;
 public class CameraOrbit : MonoBehaviour 
 {
     [SerializeField] ReadyPanelPopup readyPanel;
+    
     protected Transform _XForm_Camera;
     protected Transform _XForm_Parent;
 

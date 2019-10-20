@@ -8,6 +8,8 @@ public class SagaMapScene : MonoBehaviour {
 
 	private GameObject LevelContainer;
 
+	[SerializeField] private LevelController levelController;
+
 	private GameObject[] allLevelBlock;
 
 	//是否检测点击
@@ -41,11 +43,16 @@ public class SagaMapScene : MonoBehaviour {
 			float px = R * Mathf.Sin(angle1) * Mathf.Cos(angle2);
 			float py = R * Mathf.Sin(angle1) * Mathf.Sin(angle2);
 			float pz = R * Mathf.Cos(angle1);
-
+			Level level = levelController.levels[i];
+			string metalName = "DefaultLevelsBt";
+			if (level.Stars > 0 ){
+				metalName = "PassedLevelsBt";
+			}
 
 			Quaternion turnRotation=  Quaternion.LookRotation(new Vector3(px,py,pz),Vector3.up);
 			// GameObject g = GameObject.CreatePrimitive(PrimitiveType.Cube);
-			GameObject g =	Instantiate(Resources.Load( "UFO_level", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+			// GameObject g =	Instantiate(Resources.Load( "UFO_level", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+			GameObject g =	Instantiate(Resources.Load( metalName, typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
 			// block.transform.localScale = new Vector3 (-blockScale, blockScale, blockScale);
 			g.transform.position = new Vector3(px,py,pz);
 			g.transform.rotation = turnRotation;
