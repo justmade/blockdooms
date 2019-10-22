@@ -577,17 +577,6 @@ public class GameManager : MonoBehaviour {
 				checkAllBlocks ();
 
 //				findTopBlock ();
-				if (checkSameColor == false) {
-//                    currentRotateFrame = 0;
-//                    cameraMove = 1;
-						m_MessageText.text = "Gameover！ 剩余方块：" + blocksLeftCounts;
-					if(blocksLeftCounts == 0){
-						m_MessageText.text = "成功！！！";
-						StartCoroutine(finishLevel());
-					}
-				} else {
-					// m_MessageText.text = "消除";
-				}
 			}
 		}
 	}

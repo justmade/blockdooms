@@ -9,7 +9,7 @@ public class CameraOrbit : MonoBehaviour
     protected Transform _XForm_Parent;
 
     protected Vector3 _LocalRotation;
-    protected float _CameraDistance = 0f;
+    protected float _CameraDistance = 2f;
 
     public float MouseSensitivity = 4f;
     public float ScrollSensitvity = 2f;
@@ -17,7 +17,7 @@ public class CameraOrbit : MonoBehaviour
     public float ScrollDampening = 6f;
     public float MoveSpeed = 12f;
 
-    public bool CameraDisabled = true;
+    public bool CameraDisabled = false;
 
     protected Transform targetTsf =null ;
 
@@ -49,7 +49,7 @@ public class CameraOrbit : MonoBehaviour
         readyPanel.gameObject.SetActive(false);
     }
 
-    public bool setCameraTarget(Transform _targetTransform,int _hitIndex,bool _notOpenPanel=false){
+    public bool setCameraTarget(Transform _targetTransform,int _hitIndex,bool _notOpenPanel=false, bool isImmediate = false){
         notOpenPanel = _notOpenPanel;
         if(readyPanel.gameObject.activeSelf){
             return false;
@@ -70,7 +70,11 @@ public class CameraOrbit : MonoBehaviour
         journeyLength =  Vector3.Distance(this.transform.parent.transform.position , targetTsf.position);
         startPos = this.transform.parent.transform.position;
         startEular = this.transform.parent.transform.rotation.eulerAngles;
-        fracJourney = 0.0f;
+        if(isImmediate){
+            setCameraPosImmediately();
+        }else{
+            fracJourney = 0.0f;
+        }
         return true;
     }
 
@@ -97,6 +101,19 @@ public class CameraOrbit : MonoBehaviour
         setTouch = callback;
     }
 
+
+    public void setCameraPosImmediately(){
+         this.transform.parent.transform.position = Vector3.Lerp(startPos, targetTsf.position,1);
+            Vector3 currentAngle = new Vector3(
+                Mathf.LerpAngle(startEular.x, targetTsf.rotation.eulerAngles.x, 1),
+                Mathf.LerpAngle(startEular.y, targetTsf.rotation.eulerAngles.y, 1),
+                Mathf.LerpAngle(startEular.z, targetTsf.rotation.eulerAngles.z, 1));
+
+            this.transform.parent.transform.eulerAngles = currentAngle;
+
+            this._XForm_Camera.localPosition = new Vector3(0f, 0f,  this._CameraDistance * -1f);
+        
+    }
 
     void LateUpdate() {
         // return;
@@ -127,19 +144,7 @@ public class CameraOrbit : MonoBehaviour
 
         if (!CameraDisabled)
         {
-            //Rotation of the Camera based on Mouse Coordinates
-            // if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
-            // {
-            //     _LocalRotation.x += Input.GetAxis("Mouse X") * MouseSensitivity;
-            //     _LocalRotation.y += Input.GetAxis("Mouse Y") * -MouseSensitivity;
 
-            //     //Clamp the y Rotation to horizon and not flipping over at the top
-            //     if (_LocalRotation.y < 0f)
-            //         _LocalRotation.y = 0f;
-            //     else if (_LocalRotation.y > 90f)
-            //         _LocalRotation.y = 90f;
-            // }
-            //Zooming Input from our Mouse Scroll Wheel
             if (Input.GetAxis("Mouse ScrollWheel") != 0f)
             {
                 float ScrollAmount = Input.GetAxis("Mouse ScrollWheel") * ScrollSensitvity;
@@ -150,15 +155,18 @@ public class CameraOrbit : MonoBehaviour
 
                 this._CameraDistance = Mathf.Clamp(this._CameraDistance, 1.5f, 100f);
             }
+
+            if ( this._XForm_Camera.localPosition.z != this._CameraDistance * -1f )
+            {
+                this._XForm_Camera.localPosition = new Vector3(0f, 0f, Mathf.Lerp(this._XForm_Camera.localPosition.z, this._CameraDistance * -1f, Time.deltaTime * ScrollDampening));
+            }
+
         } 
 
         //Actual Camera Rig Transformations
         // Quaternion QT = Quaternion.Euler(_LocalRotation.y, _LocalRotation.x, 0);
         // this._XForm_Parent.rotation = Quaternion.Lerp(this._XForm_Parent.rotation, QT, Time.deltaTime * OrbitDampening);
 
-        if ( this._XForm_Camera.localPosition.z != this._CameraDistance * -1f )
-        {
-            this._XForm_Camera.localPosition = new Vector3(0f, 0f, Mathf.Lerp(this._XForm_Camera.localPosition.z, this._CameraDistance * -1f, Time.deltaTime * ScrollDampening));
-        }
+        
     }
 }

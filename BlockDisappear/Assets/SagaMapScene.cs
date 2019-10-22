@@ -14,8 +14,10 @@ public class SagaMapScene : MonoBehaviour {
 
 	//是否检测点击
 	private bool touchEnable = true;
+
 	private bool couldTouch = true;
 
+	private int totalLevels = 12;
 	void Start () {
 		createLevels();
 	}
@@ -34,9 +36,9 @@ public class SagaMapScene : MonoBehaviour {
 
 	void createLevels(){
 		LevelContainer = GameObject.Find("Sphere");
-		allLevelBlock = new GameObject[12];
+		allLevelBlock = new GameObject[totalLevels];
 		float R = 20;
-		for(int i=0;i<12;i ++){
+		for(int i=0;i<totalLevels;i ++){
 			float fx = Mathf.Sin(Mathf.PI * 2 * i / 12);
 			float angle1 = (30+i*10) * Mathf.PI / 180;
 			float angle2 = (90 + fx * 30) * Mathf.PI / 180;
@@ -66,17 +68,29 @@ public class SagaMapScene : MonoBehaviour {
 	}
 
 	void initCameraPos(){
-		for(int i= 0 ;i <LevelDataInfo.levels.Count;i++){
-			Level level = LevelDataInfo.levels[i];
-			if (level.LevelName == LevelDataInfo.selectLevelName){
-				Debug.LogFormat("selectLevelName222 {0}",level.LevelName);
-				Debug.LogFormat("cur {0}",i);
-				mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[i].transform,i,true);
-				mainCamera.GetComponent<CameraOrbit>().setTouchEnableState(OpenTouchEnable);
-				return;
-			}
+		// for(int i= 0 ;i <LevelDataInfo.levels.Count;i++){
+		// 	Level level = LevelDataInfo.levels[i];
+		// 	if (level.LevelName == LevelDataInfo.selectLevelName){
+		// 		Debug.LogFormat("selectLevelName222 {0}",level.LevelName);
+		// 		Debug.LogFormat("cur {0}",i);
+		// 		mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[i].transform,i,true);
+		// 		mainCamera.GetComponent<CameraOrbit>().setTouchEnableState(OpenTouchEnable);
+		// 		return;
+		// 	}
+		// }
+		if(LevelDataInfo.selectLevelIndex > 0){
+			mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[LevelDataInfo.selectLevelIndex-1].transform,
+				LevelDataInfo.selectLevelIndex-1,true,true);
+
+			mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[LevelDataInfo.selectLevelIndex].transform,
+				LevelDataInfo.selectLevelIndex,true);
+		}else if(LevelDataInfo.selectLevelIndex == 0 ){
+			mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[LevelDataInfo.selectLevelIndex].transform,
+				LevelDataInfo.selectLevelIndex,true,true);
 		}
-		mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[0].transform,0,true);
+
+		
+
 		mainCamera.GetComponent<CameraOrbit>().setTouchEnableState(OpenTouchEnable);
 	}
 
@@ -92,7 +106,7 @@ public class SagaMapScene : MonoBehaviour {
 		{
 			if (hit.collider.gameObject.tag == "LevelBlock") {
 				int hitIndex = 0;
-				for(int i=0;i<12;i ++){
+				for(int i=0;i<totalLevels;i ++){
 					if(allLevelBlock[i] == hit.collider.gameObject){
 						hitIndex = i;
 					}
