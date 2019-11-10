@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class ReadyPanelPopup : MonoBehaviour {
 	[SerializeField] private LevelController levelController;
 	
 	public Text tipText;
+	public GameObject gameObjText;
+
 
 	private int currentLevel = 0;
 
@@ -17,7 +20,9 @@ public class ReadyPanelPopup : MonoBehaviour {
 
 	public void setLevel(int levelIndex){
 		currentLevel = levelIndex;
-		tipText.text = "Level "+ levelIndex;
+		// tipText.text = "Level "+ levelIndex;
+		TextMeshProUGUI textmeshPro = gameObjText.GetComponent<TextMeshProUGUI>();
+		textmeshPro.text = "Level "+ levelIndex;
 
 	}
 

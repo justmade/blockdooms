@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Doozy.Engine.UI;
 
 public class CameraOrbit : MonoBehaviour 
 {
@@ -22,6 +23,8 @@ public class CameraOrbit : MonoBehaviour
     protected Transform targetTsf =null ;
 
     public Transform[] views;
+
+    public UIView rPanel;
 
     private float startTime;
 
@@ -80,8 +83,12 @@ public class CameraOrbit : MonoBehaviour
 
     void PopupReadyPanel(int level){
         if(!notOpenPanel){
-            readyPanel.gameObject.SetActive(true);
-            readyPanel.setLevel(level);
+            rPanel.gameObject.SetActive(true);
+            rPanel.GetComponent<ReadyPanelPopup>().setLevel(level);
+            // rPanel.setLevel(level);
+            rPanel.Show();
+            // readyPanel.gameObject.SetActive(true);
+            // readyPanel.setLevel(level);
         }
     }
 
@@ -92,7 +99,9 @@ public class CameraOrbit : MonoBehaviour
     }
 
     public void CloseReadyPanel(){
-        readyPanel.gameObject.SetActive(false);
+        Debug.LogFormat ("CloseReadyPanel {0}", "CloseReadyPanel");
+        // readyPanel.gameObject.SetActive(false);
+        rPanel.Hide();
         setTouch();
         // gameObject.SendMessage
     }
