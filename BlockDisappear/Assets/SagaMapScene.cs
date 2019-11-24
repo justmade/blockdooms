@@ -18,9 +18,19 @@ public class SagaMapScene : MonoBehaviour {
 	private bool couldTouch = true;
 
 	private int totalLevels = 12;
+
+
+    private GameObject UFO; 
+
 	void Start () {
 		createLevels();
+		initUFO();
 	}
+
+
+    void initUFO(){
+        UFO =	Instantiate(Resources.Load( "UFO_level", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (250f, 175f, 0f)) as GameObject;
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -101,6 +111,9 @@ public class SagaMapScene : MonoBehaviour {
 						hitIndex = i;
 					}
 				}
+				UFO.transform.position = Vector3.up + hit.collider.gameObject.transform.position;
+				Quaternion turnRotation = Quaternion.LookRotation(UFO.transform.position,Vector3.up);
+				UFO.transform.rotation = turnRotation;
 				touchEnable = !mainCamera.GetComponent<CameraOrbit>().setCameraTarget(hit.collider.gameObject.transform,hitIndex);
 			}
 		}
