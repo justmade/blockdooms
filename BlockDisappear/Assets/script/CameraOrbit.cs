@@ -93,9 +93,13 @@ public class CameraOrbit : MonoBehaviour
     }
 
     public void StartLevel(){
-        readyPanel.gameObject.SetActive(false);
+        Debug.LogFormat ("StartLevel {0}", "StartLevel");
+        // readyPanel.gameObject.SetActive(false);
         setTouch();
-        readyPanel.startLevel();
+        // readyPanel.startLevel();
+        rPanel.Hide();
+        rPanel.GetComponent<ReadyPanelPopup>().startLevel();
+        
     }
 
     public void CloseReadyPanel(){

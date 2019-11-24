@@ -68,22 +68,12 @@ public class SagaMapScene : MonoBehaviour {
 	}
 
 	void initCameraPos(){
-		// for(int i= 0 ;i <LevelDataInfo.levels.Count;i++){
-		// 	Level level = LevelDataInfo.levels[i];
-		// 	if (level.LevelName == LevelDataInfo.selectLevelName){
-		// 		Debug.LogFormat("selectLevelName222 {0}",level.LevelName);
-		// 		Debug.LogFormat("cur {0}",i);
-		// 		mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[i].transform,i,true);
-		// 		mainCamera.GetComponent<CameraOrbit>().setTouchEnableState(OpenTouchEnable);
-		// 		return;
-		// 	}
-		// }
 		if(LevelDataInfo.selectLevelIndex > 0){
 			mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[LevelDataInfo.selectLevelIndex-1].transform,
-				LevelDataInfo.selectLevelIndex-1,true,true);
+				LevelDataInfo.selectLevelIndex-1,false,true);
 
 			mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[LevelDataInfo.selectLevelIndex].transform,
-				LevelDataInfo.selectLevelIndex,true);
+				LevelDataInfo.selectLevelIndex,false);
 		}else if(LevelDataInfo.selectLevelIndex == 0 ){
 			mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[LevelDataInfo.selectLevelIndex].transform,
 				LevelDataInfo.selectLevelIndex,true,true);
