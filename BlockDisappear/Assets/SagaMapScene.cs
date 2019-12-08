@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class SagaMapScene : MonoBehaviour {
 
@@ -19,6 +20,8 @@ public class SagaMapScene : MonoBehaviour {
 
 	private int totalLevels = 12;
 
+	private float UFOMoveSpeed = 12f;
+
 
     private GameObject UFO; 
 
@@ -29,8 +32,9 @@ public class SagaMapScene : MonoBehaviour {
 
 
     void initUFO(){
-        UFO =	Instantiate(Resources.Load( "UFO_level", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (250f, 175f, 0f)) as GameObject;
-    }
+        UFO = Instantiate(Resources.Load( "UFO_level", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (250f, 175f, 0f)) as GameObject;
+		UFOMoveSpeed = mainCamera.GetComponent<CameraOrbit>().MoveSpeed;
+	}
 	
 	// Update is called once per frame
 	void Update () {
@@ -111,9 +115,19 @@ public class SagaMapScene : MonoBehaviour {
 						hitIndex = i;
 					}
 				}
-				UFO.transform.position = Vector3.up + hit.collider.gameObject.transform.position;
-				Quaternion turnRotation = Quaternion.LookRotation(UFO.transform.position,Vector3.up);
-				UFO.transform.rotation = turnRotation;
+				// UFO.transform.position = Vector3.up + hit.collider.gameObject.transform.position;
+				Vector3 targetPos = Vector3.up * 1.6f + hit.collider.gameObject.transform.position;
+				Quaternion turnRotation = Quaternion.LookRotation(targetPos,Vector3.up);
+				// UFO.transform.rotation = turnRotation;
+
+				
+        		float journeyLength =  Vector3.Distance(targetPos, UFO.transform.position);
+
+
+				UFO.transform.DOJump(targetPos,1f,1,journeyLength/UFOMoveSpeed);
+				UFO.transform.DORotateQuaternion(turnRotation,journeyLength/UFOMoveSpeed);
+
+
 				touchEnable = !mainCamera.GetComponent<CameraOrbit>().setCameraTarget(hit.collider.gameObject.transform,hitIndex);
 			}
 		}
