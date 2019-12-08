@@ -22,12 +22,15 @@ public class SagaMapScene : MonoBehaviour {
 
 	private float UFOMoveSpeed = 12f;
 
+	private Vector3 targetPos = new Vector3();
+	private Quaternion turnRotation = new Quaternion();
+
 
     private GameObject UFO; 
 
 	void Start () {
-		createLevels();
 		initUFO();
+		createLevels();
 	}
 
 
@@ -85,17 +88,45 @@ public class SagaMapScene : MonoBehaviour {
 		if(LevelDataInfo.selectLevelIndex > 0){
 			mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[LevelDataInfo.selectLevelIndex-1].transform,
 				LevelDataInfo.selectLevelIndex-1,false,true);
+			getUFOTargetPos(LevelDataInfo.selectLevelIndex-1);
+			setUFOPos(targetPos,turnRotation,true);
 
 			mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[LevelDataInfo.selectLevelIndex].transform,
 				LevelDataInfo.selectLevelIndex,false);
+			getUFOTargetPos(LevelDataInfo.selectLevelIndex);
+			setUFOPos(targetPos,turnRotation,false);
+
 		}else if(LevelDataInfo.selectLevelIndex == 0 ){
 			mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[LevelDataInfo.selectLevelIndex].transform,
 				LevelDataInfo.selectLevelIndex,true,true);
+
+			getUFOTargetPos(LevelDataInfo.selectLevelIndex);
+			setUFOPos(targetPos,turnRotation,true);
+			Debug.Log(targetPos);
 		}
 
 		
 
 		mainCamera.GetComponent<CameraOrbit>().setTouchEnableState(OpenTouchEnable);
+	}
+
+	void getUFOTargetPos(int _index){
+		targetPos = Vector3.up * 1.6f + allLevelBlock[_index].transform.position;
+		turnRotation = Quaternion.LookRotation(targetPos,Vector3.up);
+	}
+
+	void setUFOPos(Vector3 targetPos ,Quaternion turnRotation,bool isImmediate){
+		float journeyLength =  Vector3.Distance(targetPos, UFO.transform.position);
+		float dur = journeyLength/UFOMoveSpeed;
+		if(isImmediate){
+			UFO.transform.position = targetPos;
+			UFO.transform.rotation = turnRotation;
+		}else{
+			UFO.transform.DOJump(targetPos,1f,1,dur).SetEase(Ease.OutSine);
+			UFO.transform.DORotateQuaternion(turnRotation,dur);
+		}
+		
+		
 	}
 
 	void OpenTouchEnable(){
@@ -113,20 +144,11 @@ public class SagaMapScene : MonoBehaviour {
 				for(int i=0;i<totalLevels;i ++){
 					if(allLevelBlock[i] == hit.collider.gameObject){
 						hitIndex = i;
+						break;
 					}
 				}
-				// UFO.transform.position = Vector3.up + hit.collider.gameObject.transform.position;
-				Vector3 targetPos = Vector3.up * 1.6f + hit.collider.gameObject.transform.position;
-				Quaternion turnRotation = Quaternion.LookRotation(targetPos,Vector3.up);
-				// UFO.transform.rotation = turnRotation;
-
-				
-        		float journeyLength =  Vector3.Distance(targetPos, UFO.transform.position);
-
-
-				UFO.transform.DOJump(targetPos,1f,1,journeyLength/UFOMoveSpeed);
-				UFO.transform.DORotateQuaternion(turnRotation,journeyLength/UFOMoveSpeed);
-
+				getUFOTargetPos(hitIndex);
+				setUFOPos(targetPos,turnRotation,false);
 
 				touchEnable = !mainCamera.GetComponent<CameraOrbit>().setCameraTarget(hit.collider.gameObject.transform,hitIndex);
 			}
