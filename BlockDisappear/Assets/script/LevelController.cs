@@ -65,12 +65,12 @@ public class LevelController : MonoBehaviour {
 	public void LevelComplete(string levelName){
 		Level level = levels.Find(i => i.LevelName == levelName);
 		level.LevelComplete();
-		LevelDataInfo.selectLevelIndex ++ ;
+		LevelDataInfo.SelectLevelIndex ++ ;
 	}
 
 	public void LevelComplete(string levelName,int stars){
 		Debug.LogFormat("LevelComplete{0}",stars);
 		levels.Find(i => i.LevelName == levelName).LevelComplete(stars);
-		LevelDataInfo.selectLevelIndex ++ ;
+		LevelDataInfo.SelectLevelIndex ++ ;
 	}
 }

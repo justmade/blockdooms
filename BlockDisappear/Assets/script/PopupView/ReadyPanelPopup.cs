@@ -21,8 +21,9 @@ public class ReadyPanelPopup : MonoBehaviour {
 	public void setLevel(int levelIndex){
 		currentLevel = levelIndex;
 		// tipText.text = "Level "+ levelIndex;
+		int selectLevel = currentLevel + LevelDataInfo.chapter * 20;
 		TextMeshProUGUI textmeshPro = gameObjText.GetComponent<TextMeshProUGUI>();
-		textmeshPro.text = "Level "+ levelIndex;
+		textmeshPro.text = "Level "+ selectLevel;
 
 	}
 
@@ -33,8 +34,10 @@ public class ReadyPanelPopup : MonoBehaviour {
 	}
 
 	private void onSelectLevel(int levelIndex){
-		Level level = levelController.levels[levelIndex-1];
-		LevelDataInfo.selectLevelIndex = levelIndex-1;
+		int selectLevel = levelIndex + LevelDataInfo.chapter * 20;
+		
+		Level level = levelController.levels[selectLevel-1];
+		LevelDataInfo.SelectLevelIndex = levelIndex-1;
 		levelController.LevelStart(level.LevelName);
 	}
 

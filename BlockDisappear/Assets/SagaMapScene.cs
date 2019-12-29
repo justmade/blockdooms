@@ -62,7 +62,7 @@ public class SagaMapScene : MonoBehaviour {
 			float px = R * Mathf.Sin(angle1) * Mathf.Cos(angle2);
 			float py = R * Mathf.Sin(angle1) * Mathf.Sin(angle2);
 			float pz = R * Mathf.Cos(angle1);
-			Level level = levelController.levels[i];
+			Level level = levelController.levels[i + LevelDataInfo.chapter * 20];
 			string metalName = "DefaultLevelsBt";
 			if (level.Stars > 0 ){
 				metalName = "PassedLevelsBt";
@@ -85,22 +85,22 @@ public class SagaMapScene : MonoBehaviour {
 	}
 
 	void initCameraPos(){
-		if(LevelDataInfo.selectLevelIndex > 0){
-			mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[LevelDataInfo.selectLevelIndex-1].transform,
-				LevelDataInfo.selectLevelIndex-1,false,true);
-			getUFOTargetPos(LevelDataInfo.selectLevelIndex-1);
+		if(LevelDataInfo.SelectLevelIndex > 0){
+			mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[LevelDataInfo.SelectLevelIndex-1].transform,
+				LevelDataInfo.SelectLevelIndex-1,false,true);
+			getUFOTargetPos(LevelDataInfo.SelectLevelIndex-1);
 			setUFOPos(targetPos,turnRotation,true);
 
-			mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[LevelDataInfo.selectLevelIndex].transform,
-				LevelDataInfo.selectLevelIndex,false);
-			getUFOTargetPos(LevelDataInfo.selectLevelIndex);
+			mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[LevelDataInfo.SelectLevelIndex].transform,
+				LevelDataInfo.SelectLevelIndex,false);
+			getUFOTargetPos(LevelDataInfo.SelectLevelIndex);
 			setUFOPos(targetPos,turnRotation,false);
 
-		}else if(LevelDataInfo.selectLevelIndex == 0 ){
-			mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[LevelDataInfo.selectLevelIndex].transform,
-				LevelDataInfo.selectLevelIndex,true,true);
+		}else if(LevelDataInfo.SelectLevelIndex == 0 ){
+			mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[LevelDataInfo.SelectLevelIndex].transform,
+				LevelDataInfo.SelectLevelIndex,true,true);
 
-			getUFOTargetPos(LevelDataInfo.selectLevelIndex);
+			getUFOTargetPos(LevelDataInfo.SelectLevelIndex);
 			setUFOPos(targetPos,turnRotation,true);
 			Debug.Log(targetPos);
 		}
