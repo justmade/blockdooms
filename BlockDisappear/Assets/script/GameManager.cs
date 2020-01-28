@@ -204,7 +204,7 @@ public class GameManager : MonoBehaviour {
 			int counts = B_Width * B_Width;
 			moveGridData = new List<string>();
 			for(int i = 0 ; i< counts ; i++){
-				moveGridData[i] = LevelDataInfo.STOP;
+				moveGridData.Add(LevelDataInfo.STOP);
 			}
 		}
 
@@ -612,8 +612,10 @@ public class GameManager : MonoBehaviour {
 		//dropBlock ();
 		//leftMoveBlock ();
 		updateBlockState ();
+		blockMoving();
 		findHorizontalConnect ();
 		findVerticalConnect ();
+		
 	}
 
 
@@ -1011,6 +1013,75 @@ public class GameManager : MonoBehaviour {
 			}
 
 		}
+	}
+
+	void sortMovingData(){
+		List<int> uplist = new List<int>();
+		List<int> downlist = new List<int>();
+		List<int> leftlist = new List<int>();
+		List<int> rightlist = new List<int>();
+
+		for(int i=0;i<moveGridData.Count;i++){
+			string state = moveGridData[i];
+			if(state == LevelDataInfo.UP){
+				uplist.Add(i);
+			}else if(state == LevelDataInfo.DOWN){
+				downlist.Add(i);
+			}else if(state == LevelDataInfo.LEFT){
+				leftlist.Add(i);
+			}else if(state == LevelDataInfo.RIGHT){
+				rightlist.Add(i);
+			}  
+		}
+
+		if(uplist.Count > 0){
+			uplist.Sort(delegate(int a,int b){
+				if(a % B_Width >= b %B_Width){
+					return -1;
+				}else{
+					return 1;
+				}
+			});
+		}
+
+		if(downlist.Count > 0){
+			downlist.Sort(delegate(int a,int b){
+				if(a % B_Width <= b %B_Width){
+					return -1;
+				}else{
+					return 1;
+				}
+			});
+		}
+
+		if(rightlist.Count > 0){
+			rightlist.Sort(delegate(int a,int b){
+				if(Mathf.Ceil(a / B_Width) >= Mathf.Ceil(b /B_Width)){
+					return -1;
+				}else{
+					return 1;
+				}
+			});
+		}
+
+		if(leftlist.Count > 0){
+			leftlist.Sort(delegate(int a,int b){
+				if(Mathf.Ceil(a / B_Width) <= Mathf.Ceil(b /B_Width)){
+					return -1;
+				}else{
+					return 1;
+				}
+			});
+		}
+		Debug.LogFormat ("up {0} ", JsonMapper.ToJson(uplist));
+		Debug.LogFormat ("down {0} ", JsonMapper.ToJson(downlist));
+		Debug.LogFormat ("right {0} ", JsonMapper.ToJson(rightlist));
+		Debug.LogFormat ("left {0} ", JsonMapper.ToJson(leftlist));
+	}
+
+	void blockMoving(){
+		sortMovingData();
+		
 	}
 
 	void droping(float delatTime){
