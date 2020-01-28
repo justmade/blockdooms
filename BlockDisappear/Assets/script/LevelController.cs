@@ -18,6 +18,7 @@ public class LevelController : MonoBehaviour {
 		if(FindObjectsOfType<LevelController>().Length > 1){
 			Destroy(gameObject);
 		}
+		LevelDataInfo.isTest = isTest;
 		if(isTest){
 			GetAllLevel();
 		}else{
@@ -48,6 +49,7 @@ public class LevelController : MonoBehaviour {
 		if(LevelDataInfo.levels == null){
 			Object[] levelFiles = Resources.LoadAll("Levels", typeof(TextAsset));
 			for(int i = 0 ; i < levelFiles.Length ; i++ ){
+				Debug.LogFormat("Level Name{0}",levelFiles[i].name);
 				levels.Add(new Level(i+1 ,levelFiles[i].name , false,0,false));
 				LevelDataInfo.levels = levels;
 			}

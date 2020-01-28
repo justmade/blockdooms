@@ -13,6 +13,8 @@ public static class LevelDataInfo  {
 
 	public static List<Level> levels;
 
+	public static bool isTest = false;
+
     public static int SelectLevelIndex { 
 
 		get => _selectLevelIndex; 

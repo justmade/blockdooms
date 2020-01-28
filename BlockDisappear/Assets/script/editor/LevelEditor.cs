@@ -15,7 +15,7 @@ public class LevelEditor : EditorWindow {
 	static void AddWindow ()
 	{       
 		//创建窗口
-		Rect  wr = new Rect (0,0,500,500);
+		Rect  wr = new Rect (0,0,500,800);
 		LevelEditor window = (LevelEditor)EditorWindow.GetWindowWithRect (typeof (LevelEditor),wr,true,"LevelEditor ");	
 		window.Show();
 
@@ -45,6 +45,10 @@ public class LevelEditor : EditorWindow {
 	private string[,] blockGrids;
 
 	private string[,] lastGrids;
+
+	private string[] moveGrids;
+
+	private string[] lastMoveGrids;
 
 	private int totalGrids;
 
@@ -83,12 +87,17 @@ public class LevelEditor : EditorWindow {
 		blockGrids = new string[totalFloors, totalGrids];
 		allBlock = new GameObject[totalFloors, totalGrids];
 
+		moveGrids = new string[totalGrids];
+		lastMoveGrids = new string[totalGrids];
+
 		lastGrids = new string[totalFloors, totalGrids];
 
 		for (int f = 0; f < totalFloors; f++) {
 			for (int k = 0; k < totalGrids; k++) {
 				blockGrids[f,k] = "1";
 				lastGrids [f,k] = "1";
+				moveGrids[k] = "s";
+				lastMoveGrids[k] = "s";
 			}
 		}
 		blockContainer = new GameObject ("block container");
@@ -150,6 +159,7 @@ public class LevelEditor : EditorWindow {
 			totalGrids = mapSize.x * mapSize.y;
 			isUpdate = false;
 			blockGrids = new string[totalFloors,totalGrids];
+			moveGrids = new string[totalGrids];
 			allBlock = new GameObject[totalFloors,totalGrids];
 
 			int lastIndex = 0;
@@ -160,15 +170,17 @@ public class LevelEditor : EditorWindow {
 					for (int k = 0; k < totalGrids; k++) {
 						if (lastIndex >= lastMapSize.x * lastMapSize.y) {
 							blockGrids [f, k] = "-1";
+							moveGrids[k] = "s";
 						}
 
 						else if (k % (mapSize.x) >= (lastMapSize.x)) {
 							blockGrids [f, k] = "-1";
+							moveGrids[k] = "s";
 						} 
 						else {
 							//Debug.LogFormat ("lastIndex ,k,f  {0} {1} {2}", f,k,JsonMapper.ToJson(blockGrids));
 							blockGrids [f, k] = lastGrids[f, lastIndex];
-
+							moveGrids[k] = lastMoveGrids[lastIndex];
 							lastIndex++;
 						}
 					}
@@ -179,9 +191,11 @@ public class LevelEditor : EditorWindow {
 					for(int k = 0; k < totalGrids; k++) {
 						if (lastIndex >= lastMapSize.x * lastMapSize.y) {
 							blockGrids [f, k] = "-1";
+							moveGrids [k] = "s";
 						}
 						Debug.LogFormat ("lastIndex ,k,f  {0} {1} {2}", f,k,JsonMapper.ToJson(blockGrids));
 						blockGrids [f, k] = lastGrids[f, lastIndex];
+						moveGrids[k] = lastMoveGrids[lastIndex];
 						lastIndex++;
 						if ((k+1) % (mapSize.x) == 0) {
 							lastIndex += (lastMapSize.x - mapSize.x);
@@ -191,6 +205,7 @@ public class LevelEditor : EditorWindow {
 
 			}
 			lastGrids = blockGrids;
+			lastMoveGrids = moveGrids;
 			lastMapSize = mapSize;
 			Debug.Log (blockGrids);
 			addBlocks ();
@@ -208,7 +223,24 @@ public class LevelEditor : EditorWindow {
 				}
 			}
 
+			
+
 		}
+
+		EditorGUILayout.LabelField("移动地格");
+		for(int i=0;i<totalGrids;i++){
+			if (i %  lastMapSize.x == 0) {
+					EditorGUILayout.BeginHorizontal (GUILayout.Height (30));
+			}
+			if (lastMoveGrids != null) {
+	//				Debug.LogFormat ("{0},{1}", currentFloor, i);
+				lastMoveGrids[i] = EditorGUILayout.TextField("",lastMoveGrids[i], GUILayout.Width (40),  GUILayout.Height (30));
+				if ((i+1) %  lastMapSize.x == 0) {
+					EditorGUILayout.EndHorizontal ();
+				}
+			}
+		}
+
 			
 		if (GUILayout.Button ("Apply", GUILayout.Width (200))) {
 		
@@ -257,6 +289,7 @@ public class LevelEditor : EditorWindow {
 	void exportToJson(){
 		LevelFormat lf = new LevelFormat ();
 		lf.grid =  JsonMapper.ToJson(lastGrids);
+		lf.moveGrid =  JsonMapper.ToJson(lastMoveGrids);
 		lf.floor = floor;
 		lf.sizeX = (mapSize.x);
 		lf.sizeY = (mapSize.y);
@@ -272,9 +305,18 @@ public class LevelEditor : EditorWindow {
 			}
 		}
 
-		lf.gridInGame = termsList.ToArray ();
+		List<int> moveList = new List<int>();
 
-		//Debug.Log(JsonMapper.ToJson(lf));
+		for (int j = 0; j < mapSize.x; j++) {
+				for (int i = mapSize.y-1; i >= 0; i--) {
+					moveList.Add (int.Parse(lastMoveGrids [i * mapSize.x + j  ]));
+				}
+			}
+
+		lf.gridInGame = termsList.ToArray ();
+		lf.moveGridInGame = moveList.ToArray ();
+
+		Debug.Log(JsonMapper.ToJson(lf));
 
 		CreateFile (Application.dataPath+"/Resources/levels/"+fileName+".txt", JsonMapper.ToJson(lf));
 		AssetDatabase.Refresh ();
@@ -317,6 +359,7 @@ public class LevelEditor : EditorWindow {
 
 
 		string[] g = JsonMapper.ToObject<string[]> (loadLevel.grid);
+		string[] move = JsonMapper.ToObject<string[]> (loadLevel.moveGrid);
 
 		mapSize = new Vector2Int (loadLevel.sizeX, loadLevel.sizeY);
 		lastMapSize = new Vector2Int (loadLevel.sizeX, loadLevel.sizeY);
@@ -325,11 +368,15 @@ public class LevelEditor : EditorWindow {
 
 		lastGrids = new string[totalFloors,totalGrids];
 		blockGrids = new string[totalFloors,totalGrids];
+		moveGrids = new string[totalGrids];
+		lastMoveGrids = new string[totalGrids];
 
 		for (int f = 0; f < totalFloors; f++) {
 			for (int k = 0; k < totalGrids; k++) {
 				blockGrids[f,k] = "1";
 				lastGrids [f,k] = "1";
+				moveGrids[k] = "s";
+				lastMoveGrids[k] = "s";
 			}
 		}
 
@@ -338,9 +385,10 @@ public class LevelEditor : EditorWindow {
 			for (int j = 0; j < totalGrids; j++) {
 				lastGrids [i, j] = g [i * totalGrids + j];
 				blockGrids [i, j] = g [i * totalGrids + j]; 
+				moveGrids[j] = move [j];
+				lastMoveGrids[j] = move [j];
 			}
 		}
-
 	}
 
 
