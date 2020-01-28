@@ -15,6 +15,16 @@ public static class LevelDataInfo  {
 
 	public static bool isTest = false;
 
+	public static string UP = "u";
+
+	public static string DOWN = "d";
+
+	public static string LEFT = "l";
+
+	public static string RIGHT = "r";
+
+	public static string STOP = "s";
+
     public static int SelectLevelIndex { 
 
 		get => _selectLevelIndex; 

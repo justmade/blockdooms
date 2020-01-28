@@ -305,18 +305,19 @@ public class LevelEditor : EditorWindow {
 			}
 		}
 
-		List<int> moveList = new List<int>();
+		List<string> moveList = new List<string>();
 
 		for (int j = 0; j < mapSize.x; j++) {
 				for (int i = mapSize.y-1; i >= 0; i--) {
-					moveList.Add (int.Parse(lastMoveGrids [i * mapSize.x + j  ]));
+					Debug.LogFormat("lastMoveGrids {0},",lastMoveGrids [i * mapSize.x + j  ]);
+					moveList.Add (lastMoveGrids [i * mapSize.x + j ]);
 				}
 			}
 
 		lf.gridInGame = termsList.ToArray ();
 		lf.moveGridInGame = moveList.ToArray ();
 
-		Debug.Log(JsonMapper.ToJson(lf));
+		// Debug.Log(JsonMapper.ToJson(lf));
 
 		CreateFile (Application.dataPath+"/Resources/levels/"+fileName+".txt", JsonMapper.ToJson(lf));
 		AssetDatabase.Refresh ();
@@ -359,7 +360,12 @@ public class LevelEditor : EditorWindow {
 
 
 		string[] g = JsonMapper.ToObject<string[]> (loadLevel.grid);
-		string[] move = JsonMapper.ToObject<string[]> (loadLevel.moveGrid);
+		
+		string[] move = null;
+		if(loadLevel.moveGrid != null){
+			move = JsonMapper.ToObject<string[]> (loadLevel.moveGrid);
+		}
+		
 
 		mapSize = new Vector2Int (loadLevel.sizeX, loadLevel.sizeY);
 		lastMapSize = new Vector2Int (loadLevel.sizeX, loadLevel.sizeY);
@@ -385,8 +391,11 @@ public class LevelEditor : EditorWindow {
 			for (int j = 0; j < totalGrids; j++) {
 				lastGrids [i, j] = g [i * totalGrids + j];
 				blockGrids [i, j] = g [i * totalGrids + j]; 
-				moveGrids[j] = move [j];
-				lastMoveGrids[j] = move [j];
+				if(move != null){
+					moveGrids[j] = move [j];
+					lastMoveGrids[j] = move [j];
+				}
+
 			}
 		}
 	}

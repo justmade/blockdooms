@@ -43,7 +43,7 @@ public class UILevelSelect : MonoBehaviour {
 			Level level = levelController.levels[(pageSize * page) +i];
 			UILevel uiLevel = Instantiate(pageLists[i]);
 			uiLevel.SetStars(level.Stars);
-			Debug.LogFormat("level.Stars{0}",level.Stars);
+			// Debug.LogFormat("level.Stars{0}",level.Stars);
 			uiLevel.transform.SetParent(levelSelectPanel);
 			uiLevel.GetComponent<Button>().onClick.AddListener(() => SelectLevel(level));
 

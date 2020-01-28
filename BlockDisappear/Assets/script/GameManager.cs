@@ -89,6 +89,8 @@ public class GameManager : MonoBehaviour {
 
 	private List<int> loadGridData;
 
+	private List<string> moveGridData;
+
 	private List<string> files;
 
 	public TextAsset txtAsset;
@@ -194,7 +196,20 @@ public class GameManager : MonoBehaviour {
 
 		loadGridData = new List<int> (g);
 
-		Debug.LogFormat ("debug in gridingame {0}" , loadGridData.Count);
+		if(loadLevel.moveGridInGame != null){
+			string[] move = loadLevel.moveGridInGame;
+			// Debug.LogFormat("move {0}",move);
+			moveGridData = new List<string>(move);
+		}else{
+			int counts = B_Width * B_Width;
+			moveGridData = new List<string>();
+			for(int i = 0 ; i< counts ; i++){
+				moveGridData[i] = LevelDataInfo.STOP;
+			}
+		}
+
+
+		Debug.LogFormat ("debug in gridingame {0},{1}" , loadGridData.Count , moveGridData.Count);
 	}
 
 	void onBack(){
