@@ -19,7 +19,7 @@ public class BlockBase : MonoBehaviour {
 
 	private int dropDistance;
 
-	private int moveDistance;
+	private float moveDistance;
 
 	private Vector3 lastP;
 
@@ -410,12 +410,21 @@ public class BlockBase : MonoBehaviour {
 
 	public void leftMoveBlock(int distance){
 		isMove = true;
-		moveDistance = distance;
+		moveDistance = distance *1.2f;
 		if (!isDrop) {
 			lastP = this.transform.position;
 		}
-//		this.transform.position = this.transform.position - new Vector3 (distance, 0, 0	);
+		this.transform.position = this.transform.position + new Vector3 (moveDistance, 0, 0	);
 	}
 
+	public void horizontalMove(int distance){
+		moveDistance = distance *1.2f;
+		this.transform.position = this.transform.position + new Vector3 (moveDistance, 0, 0	);
+	}
+	public void verticalMoving(int distance){
+		moveDistance = distance *1.2f;
+		this.transform.position = this.transform.position + new Vector3 (0, 0, moveDistance);
+
+	}
 
 }

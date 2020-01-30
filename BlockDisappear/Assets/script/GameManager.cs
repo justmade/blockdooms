@@ -111,6 +111,11 @@ public class GameManager : MonoBehaviour {
 	private Vector2 minPos = new Vector2(-1,-1);
 	private Vector2 maxPos = new Vector2(-1,-1);
 
+	private	List<int> uplist = new List<int>();
+	private	List<int> downlist = new List<int>();
+	private	List<int> leftlist = new List<int>();
+	private	List<int> rightlist = new List<int>();
+
     // Use this for initialization
 
 	void Awake(){
@@ -1015,11 +1020,13 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+// 为需要移动的格子排序
 	void sortMovingData(){
-		List<int> uplist = new List<int>();
-		List<int> downlist = new List<int>();
-		List<int> leftlist = new List<int>();
-		List<int> rightlist = new List<int>();
+		uplist.Clear();
+		downlist.Clear();
+		leftlist.Clear();
+		rightlist.Clear();
+		
 
 		for(int i=0;i<moveGridData.Count;i++){
 			string state = moveGridData[i];
@@ -1073,15 +1080,89 @@ public class GameManager : MonoBehaviour {
 				}
 			});
 		}
-		Debug.LogFormat ("up {0} ", JsonMapper.ToJson(uplist));
-		Debug.LogFormat ("down {0} ", JsonMapper.ToJson(downlist));
-		Debug.LogFormat ("right {0} ", JsonMapper.ToJson(rightlist));
-		Debug.LogFormat ("left {0} ", JsonMapper.ToJson(leftlist));
+		// Debug.LogFormat ("up {0} ", JsonMapper.ToJson(uplist));
+		// Debug.LogFormat ("down {0} ", JsonMapper.ToJson(downlist));
+		// Debug.LogFormat ("right {0} ", JsonMapper.ToJson(rightlist));
+		// Debug.LogFormat ("left {0} ", JsonMapper.ToJson(leftlist));
+	}
+// 回合结束后重新设置移动的数据
+	void reverseMoveData(){
+		for(int i = 0 ; i < uplist.Count ; i++){
+			int index = uplist[i] ;
+			string state = LevelDataInfo.reversDirect(moveGridData[index]);
+			moveGridData[index +1] = state;
+			moveGridData[index] = LevelDataInfo.STOP;
+		}
+		for(int i = 0 ; i < downlist.Count ; i++){
+			int index = downlist[i] ;
+			string state = LevelDataInfo.reversDirect(moveGridData[index]);
+			moveGridData[index-1] = state;
+			moveGridData[index] = LevelDataInfo.STOP;
+		}
+		for(int i = 0 ; i < rightlist.Count ; i++){
+			int index = rightlist[i] ;
+			string state = LevelDataInfo.reversDirect(moveGridData[index]);
+			moveGridData[index+B_Width] = state;
+			moveGridData[index] = LevelDataInfo.STOP;
+		}
+		for(int i = 0 ; i < leftlist.Count ; i++){
+			int index = leftlist[i] ;
+			string state = LevelDataInfo.reversDirect(moveGridData[index]);
+			moveGridData[index-B_Width] = state;
+			moveGridData[index] = LevelDataInfo.STOP;
+		}
+	}
+// 移动场上的格子和数据
+	void changeMoveState(int blockIndex , int delta,bool isUpDown){
+		if (blockStates[0,blockIndex].color != -1) {
+			int tempC = blockStates[0,blockIndex].color;
+			int tempF = blockStates[0,blockIndex].floor;
+			blockStates[0,blockIndex+delta].color = tempC;
+			blockStates[0,blockIndex+delta].floor = tempF;
+			blockStates[0,blockIndex].color = -1;
+			blockStates[0,blockIndex].floor = -1;
+
+
+			for (int k = 0; k < currentFloor + 1; k++) {
+				if (allBlocks[k,blockIndex]) {
+					BlockBase bBase = allBlocks[k,blockIndex].GetComponent<BlockBase>();
+					if(isUpDown){
+						bBase.verticalMoving (delta/Mathf.Abs(delta));
+					}else{
+						bBase.horizontalMove (delta/Mathf.Abs(delta));
+					}
+					GameObject block = allBlocks [k,blockIndex];
+					allBlocks [k,blockIndex] = null;
+					allBlocks [k,blockIndex+delta] = block;
+				}
+			}
+		}
 	}
 
+	void movingBlockState(){
+		for(int i = 0 ; i < uplist.Count;i++){
+			int blockIndex = uplist[i];
+			changeMoveState(blockIndex , 1,true);
+		}
+		for(int i = 0 ; i < downlist.Count;i++){
+			int blockIndex = downlist[i];
+			changeMoveState(blockIndex , -1,true);
+		}
+		for(int i = 0 ; i < rightlist.Count;i++){
+			int blockIndex = rightlist[i];
+			changeMoveState(blockIndex , B_Width,false);
+		}
+		for(int i = 0 ; i < leftlist.Count;i++){
+			int blockIndex = leftlist[i];
+			changeMoveState(blockIndex , -B_Width,false);
+		}
+
+	}
+// 移动的格子
 	void blockMoving(){
 		sortMovingData();
-		
+		movingBlockState();
+		reverseMoveData();
 	}
 
 	void droping(float delatTime){
