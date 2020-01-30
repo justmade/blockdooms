@@ -21,7 +21,6 @@ public class GameManager : MonoBehaviour {
 	private List<BlockState> removeSeuqence;
 	//需要撤销的数组
 	private List<BlockState> redoSeuqence;
-
 	public List<GameObject> dropBlocks;
 	public List<GameObject> moveBlocks;
 
@@ -115,6 +114,9 @@ public class GameManager : MonoBehaviour {
 	private	List<int> downlist = new List<int>();
 	private	List<int> leftlist = new List<int>();
 	private	List<int> rightlist = new List<int>();
+
+	private bool blockHasMove = false;
+
 
     // Use this for initialization
 
@@ -254,7 +256,13 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void onRedo(){
+		if(blockHasMove == true){
+			blockHasMove = false;
+			blockMoving();
+		}
+		
 		redoSeuqence.Clear();
+
 		if(removeSeuqence.Count > 0){
 			BlockState blockStep = removeSeuqence[removeSeuqence.Count-1];
 			removeSeuqence.RemoveAt(removeSeuqence.Count-1);
@@ -613,11 +621,14 @@ public class GameManager : MonoBehaviour {
 
 	//检测已经更新所有的block
 	private void checkAllBlocks(){
-		removeBlocks ();
+		bool hasRemove = removeBlocks ();
 		//dropBlock ();
 		//leftMoveBlock ();
 		updateBlockState ();
-		blockMoving();
+		if(hasRemove){
+			blockHasMove = true;
+			blockMoving();
+		}
 		findHorizontalConnect ();
 		findVerticalConnect ();
 		
@@ -859,7 +870,7 @@ public class GameManager : MonoBehaviour {
 		return topBlockSates [index].color;
 	}
 
-	void removeBlocks(){
+	bool removeBlocks(){
 		if (allDisappearIndex.Count > 1) {
 			//如果需要消除的block是宝箱和钥匙，那么他们应该被算在上一步一起
 			if(!findTreasureKey){
@@ -897,12 +908,7 @@ public class GameManager : MonoBehaviour {
 						
 						//Destroy (block);
 						//Debug.LogFormat ("removeIndex {0} , {1}", i, index);
-						BlockState recordStep = new BlockState();
-						recordStep.color = blockStates [0,index].color;
-						recordStep.floor = i;
-						recordStep.step = gameStep;
-						recordStep.originalIndex = index;
-						removeSeuqence.Add(recordStep);
+						recordRemoveStep(blockStates [0,index].color,i,index);
 						allBlocks [i, index] = null;
 						blockStates [0,index].color = -1;
 						// addBoomParticle (block.transform.position,recordStep.color);
@@ -910,22 +916,29 @@ public class GameManager : MonoBehaviour {
 					}
 				}
 			}
+			return true;
 		}
+		return false;
 	}
 
-
+	void recordRemoveStep(int _color,int _floor,int _index,bool isAdd = false){
+		BlockState recordStep = new BlockState();
+		recordStep.color = _color;
+		recordStep.floor = _floor;
+		recordStep.step = gameStep;
+		recordStep.originalIndex = _index;
+		recordStep.isAdd = isAdd;
+		removeSeuqence.Add(recordStep);
+	}
 	void redoBlock(){
 		foreach(BlockState bs in redoSeuqence){
+
 			
 			int oIndex = bs.originalIndex;
 			int currentColor = blockStates [0,oIndex].color;
 			blockStates [0,bs.originalIndex].color = bs.color;
 			blockStates [0,bs.originalIndex].floor = bs.floor;
 
-			// if(allBlocks[bs.floor+1,oIndex] != null){
-			// 	allBlocks[bs.floor+1,oIndex].transform.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
-			// }	
-			
 			Vector3 v = new Vector3 (0,1,0);
 			Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
 
@@ -1115,13 +1128,17 @@ public class GameManager : MonoBehaviour {
 // 移动场上的格子和数据
 	void changeMoveState(int blockIndex , int delta,bool isUpDown){
 		if (blockStates[0,blockIndex].color != -1) {
+
 			int tempC = blockStates[0,blockIndex].color;
 			int tempF = blockStates[0,blockIndex].floor;
+			// recordRemoveStep(tempC,tempF,blockIndex);
+
+			// recordRemoveStep(tempC,tempF,blockIndex+delta,true);
+
 			blockStates[0,blockIndex+delta].color = tempC;
 			blockStates[0,blockIndex+delta].floor = tempF;
 			blockStates[0,blockIndex].color = -1;
 			blockStates[0,blockIndex].floor = -1;
-
 
 			for (int k = 0; k < currentFloor + 1; k++) {
 				if (allBlocks[k,blockIndex]) {
@@ -1160,6 +1177,7 @@ public class GameManager : MonoBehaviour {
 	}
 // 移动的格子
 	void blockMoving(){
+		
 		sortMovingData();
 		movingBlockState();
 		reverseMoveData();

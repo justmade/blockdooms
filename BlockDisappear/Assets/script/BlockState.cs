@@ -13,6 +13,8 @@ public class BlockState{
 	//记录删除是的序列号
 	public int step;
 
+	public bool isAdd = false;
+
 	public BlockState(){
 	
 	}
