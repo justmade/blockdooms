@@ -18,17 +18,17 @@ public class GameManager : MonoBehaviour {
 	//所有的block对象
 	public GameObject[,] allBlocks;
 	//记录每次的删除序列
-	private List<BlockState> removeSeuqence;
+	private List<BlockActionState> removeSeuqence;
 	//需要撤销的数组
-	private List<BlockState> redoSeuqence;
+	private List<BlockActionState> redoSeuqence;
 	public List<GameObject> dropBlocks;
 	public List<GameObject> moveBlocks;
 
 	//记录格子的状态
-	public BlockState[,] blockStates;
+	public BlockActionState[,] blockStates;
 
 	//每一层最上面格子的颜色
-	public BlockState[] topBlockSates;
+	public BlockActionState[] topBlockSates;
 
 	public Text m_MessageText; 
 
@@ -155,8 +155,8 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void InitGame(string _s){
-		removeSeuqence = new List<BlockState>();
-		redoSeuqence = new List<BlockState>();
+		removeSeuqence = new List<BlockActionState>();
+		redoSeuqence = new List<BlockActionState>();
 		currentLevelName = _s;
 		gameStep = 0 ;	
 		loadLevelData (_s);
@@ -257,14 +257,13 @@ public class GameManager : MonoBehaviour {
 
 	void onRedo(){
 		if(blockHasMove == true){
-			blockHasMove = false;
 			blockMoving();
 		}
-		
 		redoSeuqence.Clear();
 
 		if(removeSeuqence.Count > 0){
-			BlockState blockStep = removeSeuqence[removeSeuqence.Count-1];
+			
+			BlockActionState blockStep = removeSeuqence[removeSeuqence.Count-1];
 			removeSeuqence.RemoveAt(removeSeuqence.Count-1);
 			redoSeuqence.Add(blockStep);
 			for(int i = removeSeuqence.Count - 1 ; i >=0 ; i--){
@@ -273,6 +272,10 @@ public class GameManager : MonoBehaviour {
 					removeSeuqence.RemoveAt(i);
 				}
 			}
+		}
+		
+		if(removeSeuqence.Count <= 0){
+			blockHasMove = false;
 		}
 		Debug.LogFormat("redoSeuqence {0},",redoSeuqence.Count);
 		redoBlock();
@@ -364,8 +367,8 @@ public class GameManager : MonoBehaviour {
 
 	void initAllBlock(){
 		blocksLeftCounts = 0;
-		blockStates = new BlockState[B_Height, B_Width * B_Width];
-		topBlockSates = new BlockState[B_Width * B_Width];
+		blockStates = new BlockActionState[B_Height, B_Width * B_Width];
+		topBlockSates = new BlockActionState[B_Width * B_Width];
 		currentFloor = 0;
 		allBlocks = new GameObject[B_Height, B_Width * B_Width];
 		Vector3 v = new Vector3 (0,1,0);
@@ -413,10 +416,10 @@ public class GameManager : MonoBehaviour {
 				}
 				loadGridData.RemoveAt (0);
 				int color = bBase.getColorIndex ();
-				blockStates [0, i] = new BlockState ();
+				blockStates [0, i] = new BlockActionState ();
 				blockStates [0,i].color = color;
 				blockStates [0,i].floor = currentFloor;
-				topBlockSates[i] = new BlockState ();
+				topBlockSates[i] = new BlockActionState ();
 				topBlockSates[i].color = -1;
 				if(color != elementConfig.Unlock){
 					// Debug.LogFormat ("color,{0},{1}", color,blocksLeftCounts);
@@ -425,7 +428,7 @@ public class GameManager : MonoBehaviour {
 			}else{
 				allBlocks[0,i] = null;
 				loadGridData.RemoveAt (0);
-				blockStates [0, i] = new BlockState ();
+				blockStates [0, i] = new BlockActionState ();
 				blockStates [0,i].color = -1;
 				blockStates [0,i].floor = currentFloor;
 			}
@@ -452,18 +455,18 @@ public class GameManager : MonoBehaviour {
 		- new Vector3((minPos.x * 1.2f) ,0,(minPos.y * 1.2f) );
 	}
 
-	void addBoomParticle(Vector3 v,int color){
-		if(color == elementConfig.Key || color == elementConfig.Treasure){
-			v.y++;
-			GameObject boom = 
-				Instantiate(boomParticle, v, Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-			boom.transform.parent = container.transform;
-			ParticleSystem p = boom.GetComponent<ParticleSystem> ();
-			boom.GetComponent<Renderer>().material.color = getColorByID(color);
-			p.Play ();
-			Destroy(p,p.startLifetime);
-		}
-	}
+	// void addBoomParticle(Vector3 v,int color){
+	// 	if(color == elementConfig.Key || color == elementConfig.Treasure){
+	// 		v.y++;
+	// 		GameObject boom = 
+	// 			Instantiate(boomParticle, v, Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+	// 		boom.transform.parent = container.transform;
+	// 		ParticleSystem p = boom.GetComponent<ParticleSystem> ();
+	// 		boom.GetComponent<Renderer>().material.color = getColorByID(color);
+	// 		p.Play ();
+	// 		Destroy(p,p.startLifetime);
+	// 	}
+	// }
 
 	Color getColorByID(int colorID){
 		Color newColor;
@@ -601,7 +604,7 @@ public class GameManager : MonoBehaviour {
 
 					// bb.tapEffect();
 					// return;/
-					BlockState bs = findBlockIndex (hit.collider.gameObject);
+					BlockActionState bs = findBlockIndex (hit.collider.gameObject);
 					Debug.LogFormat("hit {0},color{1}",bs.originalIndex,bb.getColorIndex ());
 					addDisappearIndex (bs.originalIndex);
 					if (isMainC) {
@@ -622,16 +625,15 @@ public class GameManager : MonoBehaviour {
 	//检测已经更新所有的block
 	private void checkAllBlocks(){
 		bool hasRemove = removeBlocks ();
-		//dropBlock ();
-		//leftMoveBlock ();
 		updateBlockState ();
+		findHorizontalConnect ();
+		findVerticalConnect ();
+
 		if(hasRemove){
 			blockHasMove = true;
 			blockMoving();
 		}
-		findHorizontalConnect ();
-		findVerticalConnect ();
-		
+
 	}
 
 
@@ -646,18 +648,18 @@ public class GameManager : MonoBehaviour {
 
 
 	//在数组中找到对应的下标
-	BlockState findBlockIndex(GameObject bBase){
+	BlockActionState findBlockIndex(GameObject bBase){
 		for (int i = 0; i < currentFloor + 1; i++) {
 			for( int j = 0 ; j < allBlocks.GetLength(1) ;j ++){
 				if (bBase == allBlocks [i, j]) {
-					BlockState bs = new BlockState ();
+					BlockActionState bs = new BlockActionState ();
 					bs.originalIndex = j;
 					bs.floor = i;
 					return bs;
 				}
 			}
 		}
-		return new BlockState();
+		return new BlockActionState();
 	}
 
 	//获取每一次最上面的方块 从上到下，从左到右
@@ -922,7 +924,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void recordRemoveStep(int _color,int _floor,int _index,bool isAdd = false){
-		BlockState recordStep = new BlockState();
+		BlockActionState recordStep = new BlockActionState();
 		recordStep.color = _color;
 		recordStep.floor = _floor;
 		recordStep.step = gameStep;
@@ -931,7 +933,7 @@ public class GameManager : MonoBehaviour {
 		removeSeuqence.Add(recordStep);
 	}
 	void redoBlock(){
-		foreach(BlockState bs in redoSeuqence){
+		foreach(BlockActionState bs in redoSeuqence){
 
 			
 			int oIndex = bs.originalIndex;

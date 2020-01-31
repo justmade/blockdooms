@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //[System.Serializable]
-public class BlockState{
+public class BlockActionState{
 	public int color;
 
 	public int floor;
@@ -15,7 +15,7 @@ public class BlockState{
 
 	public bool isAdd = false;
 
-	public BlockState(){
+	public BlockActionState(){
 	
 	}
 
