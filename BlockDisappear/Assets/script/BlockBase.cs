@@ -57,6 +57,8 @@ public class BlockBase : MonoBehaviour {
 	public int centreColor = -1;
 
 	private float blockScale = 0.96f;
+
+	private string aniState = "idle";
 	// Use this for initialization
 	void Awake(){
 		if(elements != null){
@@ -216,6 +218,7 @@ public class BlockBase : MonoBehaviour {
 	}
 
 	public void setPlayAmplify(bool _state){
+		aniState = BlockAnimationState.AMPLIFY;
 		playAmplify = _state;
 		isPlayingAimation = true;
 	}
@@ -279,6 +282,7 @@ public class BlockBase : MonoBehaviour {
 		pEffect.transform.position = this.gameObject.transform.position + new Vector3 (0,0.3f,0) ;
 		ParticleSystem p = pEffect.GetComponent<ParticleSystem> ();
 		p.Play ();
+		aniState = BlockAnimationState.TAP;
 		Destroy(p,0.5f); 
 		DestroyBlock(needBoomEffect);
 	}
@@ -304,10 +308,12 @@ public class BlockBase : MonoBehaviour {
 	
 	IEnumerator DestroyByTime(){
 		yield return new WaitForSeconds(0.5f);
+		aniState = BlockAnimationState.IDLE;
 		Destroy(this.gameObject);
 	}
 
 	public void DestroyImmediately(){
+		aniState = BlockAnimationState.IDLE;
 		Destroy(this.gameObject);
 	}
 
@@ -370,6 +376,7 @@ public class BlockBase : MonoBehaviour {
 				amplifyFrames = 0;
 				playAmplify = false;
 				isPlayingAimation = false;
+				aniState = BlockAnimationState.IDLE;
 			}
 		}
 	}
@@ -418,13 +425,19 @@ public class BlockBase : MonoBehaviour {
 	}
 
 	public void horizontalMove(int distance){
+		aniState = BlockAnimationState.MOVE;
 		moveDistance = distance *1.2f;
 		this.transform.position = this.transform.position + new Vector3 (moveDistance, 0, 0	);
 	}
 	public void verticalMoving(int distance){
+		aniState = BlockAnimationState.MOVE;
 		moveDistance = distance *1.2f;
 		this.transform.position = this.transform.position + new Vector3 (0, 0, moveDistance);
 
+	}
+
+	public string getAniState(){
+		return aniState;
 	}
 
 }
