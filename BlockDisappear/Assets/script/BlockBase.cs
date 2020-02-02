@@ -4,6 +4,8 @@ using UnityEngine;
 // using UnityEngine.Assertions;
 using System;
 using System.IO;
+using UnityEngine;
+using DG.Tweening;
 
 public class BlockBase : MonoBehaviour {
 
@@ -59,6 +61,8 @@ public class BlockBase : MonoBehaviour {
 	private float blockScale = 0.96f;
 
 	private string aniState = "idle";
+
+	private List<BlockAnimationAction> actionList;
 	// Use this for initialization
 	void Awake(){
 		if(elements != null){
@@ -427,13 +431,23 @@ public class BlockBase : MonoBehaviour {
 	public void horizontalMove(int distance){
 		aniState = BlockAnimationState.MOVE;
 		moveDistance = distance *1.2f;
-		this.transform.position = this.transform.position + new Vector3 (moveDistance, 0, 0	);
+		// this.transform.position = this.transform.position + new Vector3 (moveDistance, 0, 0	);
+		Vector3 targetPos = this.transform.position + new Vector3 (0, 0, moveDistance);
+		this.transform.DOJump(targetPos,1f,1,0.1f).SetEase(Ease.OutSine).OnComplete(moveComplete);	
+
 	}
 	public void verticalMoving(int distance){
 		aniState = BlockAnimationState.MOVE;
 		moveDistance = distance *1.2f;
-		this.transform.position = this.transform.position + new Vector3 (0, 0, moveDistance);
+		
+		Vector3 targetPos = this.transform.position + new Vector3 (0, 0, moveDistance);
+		this.transform.DOJump(targetPos,1f,1,0.1f).SetEase(Ease.OutSine).OnComplete(moveComplete);	
 
+		
+	}
+
+	private void moveComplete(){
+		aniState = BlockAnimationState.IDLE;
 	}
 
 	public string getAniState(){
