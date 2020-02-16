@@ -62,7 +62,9 @@ public class BlockBase : MonoBehaviour {
 
 	private string aniState = "idle";
 
-	private List<BlockAnimationAction> actionList;
+	private Vector3 moveTargetPos;
+
+	private List<string> actionList;
 	// Use this for initialization
 	void Awake(){
 		if(elements != null){
@@ -73,6 +75,8 @@ public class BlockBase : MonoBehaviour {
 			colorIndex = 0;
 		}
 		elementConfig = new Elements();
+
+		actionList = new List<string>();
 	}
 
 	public void setColor(int i , int centreIndex=-1){
@@ -225,6 +229,12 @@ public class BlockBase : MonoBehaviour {
 		aniState = BlockAnimationState.AMPLIFY;
 		playAmplify = _state;
 		isPlayingAimation = true;
+		actionList.Add(BlockAnimationState.AMPLIFY);
+	}
+
+	public void amplifyForBegin(){
+		
+		actionList.Add(BlockAnimationState.AMPLIFY);
 	}
 
     public void elevate(float timeDelta) {
@@ -381,6 +391,8 @@ public class BlockBase : MonoBehaviour {
 				playAmplify = false;
 				isPlayingAimation = false;
 				aniState = BlockAnimationState.IDLE;
+
+				actionList.RemoveAt(0);
 			}
 		}
 	}
@@ -419,35 +431,42 @@ public class BlockBase : MonoBehaviour {
 		lastP = this.transform.position;
 	} 
 
-	public void leftMoveBlock(int distance){
-		isMove = true;
-		moveDistance = distance *1.2f;
-		if (!isDrop) {
-			lastP = this.transform.position;
-		}
-		this.transform.position = this.transform.position + new Vector3 (moveDistance, 0, 0	);
-	}
-
 	public void horizontalMove(int distance){
-		aniState = BlockAnimationState.MOVE;
+		
 		moveDistance = distance *1.2f;
+		actionList.Add(BlockAnimationState.MOVE);
 		// this.transform.position = this.transform.position + new Vector3 (moveDistance, 0, 0	);
-		Vector3 targetPos = this.transform.position + new Vector3 (0, 0, moveDistance);
-		this.transform.DOJump(targetPos,1f,1,0.1f).SetEase(Ease.OutSine).OnComplete(moveComplete);	
-
+		moveTargetPos = this.transform.position + new Vector3 (moveDistance, 0, 0);
 	}
-	public void verticalMoving(int distance){
-		aniState = BlockAnimationState.MOVE;
-		moveDistance = distance *1.2f;
-		
-		Vector3 targetPos = this.transform.position + new Vector3 (0, 0, moveDistance);
-		this.transform.DOJump(targetPos,1f,1,0.1f).SetEase(Ease.OutSine).OnComplete(moveComplete);	
 
-		
+	public void verticalMoving(int distance){
+		moveDistance = distance *1.2f;
+		actionList.Add(BlockAnimationState.MOVE);
+		moveTargetPos = this.transform.position + new Vector3 (0, 0, moveDistance);
+	}
+
+	public void startBlockMove(){
+		if(actionList.Count > 0 && actionList[0]==BlockAnimationState.MOVE){
+			aniState = BlockAnimationState.MOVE;
+			this.transform.DOJump(moveTargetPos,1f,1,0.1f).SetEase(Ease.OutSine).OnComplete(moveComplete);	
+		}
 	}
 
 	private void moveComplete(){
 		aniState = BlockAnimationState.IDLE;
+		actionList.RemoveAt(0);
+	}
+
+	public string getActionList(){
+		return aniState;
+	}
+
+	public string getCurrentAction(){
+		if(actionList.Count > 0){
+			return actionList[0];
+
+		}
+		return BlockAnimationState.IDLE;
 	}
 
 	public string getAniState(){

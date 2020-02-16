@@ -100,6 +100,7 @@ public class GameManager : MonoBehaviour {
 
 	private string currentLevelName;
 
+	private bool hasBlockMoving;
 	//找到宝箱和钥匙
 	private bool findTreasureKey;
 	//记录操作序列
@@ -305,29 +306,58 @@ public class GameManager : MonoBehaviour {
 		if (isPlaying == false) {
 			touchBlock ();
 		} 
-		if (needDestory == true) {
-			isPlaying = true;
-			//找到钥匙和宝箱之后 先播放block的消失动画，在去消除key和treasure的block
-			if (findTreasureKey) {
-				int counts = B_Width * B_Width;
-				for (int i = 0; i < counts; i++) {
-					for (int k = 0; k < currentFloor + 1; k++) {
-						if (allBlocks [k, i]) {
-							BlockBase bBase = allBlocks [k, i].GetComponent<BlockBase> ();
-							if (bBase.isPlayingAimation) {
-								redoButton.gameObject.SetActive (false);
-								return;
-							}
-						}
-					}
-				}
-				checkAllBlocks ();
-			} else {
+
+		isPlaying = true;
+		//找到钥匙和宝箱之后 先播放block的消失动画，在去消除key和treasure的block
+		if (findTreasureKey) {
+			if(checkBlockIsIdle() != BlockAnimationState.IDLE){
+				redoButton.gameObject.SetActive (false);
+			}
+			checkAllBlocks ();
+		} else {
+			if(checkBlockIsIdle() == BlockAnimationState.IDLE){
 				redoButton.gameObject.SetActive (true);
-				isPlaying = false;
+			}
+			isPlaying = false;
+		}
+
+		if(hasBlockMoving){
+			if(checkBlockIsIdle() == BlockAnimationState.IDLE){
+				// redoButton.gameObject.SetActive (false);
+				hasBlockMoving = false;
+				allBlockStartMoving();
 			}
 		}
     }
+
+	void allBlockStartMoving(){
+		int counts = B_Width * B_Width;
+		for (int i = 0; i < counts; i++) {
+			for (int k = 0; k < currentFloor + 1; k++) {
+				if (allBlocks [k, i]) {
+					BlockBase bBase = allBlocks [k, i].GetComponent<BlockBase> ();
+					bBase.startBlockMove();
+					
+				}
+			}
+		}
+	}
+
+	string checkBlockIsIdle(){
+		int counts = B_Width * B_Width;
+		for (int i = 0; i < counts; i++) {
+			for (int k = 0; k < currentFloor + 1; k++) {
+				if (allBlocks [k, i]) {
+					BlockBase bBase = allBlocks [k, i].GetComponent<BlockBase> ();
+					string bAction = bBase.getAniState();
+					if (bAction != BlockAnimationState.IDLE) {
+						return bAction;
+					}
+				}
+			}
+		}
+		return BlockAnimationState.IDLE;
+	}
 
 	//检查同一格子下层的block是否存在
 	int checkBlockBlockFloor(int blockIndex){
@@ -554,9 +584,9 @@ public class GameManager : MonoBehaviour {
 				if(blockStates [0,i].color == -1){
 					blockStates [0, i].color = color;
 					blockStates [0 ,i].floor = currentFloor;
-					bBase.playAmplify = true;
 					bBase.startTime = 1f;
 					bBase.amplifyTime = 20f;
+					bBase.setPlayAmplify(true);
 				}
 				if(color!=0){
 					blocksLeftCounts++;
@@ -1145,6 +1175,7 @@ public class GameManager : MonoBehaviour {
 			for (int k = 0; k < currentFloor + 1; k++) {
 				if (allBlocks[k,blockIndex]) {
 					BlockBase bBase = allBlocks[k,blockIndex].GetComponent<BlockBase>();
+					hasBlockMoving = true;
 					if(isUpDown){
 						bBase.verticalMoving (delta/Mathf.Abs(delta));
 					}else{
@@ -1200,8 +1231,8 @@ public class GameManager : MonoBehaviour {
 	}
 
 
-
-	//向左靠拢格子
+#region 向左靠拢格子
+	/*
 	void leftMoveBlock(){
 		moveBlocks.Clear ();
 		int line = 0;
@@ -1241,6 +1272,9 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 	}
+	*/
+#endregion
+
 	//横向搜索是否存在可以消除的格子
 	void findHorizontalConnect(){
 		findTreasureKey = false;
