@@ -100,6 +100,8 @@ public class GameManager : MonoBehaviour {
 
 	private string currentLevelName;
 
+	private bool blockIsMoving = false;
+
 	private bool hasBlockMoving;
 	//找到宝箱和钥匙
 	private bool findTreasureKey;
@@ -305,30 +307,37 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 		if (isPlaying == false) {
 			touchBlock ();
-		} 
-
+		}
 		
 		//找到钥匙和宝箱之后 先播放block的消失动画，在去消除key和treasure的block
 		if (findTreasureKey) {
-			
-			// if(checkBlockIsIdle() != BlockAnimationState.IDLE){
-			// 	redoButton.gameObject.SetActive (false);
-			// }
-			checkAllBlocks ();
-		}
-
-		if(hasBlockMoving){
 			isPlaying = true;	
+			if(checkBlockIsIdle() != BlockAnimationState.IDLE){
+			}else{
+				isPlaying = false;	
+				checkAllBlocks ();
+			}
+		
+		}else if(hasBlockMoving){
+		//移动block的时候禁止点击
+			isPlaying = true;
+			//当所有 block 完成动画之后，开始移动
 			if(checkBlockIsIdle() == BlockAnimationState.IDLE){
-				// redoButton.gameObject.SetActive (false);
 				hasBlockMoving = false;
-				// isPlaying = false;
+				blockIsMoving = true;
 				allBlockStartMoving();
 			}
 		}
-		if(!hasBlockMoving  && !checkBlockIsMoving()){
-			redoButton.gameObject.SetActive (true);
+		//处于移动状态之后，如果没有block 移动了，开放点击
+		if(blockIsMoving  && !checkBlockIsMoving()){
+			blockIsMoving = false;
 			isPlaying = false;
+		}
+
+		if(checkBlockIsIdle() == BlockAnimationState.IDLE){
+			redoButton.gameObject.SetActive (true);
+		}else{
+			redoButton.gameObject.SetActive (false);
 		}
     }
 
