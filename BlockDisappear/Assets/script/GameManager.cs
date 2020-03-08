@@ -307,26 +307,28 @@ public class GameManager : MonoBehaviour {
 			touchBlock ();
 		} 
 
-		isPlaying = true;
+		
 		//找到钥匙和宝箱之后 先播放block的消失动画，在去消除key和treasure的block
 		if (findTreasureKey) {
-			if(checkBlockIsIdle() != BlockAnimationState.IDLE){
-				redoButton.gameObject.SetActive (false);
-			}
+			
+			// if(checkBlockIsIdle() != BlockAnimationState.IDLE){
+			// 	redoButton.gameObject.SetActive (false);
+			// }
 			checkAllBlocks ();
-		} else {
-			if(checkBlockIsIdle() == BlockAnimationState.IDLE){
-				redoButton.gameObject.SetActive (true);
-			}
-			isPlaying = false;
 		}
 
 		if(hasBlockMoving){
+			isPlaying = true;	
 			if(checkBlockIsIdle() == BlockAnimationState.IDLE){
 				// redoButton.gameObject.SetActive (false);
 				hasBlockMoving = false;
+				// isPlaying = false;
 				allBlockStartMoving();
 			}
+		}
+		if(!hasBlockMoving  && !checkBlockIsMoving()){
+			redoButton.gameObject.SetActive (true);
+			isPlaying = false;
 		}
     }
 
@@ -341,6 +343,23 @@ public class GameManager : MonoBehaviour {
 				}
 			}
 		}
+	}
+
+
+	bool checkBlockIsMoving(){
+		int counts = B_Width * B_Width;
+		for (int i = 0; i < counts; i++) {
+			for (int k = 0; k < currentFloor + 1; k++) {
+				if (allBlocks [k, i]) {
+					BlockBase bBase = allBlocks [k, i].GetComponent<BlockBase> ();
+					string bAction = bBase.getAniState();
+					if (bAction == BlockAnimationState.MOVE) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	string checkBlockIsIdle(){
