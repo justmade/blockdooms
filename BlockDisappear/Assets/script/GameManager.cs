@@ -315,7 +315,7 @@ public class GameManager : MonoBehaviour {
 			if(checkBlockIsIdle() != BlockAnimationState.IDLE){
 			}else{
 				isPlaying = false;	
-				checkAllBlocks ();
+				checkAllBlocks (true);
 			}
 		
 		}else if(hasBlockMoving){
@@ -681,13 +681,13 @@ public class GameManager : MonoBehaviour {
 	}
 
 	//检测已经更新所有的block
-	private void checkAllBlocks(){
+	private void checkAllBlocks(bool _isTreasureCheck=false){
 		bool hasRemove = removeBlocks ();
 		updateBlockState ();
 		findHorizontalConnect ();
 		findVerticalConnect ();
 
-		if(hasRemove){
+		if(!_isTreasureCheck && hasRemove){
 			blockHasMove = true;
 			blockMoving();
 		}
