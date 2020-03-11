@@ -91,6 +91,9 @@ public class BlockBase : MonoBehaviour {
 			centreColor = centreIndex;
 		}
 		colorIndex = i;
+
+
+		
 	}
 
 	private GameObject AddCenterBlock(int colorID){

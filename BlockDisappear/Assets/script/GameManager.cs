@@ -492,7 +492,9 @@ public class GameManager : MonoBehaviour {
 			}
 			// updateLeftText ();
 		}
+	
 		centreContainer();
+		initMovingFrame();
 		// container.transform.position = new Vector3(-(B_Width * 1.0f) / 2,0,-(B_Width * 1.0f) / 2);
 	}
 	
@@ -509,7 +511,7 @@ public class GameManager : MonoBehaviour {
 	void centreContainer(){
 		Vector2 delatPos = maxPos - minPos;
 		delatPos = delatPos + new Vector2(1,1);
-		container.transform.position = new Vector3(0.1f-(delatPos.x * 1.2f) / 2,0,0.1f-(delatPos.y * 1.2f) / 2) 
+		container.transform.position = new Vector3(0.1f-(delatPos.x * 1.2f) / 2,2,0.1f-(delatPos.y * 1.2f) / 2) 
 		- new Vector3((minPos.x * 1.2f) ,0,(minPos.y * 1.2f) );
 	}
 
@@ -1183,6 +1185,57 @@ public class GameManager : MonoBehaviour {
 			string state = LevelDataInfo.reversDirect(moveGridData[index]);
 			moveGridData[index-B_Width] = state;
 			moveGridData[index] = LevelDataInfo.STOP;
+		}
+		initMovingFrame();
+	}
+
+	void initMovingFrame(){
+
+		foreach (Transform child in container.transform)
+		{
+			if(child.gameObject.tag == "MovingFrame"){
+				Destroy (child.gameObject);
+			}
+		}
+		for(int i=0;i<moveGridData.Count;i++){
+			string state = moveGridData[i];
+			if(state != LevelDataInfo.STOP){
+				Vector3 v = new Vector3();
+				v.x = Mathf.Ceil (i / B_Width) * 1.2f + 0.5f;
+				v.z = i % B_Width * 1.2f+0.5f ;
+
+				if(state == LevelDataInfo.UP){
+					v.z += 1.2f;
+				}else if(state == LevelDataInfo.DOWN){
+					v.z -= 1.2f;
+				}else if(state == LevelDataInfo.LEFT){
+					v.x -= 1.2f;
+				}else if(state == LevelDataInfo.RIGHT){
+					v.x += 1.2f;
+				}  
+
+				GameObject moveframe =	Instantiate(Resources.Load( "MovingBlockFrame", typeof( GameObject ) ), 
+				new Vector3(1,1,1), Quaternion.Euler (90f, 0f, 0f)) as GameObject;
+				moveframe.transform.localScale = new Vector3 (1, 1, 1);
+				moveframe.transform.parent = this.container.transform;
+				moveframe.transform.localPosition = v;
+				moveframe.tag = "MovingFrame";
+			}  
+		}
+	}
+
+	void refreshMovingFrame(){
+		for(int i=0;i<moveGridData.Count;i++){
+			string state = moveGridData[i];
+			if(state == LevelDataInfo.UP){
+
+			}else if(state == LevelDataInfo.DOWN){
+
+			}else if(state == LevelDataInfo.LEFT){
+
+			}else if(state == LevelDataInfo.RIGHT){
+
+			}  
 		}
 	}
 // 移动场上的格子和数据
