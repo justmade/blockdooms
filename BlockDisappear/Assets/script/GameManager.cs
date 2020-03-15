@@ -8,6 +8,7 @@ using LitJson;
 using System.IO;
 using LFormat;
 using UnityEditor;
+using DG.Tweening;
 
 public class GameManager : MonoBehaviour {
 
@@ -179,6 +180,8 @@ public class GameManager : MonoBehaviour {
 		generateBlock(currentFloor + 1);
 
 		Debug.LogFormat ("stageW {0}", Screen.width);
+
+		initMovingFrame();
 	}
 		
 
@@ -332,6 +335,18 @@ public class GameManager : MonoBehaviour {
 		if(blockIsMoving  && !checkBlockIsMoving()){
 			blockIsMoving = false;
 			isPlaying = false;
+			initMovingFrame();
+		}
+
+
+		if(checkAllMovingFinish())
+		{
+			foreach (Transform child in container.transform)
+			{
+				if(child.gameObject.tag == "MovingFrame"){
+					Destroy (child.gameObject);
+				}
+			}
 		}
 
 		if(checkBlockIsIdle() == BlockAnimationState.IDLE){
@@ -494,7 +509,6 @@ public class GameManager : MonoBehaviour {
 		}
 	
 		centreContainer();
-		initMovingFrame();
 		// container.transform.position = new Vector3(-(B_Width * 1.0f) / 2,0,-(B_Width * 1.0f) / 2);
 	}
 	
@@ -1186,7 +1200,21 @@ public class GameManager : MonoBehaviour {
 			moveGridData[index-B_Width] = state;
 			moveGridData[index] = LevelDataInfo.STOP;
 		}
-		initMovingFrame();
+		
+	}
+
+	bool checkAllMovingFinish(){
+		bool isFinishMove = true;
+		for(int i=0;i<moveGridData.Count;i++){
+			int gotBlock = blockStates[0,i].color;
+			string state = moveGridData[i];
+			if(state != LevelDataInfo.STOP && gotBlock != -1){
+				isFinishMove = false;
+				break;
+			}
+		}
+		return isFinishMove;
+
 	}
 
 	void initMovingFrame(){
@@ -1197,9 +1225,18 @@ public class GameManager : MonoBehaviour {
 				Destroy (child.gameObject);
 			}
 		}
+
+		for(int i=0;i<B_Width*B_Width;i++){
+			int gotBlock = blockStates[0,i].color;
+			// Debug.LogFormat("blockStates???? {0},{1}",gotBlock,i);
+		}
 		for(int i=0;i<moveGridData.Count;i++){
 			string state = moveGridData[i];
-			if(state != LevelDataInfo.STOP){
+
+			int gotBlock = blockStates[0,i].color;
+			// Debug.LogFormat("blockStates!!!!! {0}",blockStates);
+			// Debug.LogFormat("gotBlock {0},{1},{2},",gotBlock,state,i);
+			if(state != LevelDataInfo.STOP && gotBlock != -1){
 				Vector3 v = new Vector3();
 				v.x = Mathf.Ceil (i / B_Width) * 1.2f + 0.5f;
 				v.z = i % B_Width * 1.2f+0.5f ;
@@ -1214,12 +1251,22 @@ public class GameManager : MonoBehaviour {
 					v.x += 1.2f;
 				}  
 
-				GameObject moveframe =	Instantiate(Resources.Load( "MovingBlockFrame", typeof( GameObject ) ), 
+				GameObject mFrame =	Instantiate(Resources.Load( "MovingBlockFrame", typeof( GameObject ) ), 
 				new Vector3(1,1,1), Quaternion.Euler (90f, 0f, 0f)) as GameObject;
-				moveframe.transform.localScale = new Vector3 (1, 1, 1);
-				moveframe.transform.parent = this.container.transform;
-				moveframe.transform.localPosition = v;
-				moveframe.tag = "MovingFrame";
+				mFrame.transform.localScale = new Vector3 (1, 1, 1);
+				mFrame.transform.parent = this.container.transform;
+				mFrame.transform.localPosition = v;
+				mFrame.tag = "MovingFrame";
+				Color tempColor = mFrame.GetComponent<Renderer>().material.color;
+				tempColor.a =0;
+				mFrame.GetComponent<Renderer>().material.color = tempColor;
+				mFrame.GetComponent<Renderer>().material.DOFade(0.7f,0.8f);
+
+				mFrame.gameObject.AddComponent<MoveFrame>();
+				mFrame.gameObject.GetComponent<MoveFrame>().setDir(state);
+				// MoveFrame mFrame = new MoveFrame();
+				// mFrame.gameObject.transform.parent = this.container.transform;
+				// mFrame.tag = "MovingFrame";
 			}  
 		}
 	}
