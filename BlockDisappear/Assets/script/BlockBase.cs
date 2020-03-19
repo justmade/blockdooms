@@ -65,6 +65,11 @@ public class BlockBase : MonoBehaviour {
 	private Vector3 moveTargetPos;
 
 	private List<string> actionList;
+
+	public delegate void RemoveBlockCB();
+
+	public RemoveBlockCB removeBlockCB;
+
 	// Use this for initialization
 	void Awake(){
 		if(elements != null){
@@ -304,6 +309,11 @@ public class BlockBase : MonoBehaviour {
 		DestroyBlock(needBoomEffect);
 	}
 
+	//被删除的block 不在数组中需要另外的回调
+	public void setRemoveCB(RemoveBlockCB cb){
+		this.removeBlockCB = cb;
+	}
+
 	public void DestroyBlock(Boolean needBoomEffect){
 		StartCoroutine(DestroyByTime());
 		if(needBoomEffect)
@@ -325,11 +335,14 @@ public class BlockBase : MonoBehaviour {
 	
 	IEnumerator DestroyByTime(){
 		yield return new WaitForSeconds(0.5f);
+		if( removeBlockCB != null ){
+			this.removeBlockCB();
+		}
 		aniState = BlockAnimationState.IDLE;
 		Destroy(this.gameObject);
 	}
 
-	public void DestroyImmediately(){
+public void DestroyImmediately(){
 		aniState = BlockAnimationState.IDLE;
 		Destroy(this.gameObject);
 	}
@@ -400,7 +413,7 @@ public class BlockBase : MonoBehaviour {
 		}
 	}
 
-	public void drop(float timeDelta){
+	public void drop(float timeDelta){ 
 		if (isDrop) {
 			if (timeDelta <= totalMove) {
 				this.transform.position = lastP - new Vector3 (0, 0, AniX.Evaluate (timeDelta / totalMove) * dropDistance);

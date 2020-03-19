@@ -121,6 +121,8 @@ public class GameManager : MonoBehaviour {
 
 	private bool blockHasMove = false;
 
+	private bool deletedBlockFinished = true;
+
 
     // Use this for initialization
 
@@ -326,9 +328,11 @@ public class GameManager : MonoBehaviour {
 			isPlaying = true;
 			//当所有 block 完成动画之后，开始移动
 			if(checkBlockIsIdle() == BlockAnimationState.IDLE){
-				hasBlockMoving = false;
-				blockIsMoving = true;
-				allBlockStartMoving();
+				if(deletedBlockFinished){
+					hasBlockMoving = false;
+					blockIsMoving = true;
+					allBlockStartMoving();
+				}
 			}
 		}
 		//处于移动状态之后，如果没有block 移动了，开放点击
@@ -976,8 +980,14 @@ public class GameManager : MonoBehaviour {
 							BlockBase bBase = block.GetComponent<BlockBase> ();
 							bBase.setColor (lastBlockColor,cColor);
 							bBase.colorConvertEfx();
-							bBase.DestroyBlock(false);
+							bBase.DestroyBlock(false); 
 						}else{
+							deletedBlockFinished = false;
+							block.GetComponent<BlockBase>().setRemoveCB(
+								delegate(){
+									deletedBlockFinished = true;
+								}
+							);
 							block.GetComponent<BlockBase>().tapEffect();
 						}
 						lastBlockColor = block.GetComponent<BlockBase>().getColorIndex();
