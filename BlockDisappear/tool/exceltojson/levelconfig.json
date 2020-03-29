@@ -1,0 +1,82 @@
+{
+  "1": {
+    "ID": 1, 
+    "Name": "Level-c1-t0-1216"
+  }, 
+  "2": {
+    "ID": 2, 
+    "Name": "Level-c1-t1-1216"
+  }, 
+  "3": {
+    "ID": 3, 
+    "Name": "Level-c2-t10-1216"
+  }, 
+  "4": {
+    "ID": 4, 
+    "Name": "Level-c2-2-1216"
+  }, 
+  "5": {
+    "ID": 5, 
+    "Name": "Level-ct3-2.5-1007"
+  }, 
+  "6": {
+    "ID": 6, 
+    "Name": "Level-ct4a-4-1201"
+  }, 
+  "7": {
+    "ID": 7, 
+    "Name": "Level-ct4a-3.5-1125"
+  }, 
+  "8": {
+    "ID": 8, 
+    "Name": "Level-ct4a-4-1201-2"
+  }, 
+  "9": {
+    "ID": 9, 
+    "Name": "level-m1"
+  }, 
+  "10": {
+    "ID": 10, 
+    "Name": "level-m2"
+  }, 
+  "11": {
+    "ID": 11, 
+    "Name": "level-m3"
+  }, 
+  "12": {
+    "ID": 12, 
+    "Name": "level-m4"
+  }, 
+  "13": {
+    "ID": 13, 
+    "Name": "level-m5"
+  }, 
+  "14": {
+    "ID": 14, 
+    "Name": "Level-move-a0"
+  }, 
+  "15": {
+    "ID": 15, 
+    "Name": "Level-move-a3"
+  }, 
+  "16": {
+    "ID": 16, 
+    "Name": "Level-move-a1"
+  }, 
+  "17": {
+    "ID": 17, 
+    "Name": "Level-move-a2"
+  }, 
+  "18": {
+    "ID": 18, 
+    "Name": "Level-move-a4"
+  }, 
+  "19": {
+    "ID": 19, 
+    "Name": "Level-move-a5"
+  }, 
+  "20": {
+    "ID": 20, 
+    "Name": "Level-move-a6"
+  }
+}
