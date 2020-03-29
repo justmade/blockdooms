@@ -57,7 +57,7 @@ public class MoveFrame : MonoBehaviour {
         timer += Time.deltaTime;
         if (timer > waitTime)
         {
-            waitTime = waitTime +1f;
+            // waitTime = waitTime +1f;
             timer = timer - waitTime;
             arrowParticle.Play ();
         }

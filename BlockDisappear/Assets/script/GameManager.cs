@@ -1184,26 +1184,32 @@ public class GameManager : MonoBehaviour {
 		// Debug.LogFormat ("right {0} ", JsonMapper.ToJson(rightlist));
 		// Debug.LogFormat ("left {0} ", JsonMapper.ToJson(leftlist));
 	}
-// 回合结束后重新设置移动的数据
+// 回合结束后重新设置移动的数据 先右再上 先下再左
 	void reverseMoveData(){
-		for(int i = 0 ; i < uplist.Count ; i++){
-			int index = uplist[i] ;
-			string state = LevelDataInfo.reversDirect(moveGridData[index]);
-			moveGridData[index +1] = state;
-			moveGridData[index] = LevelDataInfo.STOP;
-		}
-		for(int i = 0 ; i < downlist.Count ; i++){
-			int index = downlist[i] ;
-			string state = LevelDataInfo.reversDirect(moveGridData[index]);
-			moveGridData[index-1] = state;
-			moveGridData[index] = LevelDataInfo.STOP;
-		}
+		
+
 		for(int i = 0 ; i < rightlist.Count ; i++){
 			int index = rightlist[i] ;
 			string state = LevelDataInfo.reversDirect(moveGridData[index]);
 			moveGridData[index+B_Width] = state;
 			moveGridData[index] = LevelDataInfo.STOP;
 		}
+		for(int i = 0 ; i < uplist.Count ; i++){
+			int index = uplist[i] ;
+			string state = LevelDataInfo.reversDirect(moveGridData[index]);
+			moveGridData[index +1] = state;
+			moveGridData[index] = LevelDataInfo.STOP;
+		}
+		
+
+		for(int i = 0 ; i < downlist.Count ; i++){
+			int index = downlist[i] ;
+			string state = LevelDataInfo.reversDirect(moveGridData[index]);
+			moveGridData[index-1] = state;
+			moveGridData[index] = LevelDataInfo.STOP;
+		}
+		
+		
 		for(int i = 0 ; i < leftlist.Count ; i++){
 			int index = leftlist[i] ;
 			string state = LevelDataInfo.reversDirect(moveGridData[index]);
@@ -1328,18 +1334,22 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void movingBlockState(){
-		for(int i = 0 ; i < uplist.Count;i++){
-			int blockIndex = uplist[i];
-			changeMoveState(blockIndex , 1,true);
-		}
-		for(int i = 0 ; i < downlist.Count;i++){
-			int blockIndex = downlist[i];
-			changeMoveState(blockIndex , -1,true);
-		}
+
 		for(int i = 0 ; i < rightlist.Count;i++){
 			int blockIndex = rightlist[i];
 			changeMoveState(blockIndex , B_Width,false);
 		}
+
+		for(int i = 0 ; i < uplist.Count;i++){
+			int blockIndex = uplist[i];
+			changeMoveState(blockIndex , 1,true);
+		}
+		
+		for(int i = 0 ; i < downlist.Count;i++){
+			int blockIndex = downlist[i];
+			changeMoveState(blockIndex , -1,true);
+		}
+	
 		for(int i = 0 ; i < leftlist.Count;i++){
 			int blockIndex = leftlist[i];
 			changeMoveState(blockIndex , -B_Width,false);

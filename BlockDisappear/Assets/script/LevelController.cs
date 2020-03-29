@@ -30,7 +30,7 @@ public class LevelController : MonoBehaviour {
 	//读取配置好的 levelconfig
 	void GetLevelConfig(){
 		if(LevelDataInfo.levels == null){
-			var config = Resources.Load<TextAsset>("levelconfig");
+			var config = Resources.Load<TextAsset>("levelconfig-2");
 			string _levelData = config.text;
 			JsonData levelObj = JsonMapper.ToObject(_levelData);
 			

@@ -7,7 +7,7 @@ public static class LevelDataInfo  {
 
     private static int _selectLevelIndex = 0;
 
-	public static int chapter = 1;
+	public static int chapter = 0;
 
     public static int lastPage = 0;
 
