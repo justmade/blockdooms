@@ -46,6 +46,7 @@ public class UILevelSelect : MonoBehaviour {
 			// Debug.LogFormat("level.Stars{0}",level.Stars);
 			uiLevel.transform.SetParent(levelSelectPanel);
 			uiLevel.GetComponent<Button>().onClick.AddListener(() => SelectLevel(level));
+			uiLevel.transform.localScale = new Vector3(1.0f,1.0f,1.0f);
 
 			if(!level.Locked){
 				uiLevel.lockImage.SetActive(false);
