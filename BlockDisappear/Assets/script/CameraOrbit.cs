@@ -44,13 +44,55 @@ public class CameraOrbit : MonoBehaviour
     public delegate void VoidDelegate();
     VoidDelegate setTouch;
 
+    private Material _mainMaterial;
+
+    private bool startChange = false;
 
     // Use this for initialization
     void Start() {
         this._XForm_Camera = this.transform;
         this._XForm_Parent = this.transform.parent;
         readyPanel.gameObject.SetActive(false);
+
+        initShader();
     }
+     public int _smoothLength = 20;
+    //遮罩混合颜色
+    public Color _darkColor = Color.black;
+
+    protected Camera _mainCamera;
+
+    Vector4[] _itemDatas;
+    int _tmpScreenHeight;
+    float maskRadius = Screen.width/2;
+
+    void initShader(){
+         _mainMaterial = new Material(Shader.Find("MyShader/DarkEffect"));
+         _mainCamera = GetComponent<Camera>();
+
+    }
+
+    private void OnRenderImage(RenderTexture source, RenderTexture destination)
+    {
+        if(startChange == false){
+            Graphics.Blit(source, destination);
+            return;
+        }
+        _tmpScreenHeight = Screen.height;
+
+        float px = _mainCamera.WorldToScreenPoint(new Vector3(0,0,0)).x;
+        float py = _tmpScreenHeight/2;
+        _itemDatas = new Vector4[1];
+        _itemDatas[0] = new Vector4(px,py,maskRadius,0f);
+
+        _mainMaterial.SetInt("_SmoothLength", _smoothLength);
+        _mainMaterial.SetColor("_DarkColor", _darkColor);
+        _mainMaterial.SetInt("_ItemCnt", 1);
+        _mainMaterial.SetVectorArray("_Item", _itemDatas);
+
+        Graphics.Blit(source, destination, _mainMaterial);
+    }
+
 
     public bool setCameraTarget(Transform _targetTransform,int _hitIndex,bool _notOpenPanel=false, bool isImmediate = false){
         notOpenPanel = _notOpenPanel;
@@ -128,7 +170,18 @@ public class CameraOrbit : MonoBehaviour
         
     }
 
+    public void changeLevelScene(){
+        startChange = true;
+    }
+
     void LateUpdate() {
+        if(startChange){
+            if(maskRadius < 0){
+                startChange = false;
+                maskRadius = Screen.width/2;
+            }
+            maskRadius -= 30f;
+        } 
         // return;
         if(targetTsf != null && fracJourney < 1.0f){
 
