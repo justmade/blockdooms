@@ -1075,7 +1075,7 @@ public class GameManager : MonoBehaviour {
 						blockStates [0,bIndex - empty].color = temp;
 						blockStates [0,bIndex - empty].floor = floor;
 
-//						for (int k = 0; k < 1; k++) {
+//						for (int k = 0; k < 1; k++) { 
 							if (allBlocks[floor,bIndex]) {
 								BlockBase bBase = allBlocks[floor,bIndex].GetComponent<BlockBase>();
 								bBase.dropBlock (empty);
