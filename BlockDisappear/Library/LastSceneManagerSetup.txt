@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/scenes/LevelSelect.unity
+- path: Assets/scenes/SagaMap.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0

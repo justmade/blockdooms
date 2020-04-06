@@ -17,3 +17,5 @@ MonoBehaviour:
   Names:
   - Start
   - Back
+  - Left
+  - Right
