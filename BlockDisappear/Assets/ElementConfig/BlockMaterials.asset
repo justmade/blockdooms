@@ -3,7 +3,7 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -11,11 +11,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78b28246f948c403e89d02123d31abfe, type: 3}
   m_Name: BlockMaterials
   m_EditorClassIdentifier: 
+  Unlock: 0
+  Red: 1
+  Green: 2
+  Blue: 3
+  Yellow: 4
+  Treasure: 5
+  Key: 6
   _materials:
-  - {fileID: 2100000, guid: 4628387fedd6b477484afb4ee5f52144, type: 2}
+  - {fileID: 2100000, guid: bd58100e6cb2b419b874df090e0c8d7f, type: 2}
   - {fileID: 2100000, guid: 339cee2bd77294b10bead656f52bdef6, type: 2}
   - {fileID: 2100000, guid: 66d35c0e37af3419aa534e26764abbec, type: 2}
   - {fileID: 2100000, guid: 61365d7ea356541ec9ea374c52e22b27, type: 2}
   - {fileID: 2100000, guid: 0403a9fc0bb3d40dc8b440354c8c3855, type: 2}
   - {fileID: 2100000, guid: 8c331e1f8b8c34c97bf3ff41ec6f2e54, type: 2}
   - {fileID: 2100000, guid: 83a34914a3a134f5b83d58719b36fba8, type: 2}
+  - {fileID: 2100000, guid: 4628387fedd6b477484afb4ee5f52144, type: 2}

@@ -11,6 +11,8 @@ namespace LFormat
 		public int sizeY;
 		public int[] gridInGame;
 		public string fileName = "";
+		public string moveGrid;
+		public string[] moveGridInGame;
 
 		public LevelFormat ()
 		{

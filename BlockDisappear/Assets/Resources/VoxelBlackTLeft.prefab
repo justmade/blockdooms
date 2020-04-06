@@ -98,6 +98,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _ToonLut:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BumpScale: 1
     - _Cutoff: 0.5
@@ -110,6 +114,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _RimPower: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 0
     - _SrcBlend: 1
@@ -118,6 +123,7 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!23 &23995683606074280
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -378,12 +384,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   advancedMode: 1
-  voxelFilePath: /Users/tianyunshi/blockdooms/BlockDisappear/Assets/Resources/voxel/sparklyblock-3-left.vox
+  voxelFilePath: /Users/sty/Documents/unity/BlockDisappear/BlockDisappear/Assets/Resources/voxel/sparklyblock-3-left-frame.vox
   voxelFileGUID: 
-  voxelFileObject: {fileID: 100000, guid: a5fbf34185fbc40b29f8a709fcc9d43b, type: 3}
+  voxelFileObject: {fileID: 100000, guid: e6f4f28586c4147b8b8eee7908f4ea4a, type: 3}
   voxelFileSubIndex: 0
   fileType: 0
-  fileRefreshLastTimeTicks: 636803860285591810
+  fileRefreshLastTimeTicks: 636819389529915210
   dataVersion: 114
   legacyVoxImport: 0
   importMode: 1
@@ -480,16 +486,34 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
-      inSlope: 2
-      outSlope: 2
+      value: 0.0065460205
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.63506854
+      value: 0.5557725
+      inSlope: 1.4507749
+      outSlope: 1.4507749
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.7862014
+      value: 0.8727775
+      inSlope: 1.3664198
+      outSlope: 1.3664198
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
-      value: 1
+      value: 1.006546
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -501,4 +525,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   targetPosition: {x: 0, y: 0, z: 0}
   playAmplify: 0
+  amplifyTime: 40
+  startTime: 20
   isPlayingAimation: 0

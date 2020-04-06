@@ -66,9 +66,12 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 10
     - _EnableExternalAlpha: 0
+    - _ExplosionRate: 0
+    - _ExplosionRotate: 0.5
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 1
+    - _InvFade: 1
     - _Metallic: 0
     - _Mode: 3
     - _OcclusionStrength: 1
@@ -81,5 +84,7 @@ Material:
     m_Colors:
     - _Color: {r: 0.36379883, g: 0.6603774, b: 0.34576362, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _ExplosionCenter: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _TintColor: {r: 0, g: 0.5471698, b: 0.12793714, a: 1}

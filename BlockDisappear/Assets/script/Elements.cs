@@ -18,6 +18,7 @@ public class Elements : ScriptableObject {
 
 	[HideInInspector] public int Key = 6;
 
+	[HideInInspector] public int White = 7;
 
 	public Material[] _materials;
 }

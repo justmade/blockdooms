@@ -8,6 +8,7 @@ using LitJson;
 using System.IO;
 using LFormat;
 using UnityEditor;
+using DG.Tweening;
 
 public class GameManager : MonoBehaviour {
 
@@ -18,18 +19,17 @@ public class GameManager : MonoBehaviour {
 	//所有的block对象
 	public GameObject[,] allBlocks;
 	//记录每次的删除序列
-	private List<BlockState> removeSeuqence;
+	private List<BlockActionState> removeSeuqence;
 	//需要撤销的数组
-	private List<BlockState> redoSeuqence;
-
+	private List<BlockActionState> redoSeuqence;
 	public List<GameObject> dropBlocks;
 	public List<GameObject> moveBlocks;
 
 	//记录格子的状态
-	public BlockState[,] blockStates;
+	public BlockActionState[,] blockStates;
 
 	//每一层最上面格子的颜色
-	public BlockState[] topBlockSates;
+	public BlockActionState[] topBlockSates;
 
 	public Text m_MessageText; 
 
@@ -89,6 +89,8 @@ public class GameManager : MonoBehaviour {
 
 	private List<int> loadGridData;
 
+	private List<string> moveGridData;
+
 	private List<string> files;
 
 	public TextAsset txtAsset;
@@ -99,12 +101,28 @@ public class GameManager : MonoBehaviour {
 
 	private string currentLevelName;
 
+	private bool blockIsMoving = false;
+
+	private bool hasBlockMoving;
 	//找到宝箱和钥匙
 	private bool findTreasureKey;
 	//记录操作序列
 	private int gameStep = 0;
 
 	private LevelController levelController;
+
+	private Vector2 minPos = new Vector2(-1,-1);
+	private Vector2 maxPos = new Vector2(-1,-1);
+
+	private	List<int> uplist = new List<int>();
+	private	List<int> downlist = new List<int>();
+	private	List<int> leftlist = new List<int>();
+	private	List<int> rightlist = new List<int>();
+
+	private bool blockHasMove = false;
+
+	private bool deletedBlockFinished = true;
+
 
     // Use this for initialization
 
@@ -143,8 +161,8 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void InitGame(string _s){
-		removeSeuqence = new List<BlockState>();
-		redoSeuqence = new List<BlockState>();
+		removeSeuqence = new List<BlockActionState>();
+		redoSeuqence = new List<BlockActionState>();
 		currentLevelName = _s;
 		gameStep = 0 ;	
 		loadLevelData (_s);
@@ -160,6 +178,12 @@ public class GameManager : MonoBehaviour {
 		mainCamera.enabled = isMainC;
 		sideCamera.enabled = !isMainC;
 		onUp ();
+
+		generateBlock(currentFloor + 1);
+
+		Debug.LogFormat ("stageW {0}", Screen.width);
+
+		initMovingFrame();
 	}
 		
 
@@ -187,19 +211,45 @@ public class GameManager : MonoBehaviour {
 
 		loadGridData = new List<int> (g);
 
-		Debug.LogFormat ("debug in gridingame {0}" , loadGridData.Count);
+		if(loadLevel.moveGridInGame != null){
+			string[] move = loadLevel.moveGridInGame;
+			// Debug.LogFormat("move {0}",move);
+			moveGridData = new List<string>(move);
+		}else{
+			int counts = B_Width * B_Width;
+			moveGridData = new List<string>();
+			for(int i = 0 ; i< counts ; i++){
+				moveGridData.Add(LevelDataInfo.STOP);
+			}
+		}
+
+
+		Debug.LogFormat ("debug in gridingame {0},{1}" , loadGridData.Count , moveGridData.Count);
 	}
 
 	void onBack(){
 		// Application.LoadLevel(Application.loadedLevel);
-		SceneManager.LoadScene("LevelSelect");
+		// SceneManager.LoadScene("LevelSelect");
+		if(LevelDataInfo.isTest){
+			SceneManager.LoadScene("LevelSelect");
+		}else{
+			SceneManager.LoadScene("SagaMap");
+
+		}
 		
 		
 	}
 
-	void finishLevel(){
-		SceneManager.LoadScene("LevelSelect");
-		levelController.LevelComplete(currentLevelName,3);
+	IEnumerator finishLevel(){
+		yield return new WaitForSeconds(0.7f);
+		// SceneManager.LoadScene("LevelSelect");
+		if(LevelDataInfo.isTest){
+			SceneManager.LoadScene("LevelSelect");
+		}else{
+			SceneManager.LoadScene("SagaMap");
+
+		}
+		levelController.LevelComplete(currentLevelName,1);
 	}
 
 	void onRetry(){
@@ -214,9 +264,14 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void onRedo(){
+		if(blockHasMove == true){
+			blockMoving();
+		}
 		redoSeuqence.Clear();
+
 		if(removeSeuqence.Count > 0){
-			BlockState blockStep = removeSeuqence[removeSeuqence.Count-1];
+			
+			BlockActionState blockStep = removeSeuqence[removeSeuqence.Count-1];
 			removeSeuqence.RemoveAt(removeSeuqence.Count-1);
 			redoSeuqence.Add(blockStep);
 			for(int i = removeSeuqence.Count - 1 ; i >=0 ; i--){
@@ -225,6 +280,10 @@ public class GameManager : MonoBehaviour {
 					removeSeuqence.RemoveAt(i);
 				}
 			}
+		}
+		
+		if(removeSeuqence.Count <= 0){
+			blockHasMove = false;
 		}
 		Debug.LogFormat("redoSeuqence {0},",redoSeuqence.Count);
 		redoBlock();
@@ -253,94 +312,99 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 		if (isPlaying == false) {
 			touchBlock ();
-		} 
-
-		if (needDestory == true) {
+		}
+		
+		//找到钥匙和宝箱之后 先播放block的消失动画，在去消除key和treasure的block
+		if (findTreasureKey) {
+			isPlaying = true;	
+			if(checkBlockIsIdle() != BlockAnimationState.IDLE){
+			}else{
+				isPlaying = false;	
+				checkAllBlocks (true);
+			}
+		
+		}else if(hasBlockMoving){
+		//移动block的时候禁止点击
 			isPlaying = true;
-			//找到钥匙和宝箱之后 先播放block的消失动画，在去消除key和treasure的block
-			if (findTreasureKey) {
-				int counts = B_Width * B_Width;
-				for (int i = 0; i < counts; i++) {
-					for (int k = 0; k < currentFloor + 1; k++) {
-						if (allBlocks [k, i]) {
-							BlockBase bBase = allBlocks [k, i].GetComponent<BlockBase> ();
-							if (bBase.isPlayingAimation) {
-								redoButton.gameObject.SetActive (false);
-								return;
-							}
-						}
-					}
-
-				}
-				checkAllBlocks ();
-			} else {
-				redoButton.gameObject.SetActive (true);
-				isPlaying = false;
-			}
-			if (deltaTime > 2 * totalMove) {
-				needDestory = false;
-				deltaTime = 0f;
-				//isPlaying = false;
-			} else {
-				//isPlaying = true;
-				deltaTime++;
-				if (deltaTime <= totalMove) {
-					if (dropBlocks.Count == 0) {
-						deltaTime = totalMove;
-					}
-					//droping (deltaTime);
-				} else if (deltaTime > totalMove) {
-					//moving (deltaTime - totalMove);
+			//当所有 block 完成动画之后，开始移动
+			if(checkBlockIsIdle() == BlockAnimationState.IDLE){
+				if(deletedBlockFinished){
+					hasBlockMoving = false;
+					blockIsMoving = true;
+					allBlockStartMoving();
 				}
 			}
-
-		}else if (cameraMove == 1 && currentRotateFrame >= 0 && currentRotateFrame <= rotateFrame) {
-			
-            currentRotateFrame++;
-			// Debug.LogFormat("currentRotateFrame {0}",currentRotateFrame);
-            mainCamera.transform.RotateAround(Vector3.zero, Vector3.left, rotateAngle / rotateFrame);
-
-        }
-
-		if (currentRotateFrame == rotateFrame) {
-			currentRotateFrame = -1;
-			isElevate = true;
-			deltaTime = 0f;
-			cameraMove = 0;
-			generateBlock(currentFloor + 1);
-			generateFloors--;
+		}
+		//处于移动状态之后，如果没有block 移动了，开放点击
+		if(blockIsMoving  && !checkBlockIsMoving()){
+			blockIsMoving = false;
+			isPlaying = false;
+			initMovingFrame();
 		}
 
-        if (isElevate) {
 
-            if (deltaTime > totalMove)
-            {
-				if (generateFloors > 0) {
-					deltaTime = 0f;
-					currentRotateFrame = Mathf.FloorToInt(rotateFrame);
-				} else {
-					isElevate = false;
-					deltaTime = 0f;
-					currentRotateFrame = 0;
-					cameraMove = -1;
+		if(checkAllMovingFinish())
+		{
+			foreach (Transform child in container.transform)
+			{
+				if(child.gameObject.tag == "MovingFrame"){
+					Destroy (child.gameObject);
 				}
-            }
-            else {
-                deltaTime++;
-                elevateBlocks(deltaTime);
-            }
-        }else if (cameraMove == -1 && currentRotateFrame >= 0 && currentRotateFrame <= rotateFrame)
-        {
-            currentRotateFrame++;
-            mainCamera.transform.RotateAround(Vector3.zero, Vector3.left, -rotateAngle / rotateFrame);
-            if (currentRotateFrame == rotateFrame)
-            {
-                currentRotateFrame = -1;
-                deltaTime = 0f;
-                cameraMove = 0;
-            }
-        }
+			}
+		}
+
+		if(checkBlockIsIdle() == BlockAnimationState.IDLE){
+			redoButton.gameObject.SetActive (true);
+		}else{
+			redoButton.gameObject.SetActive (false);
+		}
     }
+
+	void allBlockStartMoving(){
+		int counts = B_Width * B_Width;
+		for (int i = 0; i < counts; i++) {
+			for (int k = 0; k < currentFloor + 1; k++) {
+				if (allBlocks [k, i]) {
+					BlockBase bBase = allBlocks [k, i].GetComponent<BlockBase> ();
+					bBase.startBlockMove();
+					
+				}
+			}
+		}
+	}
+
+
+	bool checkBlockIsMoving(){
+		int counts = B_Width * B_Width;
+		for (int i = 0; i < counts; i++) {
+			for (int k = 0; k < currentFloor + 1; k++) {
+				if (allBlocks [k, i]) {
+					BlockBase bBase = allBlocks [k, i].GetComponent<BlockBase> ();
+					string bAction = bBase.getAniState();
+					if (bAction == BlockAnimationState.MOVE) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	string checkBlockIsIdle(){
+		int counts = B_Width * B_Width;
+		for (int i = 0; i < counts; i++) {
+			for (int k = 0; k < currentFloor + 1; k++) {
+				if (allBlocks [k, i]) {
+					BlockBase bBase = allBlocks [k, i].GetComponent<BlockBase> ();
+					string bAction = bBase.getAniState();
+					if (bAction != BlockAnimationState.IDLE) {
+						return bAction;
+					}
+				}
+			}
+		}
+		return BlockAnimationState.IDLE;
+	}
 
 	//检查同一格子下层的block是否存在
 	int checkBlockBlockFloor(int blockIndex){
@@ -368,7 +432,10 @@ public class GameManager : MonoBehaviour {
 			blockPreb = Resources.Load( "VoxelBlackTLeft", typeof( GameObject ) );
 		}else if(blockColorID == elementConfig.Key){
 			blockPreb = Resources.Load( "VoxelBlackTRight", typeof( GameObject ) );
-		}else{
+		}else if(blockColorID == elementConfig.White){
+			blockPreb = Resources.Load( "VoxelBlockWhite", typeof( GameObject ) );
+		}
+		else{
 			blockPreb = Resources.Load( "VoxelBlackTRight", typeof( GameObject ) );
 		}
 
@@ -377,8 +444,8 @@ public class GameManager : MonoBehaviour {
 
 	void initAllBlock(){
 		blocksLeftCounts = 0;
-		blockStates = new BlockState[B_Height, B_Width * B_Width];
-		topBlockSates = new BlockState[B_Width * B_Width];
+		blockStates = new BlockActionState[B_Height, B_Width * B_Width];
+		topBlockSates = new BlockActionState[B_Width * B_Width];
 		currentFloor = 0;
 		allBlocks = new GameObject[B_Height, B_Width * B_Width];
 		Vector3 v = new Vector3 (0,1,0);
@@ -389,14 +456,35 @@ public class GameManager : MonoBehaviour {
 			if(loadGridData[0] != -1){
 				v.x = Mathf.Ceil (i / B_Width) * 1.2f + 0.5f;
 				v.z = i % B_Width * 1.2f+0.5f ;
+
+				if(minPos.x == -1){
+					minPos.x = i / B_Width;
+				}else{
+					minPos.x = Mathf.Min(minPos.x ,i / B_Width);
+				}
+
+				if(minPos.y == -1){
+					minPos.y = i % B_Width;
+				}else{
+					minPos.y = Mathf.Min(minPos.y ,i % B_Width);
+				}
+
+				if(maxPos.x == -1){
+					maxPos.x = i / B_Width;
+				}else{
+					maxPos.x = Mathf.Max(maxPos.x ,i / B_Width);
+				}
+
+				if(maxPos.y == -1){
+					maxPos.y = i % B_Width;
+				}else{
+					maxPos.y = Mathf.Max(maxPos.y ,i % B_Width);
+				}
+
 				// ... create them, set their player number and references needed for control.
 				// Object prefab = Resources.Load("VoxelBlockGreen", typeof( GameObject ));
-				GameObject block = 
-					Instantiate(GetBlockPrefabByID(loadGridData[0]), v, turnRotation) as GameObject;
+				GameObject block = getNewBlock(loadGridData[0], v, turnRotation);
 				allBlocks[0,i] = block;
-				block.transform.localScale = new Vector3 (1f, 1f, 1f);
-				block.tag = "Block";
-				block.transform.parent = container.transform;
 				BlockBase bBase = block.GetComponent<BlockBase> ();
 				if(loadGridData.Count > counts){
 					bBase.setColor (loadGridData[0],loadGridData[counts]);
@@ -405,10 +493,10 @@ public class GameManager : MonoBehaviour {
 				}
 				loadGridData.RemoveAt (0);
 				int color = bBase.getColorIndex ();
-				blockStates [0, i] = new BlockState ();
+				blockStates [0, i] = new BlockActionState ();
 				blockStates [0,i].color = color;
 				blockStates [0,i].floor = currentFloor;
-				topBlockSates[i] = new BlockState ();
+				topBlockSates[i] = new BlockActionState ();
 				topBlockSates[i].color = -1;
 				if(color != elementConfig.Unlock){
 					// Debug.LogFormat ("color,{0},{1}", color,blocksLeftCounts);
@@ -417,26 +505,46 @@ public class GameManager : MonoBehaviour {
 			}else{
 				allBlocks[0,i] = null;
 				loadGridData.RemoveAt (0);
-				blockStates [0, i] = new BlockState ();
+				blockStates [0, i] = new BlockActionState ();
 				blockStates [0,i].color = -1;
 				blockStates [0,i].floor = currentFloor;
 			}
 			// updateLeftText ();
 		}
-
-		container.transform.position = new Vector3(-(B_Width * 1.0f) / 2,0,-(B_Width * 1.0f) / 2);
+	
+		centreContainer();
+		// container.transform.position = new Vector3(-(B_Width * 1.0f) / 2,0,-(B_Width * 1.0f) / 2);
+	}
+	
+	GameObject getNewBlock(int blockColor,Vector3 pos , Quaternion ro){
+		GameObject block = 
+				Instantiate(GetBlockPrefabByID(blockColor), pos, ro) as GameObject;
+		block.transform.localScale = new Vector3 (0.96f, 0.96f, 0.96f);
+		block.tag = "Block";
+		block.transform.parent = container.transform;
+		return block;
 	}
 
-	void addBoomParticle(Vector3 v,int color){
-		v.y++;
-		GameObject boom = 
-			Instantiate(boomParticle, v, Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-		boom.transform.parent = container.transform;
-		ParticleSystem p = boom.GetComponent<ParticleSystem> ();
-		boom.GetComponent<Renderer>().material.color = getColorByID(color);
-		p.Play ();
-		Destroy(p,p.startLifetime); 
+
+	void centreContainer(){
+		Vector2 delatPos = maxPos - minPos;
+		delatPos = delatPos + new Vector2(1,1);
+		container.transform.position = new Vector3(0.1f-(delatPos.x * 1.2f) / 2,2,0.1f-(delatPos.y * 1.2f) / 2) 
+		- new Vector3((minPos.x * 1.2f) ,0,(minPos.y * 1.2f) );
 	}
+
+	// void addBoomParticle(Vector3 v,int color){
+	// 	if(color == elementConfig.Key || color == elementConfig.Treasure){
+	// 		v.y++;
+	// 		GameObject boom = 
+	// 			Instantiate(boomParticle, v, Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+	// 		boom.transform.parent = container.transform;
+	// 		ParticleSystem p = boom.GetComponent<ParticleSystem> ();
+	// 		boom.GetComponent<Renderer>().material.color = getColorByID(color);
+	// 		p.Play ();
+	// 		Destroy(p,p.startLifetime);
+	// 	}
+	// }
 
 	Color getColorByID(int colorID){
 		Color newColor;
@@ -487,13 +595,35 @@ public class GameManager : MonoBehaviour {
 			if(loadGridData[0] != -1){
 				v.x = Mathf.Ceil (i / B_Width) * 1.2f + 0.5f;
 				v.z = i % B_Width * 1.2f+0.5f ;
+
+				if(minPos.x == -1){
+					minPos.x = i / B_Width;
+				}else{
+					minPos.x = Mathf.Min(minPos.x ,i / B_Width);
+				}
+
+				if(minPos.y == -1){
+					minPos.y = i % B_Width;
+				}else{
+					minPos.y = Mathf.Min(minPos.y ,i % B_Width);
+				}
+
+				if(maxPos.x == -1){
+					maxPos.x = i / B_Width;
+				}else{
+					maxPos.x = Mathf.Max(maxPos.x ,i / B_Width);
+				}
+
+				if(maxPos.y == -1){
+					maxPos.y = i % B_Width;
+				}else{
+					maxPos.y = Mathf.Max(maxPos.y ,i % B_Width);
+				}
+
 				// ... create them, set their player number and references needed for control.
-				GameObject block = 
-					Instantiate(GetBlockPrefabByID(loadGridData[0]), Vector3.zero, turnRotation) as GameObject;
-				block.transform.parent = container.transform;
+				GameObject block = getNewBlock(loadGridData[0], Vector3.zero, turnRotation);
 				block.transform.localPosition = v;
 				block.transform.localScale = new Vector3 (0.0f, 0.0f, 0.0f);
-				block.tag = "Block";
 				allBlocks[currentFloor,i] = block;
 				BlockBase bBase = block.GetComponent<BlockBase> ();
 				bBase.setColor (loadGridData[0]);
@@ -502,7 +632,9 @@ public class GameManager : MonoBehaviour {
 				if(blockStates [0,i].color == -1){
 					blockStates [0, i].color = color;
 					blockStates [0 ,i].floor = currentFloor;
-					bBase.playAmplify = true;
+					bBase.startTime = 1f;
+					bBase.amplifyTime = 20f;
+					bBase.setPlayAmplify(true);
 				}
 				if(color!=0){
 					blocksLeftCounts++;
@@ -516,6 +648,8 @@ public class GameManager : MonoBehaviour {
 
 		}
 		updateLeftText ();
+
+		centreContainer();
 		// Lightmapping.BakeAsync();
 		// Lightmapping.
 		// Lightmapping.Bake();
@@ -546,10 +680,13 @@ public class GameManager : MonoBehaviour {
 						return;					
 					}
 
-					BlockState bs = findBlockIndex (hit.collider.gameObject);
+					// bb.tapEffect();
+					// return;/
+					BlockActionState bs = findBlockIndex (hit.collider.gameObject);
+					Debug.LogFormat("hit {0},color{1}",bs.originalIndex,bb.getColorIndex ());
 					addDisappearIndex (bs.originalIndex);
 					if (isMainC) {
-						findNeighbour (bs.originalIndex, bb.getColorIndex (), 0);
+						findNeighbour (bs.originalIndex, bb.getColorIndex (), 0,true);
 					} else {
 						int topIndex = originalIndex2TopInde (bs.originalIndex , bs.floor);
 						findTopNeighbour(topIndex, bb.getColorIndex (), 0);
@@ -559,29 +696,22 @@ public class GameManager : MonoBehaviour {
 				checkAllBlocks ();
 
 //				findTopBlock ();
-				if (checkSameColor == false) {
-//                    currentRotateFrame = 0;
-//                    cameraMove = 1;
-						m_MessageText.text = "Gameover！ 剩余方块：" + blocksLeftCounts;
-					if(blocksLeftCounts == 0){
-						m_MessageText.text = "成功！！！";
-						finishLevel();
-					}
-				} else {
-					// m_MessageText.text = "消除";
-				}
 			}
 		}
 	}
 
 	//检测已经更新所有的block
-	private void checkAllBlocks(){
-		removeBlocks ();
-		//dropBlock ();
-		//leftMoveBlock ();
+	private void checkAllBlocks(bool _isTreasureCheck=false){
+		bool hasRemove = removeBlocks ();
 		updateBlockState ();
 		findHorizontalConnect ();
 		findVerticalConnect ();
+
+		if(!_isTreasureCheck && hasRemove){
+			blockHasMove = true;
+			blockMoving();
+		}
+
 	}
 
 
@@ -589,23 +719,25 @@ public class GameManager : MonoBehaviour {
 		m_MessageText.text = "剩余方块：" + blocksLeftCounts;
 		if(blocksLeftCounts == 0){
 			m_MessageText.text = "成功！！！";
-			finishLevel();
+			StartCoroutine(finishLevel());
 		}
 	}
 
+
+
 	//在数组中找到对应的下标
-	BlockState findBlockIndex(GameObject bBase){
+	BlockActionState findBlockIndex(GameObject bBase){
 		for (int i = 0; i < currentFloor + 1; i++) {
 			for( int j = 0 ; j < allBlocks.GetLength(1) ;j ++){
 				if (bBase == allBlocks [i, j]) {
-					BlockState bs = new BlockState ();
+					BlockActionState bs = new BlockActionState ();
 					bs.originalIndex = j;
 					bs.floor = i;
 					return bs;
 				}
 			}
 		}
-		return new BlockState();
+		return new BlockActionState();
 	}
 
 	//获取每一次最上面的方块 从上到下，从左到右
@@ -657,12 +789,13 @@ public class GameManager : MonoBehaviour {
 	}
 
 	//递归查找格子四周的同色目标 currentDir上次的位置，放置来回寻找堆栈溢出 1：上 2：下 4：右 8：左
-	void findNeighbour(int index , int color , int currentDir)
+	void findNeighbour(int index , int color , int currentDir , bool near = false)
 	{
 		int rightIndex = index + B_Width;
 
 		int leftIndex = index - B_Width;
 	
+		bool isWhiteBlock = false;
 
 		int downIndex = -1;
 		if (index % B_Width != 0) {
@@ -674,8 +807,13 @@ public class GameManager : MonoBehaviour {
 			upIndex = index + 1;
 		}
 
+
 		if (rightIndex < B_Width * B_Width && currentDir != 8) {
-			if (getBlockColor (rightIndex) == color) {
+			if (near){
+				isWhiteBlock = getBlockColor (rightIndex) == elementConfig.White ;
+			}
+			if (getBlockColor (rightIndex) == color
+				|| isWhiteBlock) {
 				if (addDisappearIndex (rightIndex)) {
 					findNeighbour (rightIndex, color , 4);
 				}
@@ -683,23 +821,41 @@ public class GameManager : MonoBehaviour {
 		}
 
 		if (leftIndex >= 0 && currentDir != 4) {
-			if (getBlockColor (leftIndex) == color) {
+			if (near){
+				isWhiteBlock = getBlockColor (leftIndex) == elementConfig.White ;
+			}
+			if (getBlockColor (leftIndex) == color
+				|| isWhiteBlock) {
 				if(addDisappearIndex(leftIndex)){
 					findNeighbour (leftIndex, color,8);
 				}
 			}
 		}
 
-		if (downIndex >= 0 && getBlockColor (downIndex) == color && currentDir != 1) {
-			if (addDisappearIndex (downIndex)) {
-				findNeighbour (downIndex, color,2);
+		if (downIndex >= 0 && currentDir != 1) {
+			if (near){
+				isWhiteBlock = getBlockColor (downIndex) == elementConfig.White ;
 			}
+			if(getBlockColor (downIndex) == color
+				|| isWhiteBlock){
+				if (addDisappearIndex (downIndex)) {
+					findNeighbour (downIndex, color,2);
+				}
+			}
+			
 		}
 
-		if (upIndex >= 0 && getBlockColor (upIndex) == color && currentDir != 2) {
-			if (addDisappearIndex (upIndex)) {
-				findNeighbour (upIndex, color,1);
+		if (upIndex >= 0 && currentDir != 2) {
+			if (near){
+				isWhiteBlock = getBlockColor (upIndex) == elementConfig.White ;
 			}
+			if(getBlockColor (upIndex) == color
+				|| isWhiteBlock) {
+				if (addDisappearIndex (upIndex)) {
+					findNeighbour (upIndex, color,1);
+				}
+			}
+			
 		}
 
 		return;
@@ -794,57 +950,82 @@ public class GameManager : MonoBehaviour {
 		return topBlockSates [index].color;
 	}
 
-	void removeBlocks(){
+	bool removeBlocks(){
 		if (allDisappearIndex.Count > 1) {
 			//如果需要消除的block是宝箱和钥匙，那么他们应该被算在上一步一起
 			if(!findTreasureKey){
 				gameStep ++;
 			}
-			
 			blocksLeftCounts -= allDisappearIndex.Count;
 			updateLeftText ();
 			needDestory = true;
 //			Debug.LogFormat ("remove {0}", allDisappearIndex.Count);
+			int lastBlockColor = elementConfig.White;
 			foreach (int element in allDisappearIndex) 
 			{
-				
+				Debug.Log(element);
 				int index = element;
 				for (int i = 0; i < currentFloor + 1; i++) {
 					GameObject block = allBlocks [i,index];
 					if (block) {
 						
-						Destroy (block);
-						//Debug.LogFormat ("removeIndex {0} , {1}", i, index);
-						BlockState recordStep = new BlockState();
-						recordStep.color = blockStates [0,index].color;
-						recordStep.floor = i;
-						recordStep.step = gameStep;
-						recordStep.originalIndex = index;
-						removeSeuqence.Add(recordStep);
+						if(block.GetComponent<BlockBase>().getColorIndex() == elementConfig.White){
 
+							Vector3 pos = block.transform.position;
+							Quaternion ro = block.transform.rotation;
+							int cColor = block.GetComponent<BlockBase>().centreColor;
+
+							block.GetComponent<BlockBase>().DestroyImmediately();
+							block = getNewBlock(lastBlockColor,pos,ro);
+							BlockBase bBase = block.GetComponent<BlockBase> ();
+							bBase.setColor (lastBlockColor,cColor);
+							bBase.colorConvertEfx();
+							bBase.DestroyBlock(false); 
+						}else{
+							deletedBlockFinished = false;
+							block.GetComponent<BlockBase>().setRemoveCB(
+								delegate(){
+									deletedBlockFinished = true;
+								}
+							);
+							block.GetComponent<BlockBase>().tapEffect();
+						}
+						lastBlockColor = block.GetComponent<BlockBase>().getColorIndex();
+						
+						//Destroy (block);
+						//Debug.LogFormat ("removeIndex {0} , {1}", i, index);
+						recordRemoveStep(blockStates [0,index].color,i,index);
 						allBlocks [i, index] = null;
 						blockStates [0,index].color = -1;
-						addBoomParticle (block.transform.position,recordStep.color);
+						// addBoomParticle (block.transform.position,recordStep.color);
 						break;
 					}
 				}
 			}
+			return true;
 		}
+		return false;
 	}
 
+	void recordRemoveStep(int _color,int _floor,int _index,bool isAdd = false){
+		BlockActionState recordStep = new BlockActionState();
+		recordStep.color = _color;
+		recordStep.floor = _floor;
+		recordStep.step = gameStep;
+		recordStep.originalIndex = _index;
+		recordStep.isAdd = isAdd;
+		removeSeuqence.Add(recordStep);
+	}
 	void redoBlock(){
-		foreach(BlockState bs in redoSeuqence){
+		foreach(BlockActionState bs in redoSeuqence){
+
 			
 			int oIndex = bs.originalIndex;
 			int currentColor = blockStates [0,oIndex].color;
 			blockStates [0,bs.originalIndex].color = bs.color;
 			blockStates [0,bs.originalIndex].floor = bs.floor;
 
-			// if(allBlocks[bs.floor+1,oIndex] != null){
-			// 	allBlocks[bs.floor+1,oIndex].transform.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
-			// }	
-			
-			Vector3 v = new Vector3 (0,2,0);
+			Vector3 v = new Vector3 (0,1,0);
 			Quaternion turnRotation= Quaternion.Euler (0f, 0f, 0f);
 
 			v.x = Mathf.Ceil (oIndex / B_Width) * 1.2f + 0.5f;
@@ -852,12 +1033,8 @@ public class GameManager : MonoBehaviour {
 			// v.y = 2 - bs.floor;
 			Vector3 v2 =  container.transform.InverseTransformVector(v);
 			// ... create them, set their player number and references needed for control.
-			GameObject block = 
-				Instantiate(GetBlockPrefabByID(bs.color),  Vector3.zero, turnRotation) as GameObject;
+			GameObject block = getNewBlock(bs.color,  Vector3.zero, turnRotation);
 			allBlocks [bs.floor,oIndex] = block;
-			block.transform.localScale = new Vector3 (1f, 1f, 1f);
-			block.tag = "Block";
-			block.transform.parent = container.transform;
 			block.transform.localPosition = v;
 			// block.transform.position = v; 
 			blocksLeftCounts ++;
@@ -942,6 +1119,251 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+// 为需要移动的格子排序
+	void sortMovingData(){
+		uplist.Clear();
+		downlist.Clear();
+		leftlist.Clear();
+		rightlist.Clear();
+		
+
+		for(int i=0;i<moveGridData.Count;i++){
+			string state = moveGridData[i];
+			if(state == LevelDataInfo.UP){
+				uplist.Add(i);
+			}else if(state == LevelDataInfo.DOWN){
+				downlist.Add(i);
+			}else if(state == LevelDataInfo.LEFT){
+				leftlist.Add(i);
+			}else if(state == LevelDataInfo.RIGHT){
+				rightlist.Add(i);
+			}  
+		}
+
+		if(uplist.Count > 0){
+			uplist.Sort(delegate(int a,int b){
+				if(a % B_Width >= b %B_Width){
+					return -1;
+				}else{
+					return 1;
+				}
+			});
+		}
+
+		if(downlist.Count > 0){
+			downlist.Sort(delegate(int a,int b){
+				if(a % B_Width <= b %B_Width){
+					return -1;
+				}else{
+					return 1;
+				}
+			});
+		}
+
+		if(rightlist.Count > 0){
+			rightlist.Sort(delegate(int a,int b){
+				if(Mathf.Ceil(a / B_Width) >= Mathf.Ceil(b /B_Width)){
+					return -1;
+				}else{
+					return 1;
+				}
+			});
+		}
+
+		if(leftlist.Count > 0){
+			leftlist.Sort(delegate(int a,int b){
+				if(Mathf.Ceil(a / B_Width) <= Mathf.Ceil(b /B_Width)){
+					return -1;
+				}else{
+					return 1;
+				}
+			});
+		}
+		// Debug.LogFormat ("up {0} ", JsonMapper.ToJson(uplist));
+		// Debug.LogFormat ("down {0} ", JsonMapper.ToJson(downlist));
+		// Debug.LogFormat ("right {0} ", JsonMapper.ToJson(rightlist));
+		// Debug.LogFormat ("left {0} ", JsonMapper.ToJson(leftlist));
+	}
+// 回合结束后重新设置移动的数据 先右再上 先下再左
+	void reverseMoveData(){
+		
+
+		for(int i = 0 ; i < rightlist.Count ; i++){
+			int index = rightlist[i] ;
+			string state = LevelDataInfo.reversDirect(moveGridData[index]);
+			moveGridData[index+B_Width] = state;
+			moveGridData[index] = LevelDataInfo.STOP;
+		}
+		for(int i = 0 ; i < uplist.Count ; i++){
+			int index = uplist[i] ;
+			string state = LevelDataInfo.reversDirect(moveGridData[index]);
+			moveGridData[index +1] = state;
+			moveGridData[index] = LevelDataInfo.STOP;
+		}
+		
+
+		for(int i = 0 ; i < downlist.Count ; i++){
+			int index = downlist[i] ;
+			string state = LevelDataInfo.reversDirect(moveGridData[index]);
+			moveGridData[index-1] = state;
+			moveGridData[index] = LevelDataInfo.STOP;
+		}
+		
+		
+		for(int i = 0 ; i < leftlist.Count ; i++){
+			int index = leftlist[i] ;
+			string state = LevelDataInfo.reversDirect(moveGridData[index]);
+			moveGridData[index-B_Width] = state;
+			moveGridData[index] = LevelDataInfo.STOP;
+		}
+		
+	}
+
+	bool checkAllMovingFinish(){
+		bool isFinishMove = true;
+		for(int i=0;i<moveGridData.Count;i++){
+			int gotBlock = blockStates[0,i].color;
+			string state = moveGridData[i];
+			if(state != LevelDataInfo.STOP && gotBlock != -1){
+				isFinishMove = false;
+				break;
+			}
+		}
+		return isFinishMove;
+
+	}
+
+	void initMovingFrame(){
+
+		foreach (Transform child in container.transform)
+		{
+			if(child.gameObject.tag == "MovingFrame"){
+				Destroy (child.gameObject);
+			}
+		}
+
+		for(int i=0;i<B_Width*B_Width;i++){
+			int gotBlock = blockStates[0,i].color;
+			// Debug.LogFormat("blockStates???? {0},{1}",gotBlock,i);
+		}
+		for(int i=0;i<moveGridData.Count;i++){
+			string state = moveGridData[i];
+
+			int gotBlock = blockStates[0,i].color;
+			// Debug.LogFormat("blockStates!!!!! {0}",blockStates);
+			// Debug.LogFormat("gotBlock {0},{1},{2},",gotBlock,state,i);
+			if(state != LevelDataInfo.STOP && gotBlock != -1){
+				Vector3 v = new Vector3();
+				v.x = Mathf.Ceil (i / B_Width) * 1.2f + 0.5f;
+				v.z = i % B_Width * 1.2f+0.5f ;
+
+				if(state == LevelDataInfo.UP){
+					v.z += 1.2f;
+				}else if(state == LevelDataInfo.DOWN){
+					v.z -= 1.2f;
+				}else if(state == LevelDataInfo.LEFT){
+					v.x -= 1.2f;
+				}else if(state == LevelDataInfo.RIGHT){
+					v.x += 1.2f;
+				}  
+
+				GameObject mFrame =	Instantiate(Resources.Load( "MovingBlockFrame", typeof( GameObject ) ), 
+				new Vector3(1,1,1), Quaternion.Euler (90f, 0f, 0f)) as GameObject;
+				mFrame.transform.localScale = new Vector3 (1, 1, 1);
+				mFrame.transform.parent = this.container.transform;
+				mFrame.transform.localPosition = v;
+				mFrame.tag = "MovingFrame";
+				Color tempColor = mFrame.GetComponent<Renderer>().material.color;
+				tempColor.a =0;
+				mFrame.GetComponent<Renderer>().material.color = tempColor;
+				mFrame.GetComponent<Renderer>().material.DOFade(0.7f,0.8f);
+
+				mFrame.gameObject.AddComponent<MoveFrame>();
+				mFrame.gameObject.GetComponent<MoveFrame>().setDir(state);
+				// MoveFrame mFrame = new MoveFrame();
+				// mFrame.gameObject.transform.parent = this.container.transform;
+				// mFrame.tag = "MovingFrame";
+			}  
+		}
+	}
+
+	void refreshMovingFrame(){
+		for(int i=0;i<moveGridData.Count;i++){
+			string state = moveGridData[i];
+			if(state == LevelDataInfo.UP){
+
+			}else if(state == LevelDataInfo.DOWN){
+
+			}else if(state == LevelDataInfo.LEFT){
+
+			}else if(state == LevelDataInfo.RIGHT){
+
+			}  
+		}
+	}
+// 移动场上的格子和数据
+	void changeMoveState(int blockIndex , int delta,bool isUpDown){
+		if (blockStates[0,blockIndex].color != -1) {
+
+			int tempC = blockStates[0,blockIndex].color;
+			int tempF = blockStates[0,blockIndex].floor;
+			// recordRemoveStep(tempC,tempF,blockIndex);
+
+			// recordRemoveStep(tempC,tempF,blockIndex+delta,true);
+
+			blockStates[0,blockIndex+delta].color = tempC;
+			blockStates[0,blockIndex+delta].floor = tempF;
+			blockStates[0,blockIndex].color = -1;
+			blockStates[0,blockIndex].floor = -1;
+
+			for (int k = 0; k < currentFloor + 1; k++) {
+				if (allBlocks[k,blockIndex]) {
+					BlockBase bBase = allBlocks[k,blockIndex].GetComponent<BlockBase>();
+					hasBlockMoving = true;
+					if(isUpDown){
+						bBase.verticalMoving (delta/Mathf.Abs(delta));
+					}else{
+						bBase.horizontalMove (delta/Mathf.Abs(delta));
+					}
+					GameObject block = allBlocks [k,blockIndex];
+					allBlocks [k,blockIndex] = null;
+					allBlocks [k,blockIndex+delta] = block;
+				}
+			}
+		}
+	}
+
+	void movingBlockState(){
+
+		for(int i = 0 ; i < rightlist.Count;i++){
+			int blockIndex = rightlist[i];
+			changeMoveState(blockIndex , B_Width,false);
+		}
+
+		for(int i = 0 ; i < uplist.Count;i++){
+			int blockIndex = uplist[i];
+			changeMoveState(blockIndex , 1,true);
+		}
+		
+		for(int i = 0 ; i < downlist.Count;i++){
+			int blockIndex = downlist[i];
+			changeMoveState(blockIndex , -1,true);
+		}
+	
+		for(int i = 0 ; i < leftlist.Count;i++){
+			int blockIndex = leftlist[i];
+			changeMoveState(blockIndex , -B_Width,false);
+		}
+
+	}
+// 移动的格子
+	void blockMoving(){
+		
+		sortMovingData();
+		movingBlockState();
+		reverseMoveData();
+	}
+
 	void droping(float delatTime){
 		foreach (GameObject element in dropBlocks) {
 			BlockBase bBase = element.GetComponent<BlockBase>();
@@ -957,8 +1379,8 @@ public class GameManager : MonoBehaviour {
 	}
 
 
-
-	//向左靠拢格子
+#region 向左靠拢格子
+	/*
 	void leftMoveBlock(){
 		moveBlocks.Clear ();
 		int line = 0;
@@ -998,6 +1420,9 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 	}
+	*/
+#endregion
+
 	//横向搜索是否存在可以消除的格子
 	void findHorizontalConnect(){
 		findTreasureKey = false;

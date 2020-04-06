@@ -25,6 +25,10 @@ public class UILevelSelect : MonoBehaviour {
 		for(int i = 0 ; i < levelController.levels.Count ; i++ ){
 			levelList.Add(levelUI);
 		}
+
+		// levelSelectPanel.GetComponentInChildren<GridLayoutGroup>().cellSize = new Vector2(150,150);
+		// levelSelectPanel.GetComponentInChildren<GridLayoutGroup>().spacing = new Vector2(100,100);
+
 		BuildLevelPage(LevelDataInfo.lastPage);	
 	}
 	
@@ -39,9 +43,10 @@ public class UILevelSelect : MonoBehaviour {
 			Level level = levelController.levels[(pageSize * page) +i];
 			UILevel uiLevel = Instantiate(pageLists[i]);
 			uiLevel.SetStars(level.Stars);
-			Debug.LogFormat("level.Stars{0}",level.Stars);
+			// Debug.LogFormat("level.Stars{0}",level.Stars);
 			uiLevel.transform.SetParent(levelSelectPanel);
 			uiLevel.GetComponent<Button>().onClick.AddListener(() => SelectLevel(level));
+			uiLevel.transform.localScale = new Vector3(1.0f,1.0f,1.0f);
 
 			if(!level.Locked){
 				uiLevel.lockImage.SetActive(false);

@@ -38,7 +38,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1359796263966058}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -1.4815302, y: -1.6613293, z: -1.4514039}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -407,16 +407,34 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
-      inSlope: 2
-      outSlope: 2
+      value: 0.0065460205
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.63506854
+      value: 0.5557725
+      inSlope: 1.4507749
+      outSlope: 1.4507749
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.7862014
+      value: 0.8727775
+      inSlope: 1.3664198
+      outSlope: 1.3664198
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
-      value: 1
+      value: 1.006546
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -441,12 +459,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   advancedMode: 1
-  voxelFilePath: /Users/tianyunshi/blockdooms/BlockDisappear/Assets/Resources/voxel/sparklyblock-3-right.vox
+  voxelFilePath: /Users/sty/Documents/unity/BlockDisappear/BlockDisappear/Assets/Resources/voxel/sparklyblock-3-right-frame.vox
   voxelFileGUID: 
-  voxelFileObject: {fileID: 100000, guid: 31c5f37d1ae1745c7920d0a1cf22f310, type: 3}
+  voxelFileObject: {fileID: 100000, guid: 277b45664cd3d4e279f9ab74ab5fcbc7, type: 3}
   voxelFileSubIndex: 0
   fileType: 0
-  fileRefreshLastTimeTicks: 636803860410652230
+  fileRefreshLastTimeTicks: 636819667764232630
   dataVersion: 114
   legacyVoxImport: 0
   importMode: 1
