@@ -50,6 +50,7 @@ public class CameraOrbit : MonoBehaviour
     private int maskAmplify = 1;
     private float maskWaiting = 1f;
     private float maskWaitingTime = 1f;
+    private GameObject myPlanet;
 
     // Use this for initialization
     void Start() {
@@ -58,6 +59,7 @@ public class CameraOrbit : MonoBehaviour
         readyPanel.gameObject.SetActive(false);
 
         initShader();
+        initPlanet();
     }
      public int _smoothLength = 20;
     //遮罩混合颜色
@@ -73,6 +75,12 @@ public class CameraOrbit : MonoBehaviour
          _mainMaterial = new Material(Shader.Find("MyShader/DarkEffect"));
          _mainCamera = GetComponent<Camera>();
 
+    }
+
+    void initPlanet(){
+        myPlanet = Instantiate(Resources.Load( "ploygon_planet/Prefabs/Gas_Giant_02", typeof( GameObject ) ), 
+            new Vector3 (0,0,0), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+        myPlanet.transform.localScale = new Vector3 (0.17f, 0.17f, 0.17f);
     }
 
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
@@ -178,9 +186,10 @@ public class CameraOrbit : MonoBehaviour
     }
 
     void changeNewPlanet(){
-          GameObject planet = Instantiate(Resources.Load( "ploygon_planet/Prefabs/Sand_Planet_01", typeof( GameObject ) ), 
+        Destroy(myPlanet);
+        myPlanet = Instantiate(Resources.Load( "ploygon_planet/Prefabs/Sand_Planet_01", typeof( GameObject ) ), 
             new Vector3 (0,0,0), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-        planet.transform.localScale = new Vector3 (0.17f, 0.17f, 0.17f);
+        myPlanet.transform.localScale = new Vector3 (0.17f, 0.17f, 0.17f);
     }
 
     void loadingMask(){
