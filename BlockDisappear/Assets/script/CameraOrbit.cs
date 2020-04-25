@@ -47,6 +47,9 @@ public class CameraOrbit : MonoBehaviour
     private Material _mainMaterial;
 
     private bool startChange = false;
+    private int maskAmplify = 1;
+    private float maskWaiting = 1f;
+    private float maskWaitingTime = 1f;
 
     // Use this for initialization
     void Start() {
@@ -174,14 +177,41 @@ public class CameraOrbit : MonoBehaviour
         startChange = true;
     }
 
-    void LateUpdate() {
-        if(startChange){
+    void changeNewPlanet(){
+          GameObject planet = Instantiate(Resources.Load( "ploygon_planet/Prefabs/Sand_Planet_01", typeof( GameObject ) ), 
+            new Vector3 (0,0,0), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+        planet.transform.localScale = new Vector3 (0.17f, 0.17f, 0.17f);
+    }
+
+    void loadingMask(){
+         if(startChange){
             if(maskRadius < 0){
+                maskAmplify = -1;
+
+                if(maskWaiting == maskWaitingTime){
+                    changeNewPlanet();
+                }
+
+                maskWaiting -= Time.deltaTime;
+                if(maskWaiting <= 0f){
+                    maskWaiting = 0f;
+                }
+            }
+            if(maskWaiting <= 0 && maskAmplify == -1 && maskRadius >= Screen.width/2){
+                maskWaiting = maskWaitingTime;
+                maskAmplify = 1;
                 startChange = false;
                 maskRadius = Screen.width/2;
             }
-            maskRadius -= 30f;
+
+            if(maskWaiting == maskWaitingTime || maskWaiting == 0f){
+                maskRadius -= 20f * maskAmplify;
+            }
         } 
+    }
+
+    void LateUpdate() {
+        loadingMask();
         // return;
         if(targetTsf != null && fracJourney < 1.0f){
 
