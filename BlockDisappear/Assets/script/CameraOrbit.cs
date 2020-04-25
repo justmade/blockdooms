@@ -78,7 +78,8 @@ public class CameraOrbit : MonoBehaviour
     }
 
     void initPlanet(){
-        myPlanet = Instantiate(Resources.Load( "ploygon_planet/Prefabs/Gas_Giant_02", typeof( GameObject ) ), 
+        string planetName = LevelDataInfo.planetList[LevelDataInfo.chapter];
+        myPlanet = Instantiate(Resources.Load( "ploygon_planet/Prefabs/"+planetName, typeof( GameObject ) ), 
             new Vector3 (0,0,0), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
         myPlanet.transform.localScale = new Vector3 (0.17f, 0.17f, 0.17f);
     }
@@ -181,13 +182,29 @@ public class CameraOrbit : MonoBehaviour
         
     }
 
+    public void nextPlanet(){
+        LevelDataInfo.chapter ++;
+        LevelDataInfo.chapter = Mathf.Min(LevelDataInfo.chapter,2);
+        Debug.LogFormat("nextLevelDataInfo.chapter {0}",LevelDataInfo.chapter);
+        changeLevelScene();
+    }
+
+    public void perPlanet(){
+        LevelDataInfo.chapter --;
+        LevelDataInfo.chapter = Mathf.Max(LevelDataInfo.chapter,0);
+         Debug.LogFormat("perLevelDataInfo.chapter {0}",LevelDataInfo.chapter);
+        changeLevelScene();
+    }
+
     public void changeLevelScene(){
         startChange = true;
     }
 
     void changeNewPlanet(){
         Destroy(myPlanet);
-        myPlanet = Instantiate(Resources.Load( "ploygon_planet/Prefabs/Sand_Planet_01", typeof( GameObject ) ), 
+
+        string planetName = LevelDataInfo.planetList[LevelDataInfo.chapter];
+        myPlanet = Instantiate(Resources.Load( "ploygon_planet/Prefabs/"+planetName, typeof( GameObject ) ), 
             new Vector3 (0,0,0), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
         myPlanet.transform.localScale = new Vector3 (0.17f, 0.17f, 0.17f);
     }

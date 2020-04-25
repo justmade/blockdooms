@@ -62,7 +62,7 @@ public class SagaMapScene : MonoBehaviour {
 			float px = R * Mathf.Sin(angle1) * Mathf.Cos(angle2);
 			float py = R * Mathf.Sin(angle1) * Mathf.Sin(angle2);
 			float pz = R * Mathf.Cos(angle1);
-			Level level = levelController.levels[i + LevelDataInfo.chapter * 20];
+			Level level = levelController.levels[i + LevelDataInfo.chapter * 12];
 			string metalName = "DefaultLevelsBt";
 			if (level.Stars > 0 ){
 				metalName = "PassedLevelsBt";

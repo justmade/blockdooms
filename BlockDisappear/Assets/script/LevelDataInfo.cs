@@ -25,6 +25,8 @@ public static class LevelDataInfo  {
 
 	public static string STOP = "s";
 
+	public static string[] planetList= {"Gas_Giant_03","Sand_Planet_01","Cream_Violet_Planet"};
+
     public static int SelectLevelIndex { 
 
 		get => _selectLevelIndex; 
@@ -36,7 +38,7 @@ public static class LevelDataInfo  {
     private static int _currentLevel = 0;
 
     public static int CurrentLevel { 
-		get => _selectLevelIndex + chapter * 20  ;
+		get => _selectLevelIndex + chapter * 12  ;
 		set => _currentLevel = value; }
 
 
