@@ -79,7 +79,7 @@ public class CameraOrbit : MonoBehaviour
 
     void initPlanet(){
         string planetName = LevelDataInfo.planetList[LevelDataInfo.chapter];
-        myPlanet = Instantiate(Resources.Load( "ploygon_planet/Prefabs/"+planetName, typeof( GameObject ) ), 
+        myPlanet = Instantiate(Resources.Load( "PlanetObjs/"+planetName, typeof( GameObject ) ), 
             new Vector3 (0,0,0), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
         myPlanet.transform.localScale = new Vector3 (0.17f, 0.17f, 0.17f);
     }
@@ -204,7 +204,7 @@ public class CameraOrbit : MonoBehaviour
         Destroy(myPlanet);
 
         string planetName = LevelDataInfo.planetList[LevelDataInfo.chapter];
-        myPlanet = Instantiate(Resources.Load( "ploygon_planet/Prefabs/"+planetName, typeof( GameObject ) ), 
+        myPlanet = Instantiate(Resources.Load( "PlanetObjs/"+planetName, typeof( GameObject ) ), 
             new Vector3 (0,0,0), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
         myPlanet.transform.localScale = new Vector3 (0.17f, 0.17f, 0.17f);
     }
