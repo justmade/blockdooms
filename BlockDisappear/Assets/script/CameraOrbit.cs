@@ -184,7 +184,7 @@ public class CameraOrbit : MonoBehaviour
 
     public void nextPlanet(){
         LevelDataInfo.chapter ++;
-        LevelDataInfo.chapter = Mathf.Min(LevelDataInfo.chapter,1);
+        LevelDataInfo.chapter = Mathf.Min(LevelDataInfo.chapter,4);
         Debug.LogFormat("nextLevelDataInfo.chapter {0}",LevelDataInfo.chapter);
         changeLevelScene();
     }
