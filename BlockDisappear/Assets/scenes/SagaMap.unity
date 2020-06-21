@@ -8216,7 +8216,7 @@ MonoBehaviour:
       SoundData:
         SoundSource: 0
         DatabaseName: Example Slides
-        SoundName: Swoosh
+        SoundName: No Sound
         AudioClip: {fileID: 0}
         OutputAudioMixerGroup: {fileID: 0}
     PresetCategory: Organic

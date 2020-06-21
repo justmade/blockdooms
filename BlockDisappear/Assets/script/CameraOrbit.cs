@@ -10,7 +10,7 @@ public class CameraOrbit : MonoBehaviour
     protected Transform _XForm_Parent;
 
     protected Vector3 _LocalRotation;
-    protected float _CameraDistance = 2f;
+    protected float _CameraDistance = 5f;
 
     public float MouseSensitivity = 4f;
     public float ScrollSensitvity = 2f;
@@ -48,8 +48,8 @@ public class CameraOrbit : MonoBehaviour
 
     private bool startChange = false;
     private int maskAmplify = 1;
-    private float maskWaiting = 1f;
-    private float maskWaitingTime = 1f;
+    private float maskWaiting = 0.8f;
+    private float maskWaitingTime = 0.8f;
     private GameObject myPlanet;
 
     // Use this for initialization
@@ -184,7 +184,7 @@ public class CameraOrbit : MonoBehaviour
 
     public void nextPlanet(){
         LevelDataInfo.chapter ++;
-        LevelDataInfo.chapter = Mathf.Min(LevelDataInfo.chapter,2);
+        LevelDataInfo.chapter = Mathf.Min(LevelDataInfo.chapter,1);
         Debug.LogFormat("nextLevelDataInfo.chapter {0}",LevelDataInfo.chapter);
         changeLevelScene();
     }
@@ -231,7 +231,7 @@ public class CameraOrbit : MonoBehaviour
             }
 
             if(maskWaiting == maskWaitingTime || maskWaiting == 0f){
-                maskRadius -= 20f * maskAmplify;
+                maskRadius -= (Screen.width/40) * maskAmplify;
             }
         } 
     }
@@ -275,7 +275,7 @@ public class CameraOrbit : MonoBehaviour
 
                 this._CameraDistance += ScrollAmount * -1f;
 
-                this._CameraDistance = Mathf.Clamp(this._CameraDistance, 1.5f, 100f);
+                this._CameraDistance = Mathf.Clamp(this._CameraDistance, 1.5f, 5f);
             }
 
             if ( this._XForm_Camera.localPosition.z != this._CameraDistance * -1f )
