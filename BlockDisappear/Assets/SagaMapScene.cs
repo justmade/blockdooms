@@ -85,7 +85,16 @@ public class SagaMapScene : MonoBehaviour {
 	}
 
 	void initCameraPos(){
-		if(LevelDataInfo.SelectLevelIndex > 0){
+		if(LevelDataInfo.SelectLevelIndex == 12){
+			mainCamera.GetComponent<CameraOrbit>().nextPlanet();
+			
+			mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[0].transform,
+				0,false,true);
+			getUFOTargetPos(0);
+			setUFOPos(targetPos,turnRotation,false);
+
+			
+		}else if(LevelDataInfo.SelectLevelIndex > 0){
 			mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[LevelDataInfo.SelectLevelIndex-1].transform,
 				LevelDataInfo.SelectLevelIndex-1,false,true);
 			getUFOTargetPos(LevelDataInfo.SelectLevelIndex-1);
