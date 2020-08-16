@@ -53,6 +53,22 @@ public class SagaMapScene : MonoBehaviour {
 
 	void createLevels(){
 		LevelContainer = GameObject.Find("Sphere");
+		initLevelBlocks();
+		initCameraPos();
+		mainCamera.GetComponent<CameraOrbit>().setLevelObjectCB(updateLevelBlocks);
+	}
+
+
+
+	void updateLevelBlocks(){
+		for(int i=0;i<allLevelBlock.Length;i ++){
+			Destroy(allLevelBlock[i]);
+		}
+		initLevelBlocks();
+	}
+
+
+	void initLevelBlocks(){
 		allLevelBlock = new GameObject[totalLevels];
 		float R = 20;
 		for(int i=0;i<totalLevels;i ++){
@@ -67,22 +83,15 @@ public class SagaMapScene : MonoBehaviour {
 			if (level.Stars > 0 ){
 				metalName = "PassedLevelsBt";
 			}
-
 			Quaternion turnRotation=  Quaternion.LookRotation(new Vector3(px,py,pz),Vector3.up);
-			// GameObject g = GameObject.CreatePrimitive(PrimitiveType.Cube);
-			// GameObject g =	Instantiate(Resources.Load( "UFO_level", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
 			GameObject g =	Instantiate(Resources.Load( metalName, typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-			// block.transform.localScale = new Vector3 (-blockScale, blockScale, blockScale);
 			g.transform.position = new Vector3(px,py,pz);
 			g.transform.rotation = turnRotation;
-			// g.transform.parent = LevelContainer.transform;
 			g.tag = "LevelBlock";
 			allLevelBlock[i]=g;
-
 		}
-		initCameraPos();
-
 	}
+
 
 	void initCameraPos(){
 		if(LevelDataInfo.SelectLevelIndex == 12){

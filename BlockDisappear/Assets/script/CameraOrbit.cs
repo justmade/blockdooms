@@ -44,6 +44,9 @@ public class CameraOrbit : MonoBehaviour
     public delegate void VoidDelegate();
     VoidDelegate setTouch;
 
+    public delegate void VoidLevelObjDelegate();
+    VoidLevelObjDelegate levelBlockCB;
+
     private Material _mainMaterial;
 
     private bool startChange = false;
@@ -168,6 +171,10 @@ public class CameraOrbit : MonoBehaviour
         setTouch = callback;
     }
 
+    public void setLevelObjectCB(VoidLevelObjDelegate callback){
+        levelBlockCB = callback;
+    }
+
 
     public void setCameraPosImmediately(){
          this.transform.parent.transform.position = Vector3.Lerp(startPos, targetTsf.position,1);
@@ -186,13 +193,15 @@ public class CameraOrbit : MonoBehaviour
         LevelDataInfo.chapter ++;
         LevelDataInfo.chapter = Mathf.Min(LevelDataInfo.chapter,4);
         Debug.LogFormat("nextLevelDataInfo.chapter {0}",LevelDataInfo.chapter);
+        levelBlockCB();
         changeLevelScene();
     }
 
     public void perPlanet(){
         LevelDataInfo.chapter --;
         LevelDataInfo.chapter = Mathf.Max(LevelDataInfo.chapter,0);
-         Debug.LogFormat("perLevelDataInfo.chapter {0}",LevelDataInfo.chapter);
+        Debug.LogFormat("perLevelDataInfo.chapter {0}",LevelDataInfo.chapter);
+        levelBlockCB();
         changeLevelScene();
     }
 
