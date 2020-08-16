@@ -123,6 +123,8 @@ public class GameManager : MonoBehaviour {
 
 	private bool deletedBlockFinished = true;
 
+	private bool redoLock = false;
+
 
     // Use this for initialization
 
@@ -157,6 +159,7 @@ public class GameManager : MonoBehaviour {
 //		if (txtAsset) {
 //			solveLevelData (txtAsset.text);
 //		}
+		redoLock = false;
 		InitGame(currentLevelName);
 	}
 
@@ -227,7 +230,7 @@ public class GameManager : MonoBehaviour {
 		Debug.LogFormat ("debug in gridingame {0},{1}" , loadGridData.Count , moveGridData.Count);
 	}
 
-	void onBack(){
+	public void onBack(){
 		// Application.LoadLevel(Application.loadedLevel);
 		// SceneManager.LoadScene("LevelSelect");
 		if(LevelDataInfo.isTest){
@@ -252,18 +255,21 @@ public class GameManager : MonoBehaviour {
 		levelController.LevelComplete(currentLevelName,1);
 	}
 
-	void onRetry(){
-		Button btn = addFloorBtn.GetComponent<Button>();
-		btn.onClick.RemoveAllListeners();
-		Button upBtn = addUpBtn.GetComponent<Button>();
-		upBtn.onClick.RemoveAllListeners();
-		Button redoBtn = redoButton.GetComponent<Button>();
-		redoBtn.onClick.RemoveAllListeners();
+	public void onRetry(){
+		// Button btn = addFloorBtn.GetComponent<Button>();
+		// btn.onClick.RemoveAllListeners();
+		// Button upBtn = addUpBtn.GetComponent<Button>();
+		// upBtn.onClick.RemoveAllListeners();
+		// Button redoBtn = redoButton.GetComponent<Button>();
+		// redoBtn.onClick.RemoveAllListeners();
 		destoryAllBlocks ();
 		InitGame(currentLevelName);
 	}
 
-	void onRedo(){
+	public void onRedo(){
+		if(redoLock){
+			return;
+		}
 		if(blockHasMove == true){
 			blockMoving();
 		}
@@ -355,8 +361,10 @@ public class GameManager : MonoBehaviour {
 
 		if(checkBlockIsIdle() == BlockAnimationState.IDLE){
 			redoButton.gameObject.SetActive (true);
+			redoLock = false;
 		}else{
 			redoButton.gameObject.SetActive (false);
+			redoLock = true;
 		}
     }
 
