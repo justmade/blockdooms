@@ -2646,6 +2646,57 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!1 &216466109
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 216466110}
+  - component: {fileID: 216466111}
+  m_Layer: 0
+  m_Name: FootPage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &216466110
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 216466109}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 950270763}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 24, y: 24}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &216466111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 216466109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09f069db67bf948fcbe1a1a54ac8abf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state_off: {fileID: 2800000, guid: 36e2cd32a9461954d92179409e968545, type: 3}
+  state_on: {fileID: 2800000, guid: 5dcf892d7cf6952488d626701f593a38, type: 3}
+  iconSize: {x: 24, y: 24}
 --- !u!1 &288675075
 GameObject:
   m_ObjectHideFlags: 0
@@ -5226,7 +5277,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 723898471}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 528db0dc07cc941fb87d1dad734ef4e8, type: 3}
+  m_Script: {fileID: 11500000, guid: 999b6ab58d6a3464781e9e8663da6fcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 1182234329}
@@ -7630,6 +7681,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 216466111}
+        m_MethodName: updatePointState
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &762930071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7810,6 +7872,7 @@ RectTransform:
   - {fileID: 1053735148}
   - {fileID: 762930068}
   - {fileID: 1608281596}
+  - {fileID: 216466110}
   m_Father: {fileID: 0}
   m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -11824,6 +11887,17 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1182234332}
         m_MethodName: nextPlanet
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 216466111}
+        m_MethodName: updatePointState
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

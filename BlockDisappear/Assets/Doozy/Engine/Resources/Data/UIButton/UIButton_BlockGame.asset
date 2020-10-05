@@ -19,3 +19,6 @@ MonoBehaviour:
   - Back
   - Left
   - Right
+  - Return
+  - Retry
+  - Redo
