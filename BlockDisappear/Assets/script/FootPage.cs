@@ -29,6 +29,7 @@ public class FootPage : MonoBehaviour
     }
 
     void addPoint(){
+        float totalW = -LevelDataInfo.planetList.Length * iconSize.x/2;
         onState = Sprite.Create(state_on,new Rect(0.0f, 0.0f,iconSize.x, iconSize.y),new Vector2(0.5f,0.5f));//注意居中显示采用0.5f值  //创建一个精灵(图片，纹理，二维浮点型坐标)
         offState = Sprite.Create(state_off,new Rect(0.0f, 0.0f,iconSize.x, iconSize.y),new Vector2(0.5f,0.5f));
         points = new GameObject[LevelDataInfo.planetList.Length];
@@ -40,7 +41,7 @@ public class FootPage : MonoBehaviour
             
             spr.sprite = offState; 
             pointObj.transform.parent = this.gameObject.transform;
-            pointObj.transform.localPosition = new Vector3(i *iconSize.x,0,0);
+            pointObj.transform.localPosition = new Vector3(totalW + i *iconSize.x,0,0);
             RectTransform rectTrans = pointObj.GetComponent<RectTransform>();
             rectTrans.sizeDelta = iconSize;
             pointObj.SetActive(true); //Activate the GameObject
