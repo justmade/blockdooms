@@ -190,17 +190,22 @@ public class CameraOrbit : MonoBehaviour
     }
 
     public void nextPlanet(){
-        LevelDataInfo.chapter ++;
-        LevelDataInfo.chapter = Mathf.Min(LevelDataInfo.chapter,4);
-        Debug.LogFormat("nextLevelDataInfo.chapter {0}",LevelDataInfo.chapter);
-        changeLevelScene();
+        if(LevelDataInfo.chapter < LevelDataInfo.planetList.Length-1){
+            LevelDataInfo.chapter ++;
+            LevelDataInfo.chapter = Mathf.Min(LevelDataInfo.chapter,4);
+            Debug.LogFormat("nextLevelDataInfo.chapter {0}",LevelDataInfo.chapter);
+            changeLevelScene();
+        }
+
     }
 
     public void perPlanet(){
-        LevelDataInfo.chapter --;
-        LevelDataInfo.chapter = Mathf.Max(LevelDataInfo.chapter,0);
-        Debug.LogFormat("perLevelDataInfo.chapter {0}",LevelDataInfo.chapter);
-        changeLevelScene();
+        if(LevelDataInfo.chapter > 0 ){
+            LevelDataInfo.chapter --;
+            LevelDataInfo.chapter = Mathf.Max(LevelDataInfo.chapter,0);
+            Debug.LogFormat("perLevelDataInfo.chapter {0}",LevelDataInfo.chapter);
+            changeLevelScene();
+        }
     }
 
     public void changeLevelScene(){
