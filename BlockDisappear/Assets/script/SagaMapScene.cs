@@ -31,6 +31,7 @@ public class SagaMapScene : MonoBehaviour {
 	void Start () {
 		initUFO();
 		createLevels();
+		
 	}
 
 
@@ -51,6 +52,7 @@ public class SagaMapScene : MonoBehaviour {
 		}
 	}
 
+
 	void createLevels(){
 		LevelContainer = GameObject.Find("Sphere");
 		initLevelBlocks();
@@ -65,6 +67,8 @@ public class SagaMapScene : MonoBehaviour {
 			Destroy(allLevelBlock[i]);
 		}
 		initLevelBlocks();
+		LevelDataInfo.SelectLevelIndex = 0;
+		initCameraPos();
 	}
 
 
