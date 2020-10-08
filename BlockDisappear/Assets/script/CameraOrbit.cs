@@ -190,7 +190,7 @@ public class CameraOrbit : MonoBehaviour
     }
 
     public void nextPlanet(){
-        if(LevelDataInfo.chapter < LevelDataInfo.planetList.Length-1){
+        if(!startChange && LevelDataInfo.chapter < LevelDataInfo.planetList.Length-1){
             LevelDataInfo.chapter ++;
             LevelDataInfo.chapter = Mathf.Min(LevelDataInfo.chapter,4);
             Debug.LogFormat("nextLevelDataInfo.chapter {0}",LevelDataInfo.chapter);
@@ -200,7 +200,7 @@ public class CameraOrbit : MonoBehaviour
     }
 
     public void perPlanet(){
-        if(LevelDataInfo.chapter > 0 ){
+        if(!startChange && LevelDataInfo.chapter > 0 ){
             LevelDataInfo.chapter --;
             LevelDataInfo.chapter = Mathf.Max(LevelDataInfo.chapter,0);
             Debug.LogFormat("perLevelDataInfo.chapter {0}",LevelDataInfo.chapter);
