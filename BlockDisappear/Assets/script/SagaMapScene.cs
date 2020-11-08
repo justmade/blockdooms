@@ -98,7 +98,8 @@ public class SagaMapScene : MonoBehaviour {
 
 
 	void initCameraPos(){
-		if(LevelDataInfo.SelectLevelIndex == 12){
+		Debug.LogFormat("SelectLevelIndex{0}",LevelDataInfo.SelectLevelIndex);
+		if(LevelDataInfo.SelectLevelIndex == 12 && LevelDataInfo.chapter < LevelDataInfo.planetList.Length-1){
 			mainCamera.GetComponent<CameraOrbit>().nextPlanet();
 			
 			mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[0].transform,
