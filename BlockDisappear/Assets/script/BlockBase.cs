@@ -135,7 +135,7 @@ public class BlockBase : MonoBehaviour {
 			block = Instantiate(Resources.Load( "GreenCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
 			block.transform.localScale = new Vector3 (blockScale, blockScale, blockScale);
 		}else if(colorID == elementConfig.Treasure){
-			block = Instantiate(Resources.Load( "LeftCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
+			block = Instantiate(Resources.Load( "LeftCenter2", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
 			block.transform.localScale = new Vector3 (blockScale, blockScale, blockScale);
 		}else if(colorID == elementConfig.Key){
 			block = Instantiate(Resources.Load( "RightCenter", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (0f, 0f, 0f)) as GameObject;
