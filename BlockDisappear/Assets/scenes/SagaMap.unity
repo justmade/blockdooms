@@ -5831,20 +5831,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1412782950}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &380797822
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 380797821}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e0adf91b11d945b1955a3a45761ab27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueTransition: {fileID: 68478171}
-  UFOTransition: {fileID: 380797823}
 --- !u!95 &380797823
 Animator:
   serializedVersion: 3
@@ -5875,6 +5861,7 @@ GameObject:
   - component: {fileID: 723898472}
   - component: {fileID: 723898473}
   - component: {fileID: 723898474}
+  - component: {fileID: 723898475}
   m_Layer: 0
   m_Name: SagaMapScene
   m_TagString: Untagged
@@ -5923,6 +5910,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates: []
+--- !u!114 &723898475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 723898471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e0adf91b11d945b1955a3a45761ab27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueTransition: {fileID: 68478171}
+  UFOTransition: {fileID: 380797823}
+  tutorUFO: {fileID: 380797821}
 --- !u!1 &762930067
 GameObject:
   m_ObjectHideFlags: 0

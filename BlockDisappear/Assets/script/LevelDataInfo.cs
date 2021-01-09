@@ -37,6 +37,8 @@ public static class LevelDataInfo  {
 
     private static int _currentLevel = 0;
 
+	public static bool tutorFinished = false;
+
     public static int CurrentLevel { 
 		get => _selectLevelIndex + chapter * 12  ;
 		set => _currentLevel = value; }
