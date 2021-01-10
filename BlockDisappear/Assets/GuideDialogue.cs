@@ -5,9 +5,11 @@ using UnityEngine;
 public class GuideDialogue : MonoBehaviour
 {
 
-    public Animator dialogueTransition;
+    private Animator dialogueTransition;
 
-    public Animator UFOTransition;
+    public GameObject dialogueUIView;
+
+    private Animator UFOTransition;
 
     private GameObject tutorUFO;
 
@@ -23,16 +25,20 @@ public class GuideDialogue : MonoBehaviour
     // Update is called once per frame
 
     void Start() {
-        tutorUFO = Instantiate(Resources.Load( "UFO_level", typeof( GameObject ) ), 
-        new Vector3 (1,1,1), Quaternion.Euler (250f, 175f, 0f)) as GameObject;
-		
-        // tutorUFO.SetActive(false);
+        tutorUFO = Instantiate(Resources.Load( "UFO_level_tutor", typeof( GameObject ) ), 
+        new Vector3 (3.5f,6.5f,23.9f), Quaternion.Euler (292f, -352f, 0f)) as GameObject;
+		UFOTransition = tutorUFO.GetComponent<Animator>();
+        dialogueUIView.SetActive(false);
+        dialogueTransition = dialogueUIView.GetComponent<Animator>();
+        tutorUFO.SetActive(false);
     }
 
     public void setGameUFO(GameObject _tutorUFO){
         tutorUFO.SetActive(true);
+        UFOTransition.SetTrigger("UFO_TUTOR");
         gameUFO = _tutorUFO;
         gameUFO.SetActive(false);
+        dialogueUIView.SetActive(true);
     }
     
     void Update()
@@ -45,6 +51,7 @@ public class GuideDialogue : MonoBehaviour
             gameUFO.SetActive(true);
             this.GetComponent<GuideDialogue>().enabled = false;
             LevelDataInfo.tutorFinished = true;
+            dialogueUIView.SetActive(false);
             return;
         }
         if(Input.GetMouseButtonDown(0)){

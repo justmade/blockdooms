@@ -36,7 +36,8 @@ public class SagaMapScene : MonoBehaviour {
 
 
     void initUFO(){
-        UFO = Instantiate(Resources.Load( "UFO_level", typeof( GameObject ) ), new Vector3 (1,1,1), Quaternion.Euler (250f, 175f, 0f)) as GameObject;
+        UFO = Instantiate(Resources.Load( "UFO_level", typeof( GameObject ) ), 
+		new Vector3 (-4.3f,11.6f,17.32f), Quaternion.Euler (326.2f, 0f, 5.34f)) as GameObject;
 		UFOMoveSpeed = mainCamera.GetComponent<CameraOrbit>().MoveSpeed;
 
 		if(!LevelDataInfo.tutorFinished){
