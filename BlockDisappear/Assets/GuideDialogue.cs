@@ -23,9 +23,19 @@ public class GuideDialogue : MonoBehaviour
     // Start is called before the first frame update
 
     // Update is called once per frame
+    
 
     void Start() {
-        tutorUFO = Instantiate(Resources.Load( "UFO_level_tutor", typeof( GameObject ) ), 
+        
+    }
+
+    public void enableDialogue(){
+        dialogueUIView.SetActive(false);
+    }
+     
+
+    void initUFO(){
+        tutorUFO = Instantiate(Resources.Load("UFO_level_tutor", typeof( GameObject ) ), 
         new Vector3 (3.5f,6.5f,23.9f), Quaternion.Euler (292f, -352f, 0f)) as GameObject;
 		UFOTransition = tutorUFO.GetComponent<Animator>();
         dialogueUIView.SetActive(false);
@@ -34,6 +44,7 @@ public class GuideDialogue : MonoBehaviour
     }
 
     public void setGameUFO(GameObject _tutorUFO){
+        initUFO();
         tutorUFO.SetActive(true);
         UFOTransition.SetTrigger("UFO_TUTOR");
         gameUFO = _tutorUFO;

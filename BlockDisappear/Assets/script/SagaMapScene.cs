@@ -43,7 +43,8 @@ public class SagaMapScene : MonoBehaviour {
 		if(!LevelDataInfo.tutorFinished){
 			this.GetComponent<GuideDialogue>().setGameUFO(UFO);
 		}else{
-			// this.GetComponent<GuideDialogue>().enabled = false;
+			this.GetComponent<GuideDialogue>().enableDialogue();
+			this.GetComponent<GuideDialogue>().enabled = false;
 		}
 	}
 	
