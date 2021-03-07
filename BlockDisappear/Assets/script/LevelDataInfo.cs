@@ -27,6 +27,8 @@ public static class LevelDataInfo  {
 
 	public static string[] planetList= {"planetObj_01","planetObj_02","planetObj_03","planetObj_04","planetObj_05"};
 
+	public static int topLevel = 1;
+
     public static int SelectLevelIndex { 
 
 		get => _selectLevelIndex; 

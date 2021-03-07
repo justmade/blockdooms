@@ -68,11 +68,27 @@ public class LevelController : MonoBehaviour {
 		Level level = levels.Find(i => i.LevelName == levelName);
 		level.LevelComplete();
 		LevelDataInfo.SelectLevelIndex ++ ;
+
+		LevelDataInfo.topLevel = getLevelIndexByLevelName(levelName)+2 > LevelDataInfo.topLevel 
+			? getLevelIndexByLevelName(levelName)+2 : LevelDataInfo.topLevel;
 	}
 
 	public void LevelComplete(string levelName,int stars){
-		Debug.LogFormat("LevelComplete{0}",stars);
 		levels.Find(i => i.LevelName == levelName).LevelComplete(stars);
 		LevelDataInfo.SelectLevelIndex ++ ;
+		LevelDataInfo.topLevel = getLevelIndexByLevelName(levelName)+2 > LevelDataInfo.topLevel 
+			? getLevelIndexByLevelName(levelName)+2 : LevelDataInfo.topLevel;
+
+		Debug.LogFormat("LevelComplete{0},{1}",stars,LevelDataInfo.topLevel);
+	}
+
+	private int getLevelIndexByLevelName(string _name){
+		for (int i = 0; i < levels.Count; i++)
+		{
+			if(levels[i].LevelName == _name){
+				return i;
+			}
+		}
+		return -1;
 	}
 }
