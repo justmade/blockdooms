@@ -115,6 +115,9 @@ public class SagaMapScene : MonoBehaviour {
 			getUFOTargetPos(0);
 			setUFOPos(targetPos,turnRotation,false);
 
+			// LevelDataInfo.chapter++;
+        	GameObject footPage = GameObject.Find("FootPage");
+			footPage.GetComponent<FootPage>().updatePointState();
 			
 		}else if(LevelDataInfo.SelectLevelIndex > 0){
 			mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[LevelDataInfo.SelectLevelIndex-1].transform,
@@ -170,7 +173,7 @@ public class SagaMapScene : MonoBehaviour {
 		RaycastHit hit;
 		if(Physics.Raycast (ray,out hit))    //如果真的发生了碰撞，ray这条射线在hit点与别的物体碰撞了
 		{
-			if (hit.collider.gameObject.tag == "LevelBlock") {
+			if (hit.collider.gameObject.tag == "LevelBlock" && LevelDataInfo.tutorFinished) {
 				int hitIndex = 0;
 				for(int i=0;i<totalLevels;i ++){
 					if(allLevelBlock[i] == hit.collider.gameObject){

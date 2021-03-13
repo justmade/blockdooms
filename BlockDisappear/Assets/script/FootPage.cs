@@ -15,6 +15,7 @@ public class FootPage : MonoBehaviour
 
     void Start()
     {
+        checkBTNState();
         addPoint();
     }
 
@@ -26,6 +27,33 @@ public class FootPage : MonoBehaviour
 
     void OnGUI()
     {
+
+    }
+
+
+    void checkBTNState(){
+        int unlockPage = Mathf.FloorToInt(LevelDataInfo.topLevel /12);
+        GameObject btnRight = GameObject.Find("Button - Right");
+        GameObject btnLeft = GameObject.Find("Button - Left");
+        if(unlockPage <= LevelDataInfo.chapter){
+            btnRight.GetComponent<Image>().color =  new Vector4(1.0f, 1.0f, 1.0f,0.1f);
+            btnRight.GetComponent<Button>().interactable = false;
+        }else{
+            btnRight.GetComponent<Image>().color =  new Vector4(1.0f, 1.0f, 1.0f,1.0f);
+            btnRight.GetComponent<Button>().interactable = true;
+        }
+
+        if(LevelDataInfo.chapter == 0){
+            btnLeft.GetComponent<Image>().color =  new Vector4(1.0f, 1.0f, 1.0f,0.1f);
+            btnLeft.GetComponent<Button>().interactable = false;
+        }else{
+            btnLeft.GetComponent<Image>().color =  new Vector4(1.0f, 1.0f, 1.0f,1.0f);
+            btnLeft.GetComponent<Button>().interactable = true;
+        }
+
+        
+		Debug.LogFormat("checkBTNState{0},{1},{2}",LevelDataInfo.topLevel,unlockPage,LevelDataInfo.chapter);
+
     }
 
     void addPoint(){
@@ -33,6 +61,7 @@ public class FootPage : MonoBehaviour
         onState = Sprite.Create(state_on,new Rect(0.0f, 0.0f,iconSize.x, iconSize.y),new Vector2(0.5f,0.5f));//注意居中显示采用0.5f值  //创建一个精灵(图片，纹理，二维浮点型坐标)
         offState = Sprite.Create(state_off,new Rect(0.0f, 0.0f,iconSize.x, iconSize.y),new Vector2(0.5f,0.5f));
         points = new GameObject[LevelDataInfo.planetList.Length];
+
         for (int i = 0; i < LevelDataInfo.planetList.Length; i++)
         {
             GameObject pointObj = new GameObject();
@@ -48,8 +77,6 @@ public class FootPage : MonoBehaviour
 
             points[i] = pointObj;
 
-
-
         }
         updatePointState();
         
@@ -62,5 +89,6 @@ public class FootPage : MonoBehaviour
             points[i].GetComponent<Image>().sprite = offState; 
         }
         points[index].GetComponent<Image>().sprite = onState; 
+        checkBTNState();
     }
 }
