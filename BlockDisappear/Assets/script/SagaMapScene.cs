@@ -108,14 +108,18 @@ public class SagaMapScene : MonoBehaviour {
 	void initCameraPos(){
 		Debug.LogFormat("SelectLevelIndex{0}",LevelDataInfo.SelectLevelIndex);
 		if(LevelDataInfo.SelectLevelIndex == 12 && LevelDataInfo.chapter < LevelDataInfo.planetList.Length-1){
-			mainCamera.GetComponent<CameraOrbit>().nextPlanet();
+			// mainCamera.GetComponent<CameraOrbit>().nextPlanet();
 			
-			mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[0].transform,
-				0,false,true);
-			getUFOTargetPos(0);
-			setUFOPos(targetPos,turnRotation,false);
+			// mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[0].transform,
+			// 	0,false,true);
+			// getUFOTargetPos(0);
+			// setUFOPos(targetPos,turnRotation,false);
 
-			// LevelDataInfo.chapter++;
+			mainCamera.GetComponent<CameraOrbit>().setCameraTarget(allLevelBlock[LevelDataInfo.SelectLevelIndex-1].transform,
+				LevelDataInfo.SelectLevelIndex-1,false,true);
+			getUFOTargetPos(LevelDataInfo.SelectLevelIndex-1);
+			setUFOPos(targetPos,turnRotation,true);
+
         	GameObject footPage = GameObject.Find("FootPage");
 			footPage.GetComponent<FootPage>().updatePointState();
 			

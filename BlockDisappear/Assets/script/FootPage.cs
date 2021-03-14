@@ -35,12 +35,22 @@ public class FootPage : MonoBehaviour
         int unlockPage = Mathf.FloorToInt(LevelDataInfo.topLevel /12);
         GameObject btnRight = GameObject.Find("Button - Right");
         GameObject btnLeft = GameObject.Find("Button - Left");
+
+        GameObject newLabel = btnRight.transform.Find("NewLabel").gameObject;
         if(unlockPage <= LevelDataInfo.chapter){
             btnRight.GetComponent<Image>().color =  new Vector4(1.0f, 1.0f, 1.0f,0.1f);
             btnRight.GetComponent<Button>().interactable = false;
+
+            newLabel.SetActive(false);
         }else{
             btnRight.GetComponent<Image>().color =  new Vector4(1.0f, 1.0f, 1.0f,1.0f);
             btnRight.GetComponent<Button>().interactable = true;
+
+            if(LevelDataInfo.topLevel %12 == 1 && LevelDataInfo.topLevel>=12){
+                newLabel.SetActive(true);
+            }else{
+                newLabel.SetActive(false);
+            }
         }
 
         if(LevelDataInfo.chapter == 0){
@@ -50,6 +60,8 @@ public class FootPage : MonoBehaviour
             btnLeft.GetComponent<Image>().color =  new Vector4(1.0f, 1.0f, 1.0f,1.0f);
             btnLeft.GetComponent<Button>().interactable = true;
         }
+
+        
 
         
 		Debug.LogFormat("checkBTNState{0},{1},{2}",LevelDataInfo.topLevel,unlockPage,LevelDataInfo.chapter);
