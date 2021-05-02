@@ -46,8 +46,11 @@ public class GuideDialogue : MonoBehaviour
         tutorUFO.SetActive(false);
     }
 
-    public void setGameUFO(GameObject _tutorUFO){
+    public void setGameUFO(GameObject _tutorUFO,GameObject UFOContainer=null){
         initUFO();
+        if(UFOContainer != null){
+            UFOTransition.transform.SetParent(UFOContainer.transform);
+        }
         tutorUFO.SetActive(true);
         UFOTransition.SetTrigger("UFO_TUTOR");
         gameUFO = _tutorUFO;
