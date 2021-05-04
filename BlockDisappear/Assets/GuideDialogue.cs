@@ -37,19 +37,29 @@ public class GuideDialogue : MonoBehaviour
     }
      
 
-    void initUFO(){
-        tutorUFO = Instantiate(Resources.Load("UFO_level_tutor", typeof( GameObject ) ), 
-        new Vector3 (3.5f,6.5f,23.9f), Quaternion.Euler (292f, -352f, 0f)) as GameObject;
+    void initUFO(string UFOPATH){
+        string u_path = "UFO_level_tutor";
+        if(UFOPATH != null){
+            u_path = UFOPATH;
+        }else{
+            
+        }
+        Debug.LogFormat("u_path {0}",u_path);
+        tutorUFO = Instantiate(Resources.Load(u_path, typeof( GameObject ) ), 
+            new Vector3 (0,0,0), Quaternion.Euler (292f, -352f, 0f)) as GameObject;
 		UFOTransition = tutorUFO.GetComponent<Animator>();
         dialogueUIView.SetActive(false);
         dialogueTransition = dialogueUIView.GetComponent<Animator>();
         tutorUFO.SetActive(false);
     }
 
-    public void setGameUFO(GameObject _tutorUFO,GameObject UFOContainer=null){
-        initUFO();
+    public void setGameUFO(GameObject _tutorUFO,GameObject UFOContainer=null,string UFOPATH=null){
+        Debug.LogFormat("UFOPATH1 {0}",UFOPATH);
+        initUFO(UFOPATH);
         if(UFOContainer != null){
-            UFOTransition.transform.SetParent(UFOContainer.transform);
+            tutorUFO.transform.SetParent(UFOContainer.transform);
+            tutorUFO.transform.localPosition = Vector3.zero;
+
         }
         tutorUFO.SetActive(true);
         UFOTransition.SetTrigger("UFO_TUTOR");

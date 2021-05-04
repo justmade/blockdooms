@@ -14,12 +14,13 @@ public class BattleSceneUI : MonoBehaviour
 		dialogueUI.transform.SetParent(canvas.transform);
 
         GameObject UFOContainer = new GameObject();
+        UFOContainer.transform.position = new Vector3(-4.67f,7.89f,-2.21f);
 
         GameObject UFO = Instantiate(Resources.Load( "UFO_level", typeof( GameObject ) ), 
-		new Vector3 (-4.3f,11.6f,17.32f), Quaternion.Euler (326.2f, 0f, 5.34f)) as GameObject;
+		new Vector3 (), Quaternion.Euler (326.2f, 0f, 5.34f)) as GameObject;
 
         canvas.GetComponent<GuideDialogue>().dialogueUIView = dialogueUI;
-        canvas.GetComponent<GuideDialogue>().setGameUFO(UFO,UFOContainer);
+        canvas.GetComponent<GuideDialogue>().setGameUFO(UFO,UFOContainer,"UFO_level_tutor_inlevel");
 
 
     }

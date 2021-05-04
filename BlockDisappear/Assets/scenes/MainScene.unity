@@ -378,9 +378,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 73690338}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3adee5c74687e4b1eaf1d7c2771e3d8f, type: 3}
+  m_Script: {fileID: 11500000, guid: 7e0adf91b11d945b1955a3a45761ab27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dialogueUIView: {fileID: 0}
 --- !u!1 &287504396
 GameObject:
   m_ObjectHideFlags: 0
@@ -11444,7 +11445,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 31.4
-  orthographic: 1
+  orthographic: 0
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
